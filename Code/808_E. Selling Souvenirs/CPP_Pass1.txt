@@ -1,0 +1,45 @@
+#include <bits/stdc++.h>
+using namespace std;
+const int qq = 3e5 + 10;
+struct Backpack {
+  long long val;
+  int m1, m2;
+} dp[qq];
+int num[4];
+long long Val[4][qq];
+long long pre[4][qq];
+int n, m;
+int main() {
+  scanf("%d%d", &n, &m);
+  for (int i = 1; i <= n; ++i) {
+    int w;
+    long long val;
+    scanf("%d%lld", &w, &val);
+    Val[w][++num[w]] = val;
+  }
+  for (int i = 1; i < 4; ++i) {
+    sort(Val[i] + 1, Val[i] + 1 + num[i], greater<long long>());
+    for (int j = 1; j <= num[i]; ++j) pre[i][j] = pre[i][j - 1] + Val[i][j];
+  }
+  dp[0].val = dp[0].m1 = dp[0].m2 = 0;
+  for (int i = 1; i <= m; ++i) {
+    dp[i] = dp[i - 1];
+    if (dp[i].val < dp[i - 1].val + Val[1][dp[i - 1].m1 + 1]) {
+      dp[i].val = dp[i - 1].val + Val[1][dp[i - 1].m1 + 1];
+      dp[i].m1 = dp[i - 1].m1 + 1;
+      dp[i].m2 = dp[i - 1].m2;
+    }
+    if (i >= 2 && dp[i].val < dp[i - 2].val + Val[2][dp[i - 2].m2 + 1]) {
+      dp[i].val = dp[i - 2].val + Val[2][dp[i - 2].m2 + 1];
+      dp[i].m1 = dp[i - 2].m1;
+      dp[i].m2 = dp[i - 2].m2 + 1;
+    }
+  }
+  long long ans = 0;
+  for (int i = 0; i <= num[3]; ++i) {
+    if (m >= i * 3) {
+      ans = max(ans, pre[3][i] + dp[m - 3 * i].val);
+    }
+  }
+  printf("%lld\n", ans);
+}

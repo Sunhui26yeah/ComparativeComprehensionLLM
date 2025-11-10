@@ -1,0 +1,20 @@
+def base(a, b, c):
+    tot = 0
+    for i in range(a):
+        tot += c[-(i + 1)] * (b ** i)
+    return tot
+
+x, bx = (int(i) for i in input().split())
+xnum = [int(i) for i in input().split()]
+y, by = (int(i) for i in input().split())
+ynum = [int(i) for i in input().split()]
+
+rx = base(x, bx, xnum)
+ry = base(y, by, ynum)
+
+if rx == ry:
+    print("=")
+elif rx > ry:
+    print(">")
+else:
+    print("<")

@@ -1,0 +1,93 @@
+import java.util.*;
+import java.io.*;
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        new Solver().run(1);
+    }
+}
+
+class Solver {
+
+    private BufferedReader reader = null;
+    private StringTokenizer st = null;
+
+    private static final int MAXCARDVALUE = (int)1e5;
+
+    private int n, k;
+    private int[] amountOfCards, amountOfPlayers, h;
+    private int[][] dp;
+    private Set<Integer> cards;
+
+    private int ans = 0;
+
+    public void run(int inputType) throws Exception {
+        if (inputType == 0)
+            reader = new BufferedReader(new FileReader("input.txt"));
+        else
+            reader = new BufferedReader(new InputStreamReader(System.in));
+
+        st = new StringTokenizer(reader.readLine());
+        n = Integer.parseInt(st.nextToken());
+        k = Integer.parseInt(st.nextToken());
+
+        amountOfPlayers = new int[MAXCARDVALUE + 1];
+        amountOfCards = new int[MAXCARDVALUE + 1];
+        h = new int[k + 1];
+        cards = new HashSet<>(n);
+
+        dp = new int[n + 1][k*n + 1];
+
+        st = new StringTokenizer(reader.readLine());
+        for(; st.hasMoreTokens();) {
+            int v = Integer.parseInt(st.nextToken());
+            amountOfCards[v]++;
+        }
+
+        st = new StringTokenizer(reader.readLine());
+        for(int i = 0; i < n; ++i) {
+            int v = Integer.parseInt(st.nextToken());
+            amountOfPlayers[v]++;
+            cards.add(v);
+        }
+
+        st = new StringTokenizer(reader.readLine());
+        for (int i = 1; i <= k; ++i) {
+            h[i] = Integer.parseInt(st.nextToken());
+        }
+
+        reader.close();
+
+        for (Integer card : cards) {
+            if (amountOfPlayers[card] == 0)
+                continue;
+
+            if (amountOfPlayers[card] == 1) {
+                ans += h[Math.min(k, amountOfCards[card])];
+                continue;
+            }
+
+            for (int i = 0; i <= k*n; ++i)
+                dp[0][i] = 0;
+
+            for (int i = 0; i <= n; ++i) {
+                dp[i][0] = 0;
+            }
+
+            for (int i = 1; i <= amountOfPlayers[card]; ++i) {
+                for (int j = 1; j <= amountOfCards[card]; ++j) {
+
+                    dp[i][j] = 0;
+                    int border = Math.min(k, j);
+                    for (int t = 1; t <= border; ++t) {
+                        dp[i][j] = Math.max(dp[i][j], dp[i - 1][j - t] + h[t]);
+                    }
+                }
+            }
+
+            ans += dp[amountOfPlayers[card]][amountOfCards[card]];
+        }
+
+        System.out.println(ans);
+    }
+}

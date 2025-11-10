@@ -1,0 +1,32 @@
+#include <bits/stdc++.h>
+using namespace std;
+void solve() {
+  int a1, a2, k1, k2, n;
+  cin >> a1;
+  cin >> a2;
+  cin >> k1;
+  cin >> k2;
+  cin >> n;
+  int l = 0;
+  int s = 0;
+  if (k1 > k2) {
+    swap(k1, k2);
+    swap(a1, a2);
+  }
+  if (k1 <= k2) {
+    if (n > a1 * k1)
+      l = a1 + (n - (a1 * k1)) / k2;
+    else
+      l = n / k1;
+    s = max(0, n - (a1 * (k1 - 1) + a2 * (k2 - 1)));
+  }
+  cout << s << ' ' << l;
+}
+int main() {
+  ios_base::sync_with_stdio(false);
+  int t = 1;
+  while (t--) {
+    solve();
+  }
+  return 0;
+}

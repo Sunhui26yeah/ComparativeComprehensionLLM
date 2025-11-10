@@ -1,0 +1,39 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+  int n;
+  cin >> n;
+  int ciel = 0, jiro = 0;
+  vector<int> mid;
+  for (int i = 0; i < n; i++) {
+    int sz;
+    cin >> sz;
+    int j;
+    for (j = 0; j < sz / 2; j++) {
+      int num;
+      cin >> num;
+      ciel += num;
+    }
+    if (sz % 2 == 1) {
+      int num;
+      cin >> num;
+      mid.push_back(num);
+      j++;
+    }
+    for (; j < sz; j++) {
+      int num;
+      cin >> num;
+      jiro += num;
+    }
+  }
+  sort(mid.begin(), mid.end());
+  int sz = mid.size();
+  for (int i = sz - 1; i >= 0; i--) {
+    if ((sz - i) % 2 == 1)
+      ciel += mid[i];
+    else
+      jiro += mid[i];
+  }
+  cout << ciel << " " << jiro << "\n";
+  return 0;
+}

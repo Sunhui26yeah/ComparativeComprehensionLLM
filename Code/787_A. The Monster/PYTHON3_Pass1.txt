@@ -1,0 +1,17 @@
+a, b = list(map(int, input().split(" ")))
+c, d = list(map(int, input().split(" ")))
+
+final = -1
+
+for i in range(101):
+  soma = b+a*i
+  for j in range(101):  
+    soma2 = d+c*j
+    if soma2 == soma:
+      final = soma2
+      break
+    if soma2 > soma:
+      break
+  if final > -1: break
+
+print(final)

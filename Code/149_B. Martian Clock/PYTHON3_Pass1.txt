@@ -1,0 +1,28 @@
+a={}
+for x in range(10): a[str(x)]=x
+for x in range(26): a[chr(ord('A')+x)]=10+x
+
+def to10(s,n):
+    y=0
+    for c in s:
+        if a[c]>=n: return None
+        y=y*n+a[c]
+    return y
+
+h,m=input().split(':')
+
+
+ans=[]
+for i in range(2,60):
+    h1,m1=to10(h,i),to10(m,i)
+    if h1==None or m1==None: continue
+    if h1<24 and m1<60: ans.append(i)
+
+if len(ans)==0:
+    print(0)
+else:
+    h2,m2=to10(h,100),to10(m,100)
+    if h2<24 and m2<60:
+        print(-1)
+    else:
+        print(*ans)

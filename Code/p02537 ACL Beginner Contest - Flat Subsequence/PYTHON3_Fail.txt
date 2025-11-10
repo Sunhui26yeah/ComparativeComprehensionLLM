@@ -1,0 +1,21 @@
+from sys import stdin
+import itertools
+imput = stdin.readline
+n,k = map(int, input().split())  # 3個の数字の入力を受け取る
+num_list = []
+for i in range(n):
+    num_list.append(list(map(int,input().split())))
+#print(num_list)
+num_list = list(itertools.chain.from_iterable(num_list))
+#print(num_list)
+count = 0
+for i in range(n-1):
+    count = count + 1
+    countMax = 0
+    if(abs(num_list[i]-num_list[i+1])>k):
+        countTmp = count
+        if(countMax<count):
+            countMax = count
+        count = 0
+        
+print(count)

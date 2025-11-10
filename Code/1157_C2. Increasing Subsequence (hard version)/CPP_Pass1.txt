@@ -1,0 +1,110 @@
+#include <bits/stdc++.h>
+using namespace std;
+void fff(vector<int> &v, int s, int e, string &ss, int &pre) {
+  if (s == e && v[s] > pre) {
+    ss.push_back('L');
+    return;
+  }
+  if (s == e) {
+    return;
+  }
+  if (v[s] < pre && v[e] < pre) {
+    return;
+  }
+  if (v[s] == v[e] && pre == v[s]) {
+    return;
+  }
+  if (v[s] == v[e] && v[s] > pre) {
+    string os = ss;
+    int op = pre;
+    string s1 = "";
+    string s2 = "";
+    s1.push_back('L');
+    s2.push_back('R');
+    pre = v[s];
+    fff(v, s + 1, e, s1, pre);
+    pre = v[e];
+    fff(v, s, e - 1, s2, pre);
+    if (s1.size() < s2.size()) {
+      ss = ss + s2;
+      return;
+    } else {
+      ss = ss + s1;
+      return;
+    }
+  }
+  int mi = min(v[s], v[e]);
+  if (mi > pre) {
+    if (mi == v[s]) {
+      ss.push_back('L');
+      pre = v[s];
+      fff(v, s + 1, e, ss, pre);
+    } else {
+      ss.push_back('R');
+      pre = v[e];
+      fff(v, s, e - 1, ss, pre);
+    }
+  } else if (mi <= pre) {
+    int ma = max(v[s], v[e]);
+    if (ma > pre) {
+      if (ma == v[s]) {
+        ss.push_back('L');
+        pre = v[s];
+        fff(v, s + 1, e, ss, pre);
+      } else {
+        ss.push_back('R');
+        pre = v[e];
+        fff(v, s, e - 1, ss, pre);
+      }
+    }
+  }
+}
+int main() {
+  int n;
+  cin >> n;
+  vector<int> v(n, 0);
+  for (int i = 0; i < n; i++) {
+    cin >> v[i];
+  }
+  if (n == 1) {
+    cout << "1" << endl;
+    cout << "L";
+    return 0;
+  }
+  int s = 0, e = n - 1;
+  int pre = 0;
+  if (v[0] != v[n - 1]) {
+    int m = min(v[0], v[n - 1]);
+    string ss = "";
+    if (m == v[0]) {
+      pre = v[0];
+      s = 1;
+      ss.push_back('L');
+    } else {
+      e = n - 2;
+      pre = v[n - 1];
+      ss.push_back('R');
+    }
+    fff(v, s, e, ss, pre);
+    cout << ss.size() << endl;
+    cout << ss;
+  } else {
+    string s1 = "";
+    string s2 = "";
+    s1.push_back('L');
+    s2.push_back('R');
+    pre = v[0];
+    fff(v, s + 1, e, s1, pre);
+    pre = v[n - 1];
+    fff(v, s, e - 1, s2, pre);
+    if (s1.size() < s2.size()) {
+      cout << s2.size() << endl;
+      cout << s2;
+      return 0;
+    } else {
+      cout << s1.size() << endl;
+      cout << s1;
+      return 0;
+    }
+  }
+}

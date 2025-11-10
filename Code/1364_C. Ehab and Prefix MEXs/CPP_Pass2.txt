@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+using namespace std;
+void parseArray(long long* A, long long n) {
+  for (long long K = 0; K < n; K++) {
+    cin >> A[K];
+  }
+}
+long long modInverse(long long a, long long b) {
+  return 1 < a ? b - modInverse(b % a, a) * b / a : 1;
+}
+long long gcd(long long a, long long b) { return b ? gcd(b, a % b) : a; }
+long long lcm(long long a, long long b) { return (a * b) / gcd(a, b); }
+long double dist(long double x, long double y, long double a, long double b) {
+  return sqrt((x - a) * (x - a) + (y - b) * (y - b));
+}
+void debug(long long* a, long long n) {
+  for (long long k = 0; k < n; k++) {
+    cerr << a[k] << " ";
+  }
+  cout << "\n";
+}
+int main() {
+  ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+  ;
+  int n;
+  cin >> n;
+  long long a[n];
+  parseArray(a, n);
+  int last_idx[2 * n];
+  memset(last_idx, -1, sizeof last_idx);
+  for (int k = 0; k < n; k++) last_idx[a[k]] = k;
+  vector<long long> ans;
+  long long idx = 0;
+  for (int k = 0; k < n; k++) {
+    if (k == 0 || a[k] == a[k - 1]) {
+      while (last_idx[idx] >= k) idx++;
+      ans.push_back(idx++);
+    } else {
+      ans.push_back(a[k - 1]);
+      idx = max(idx, a[k - 1] + 1);
+    }
+  }
+  for (long long e : ans) cout << e << " ";
+  cout << endl;
+  return 0;
+}

@@ -1,0 +1,44 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        //PrintWriter out = new PrintWriter(System.out);
+        StringTokenizer st = new StringTokenizer(in.readLine());
+        st.nextToken();
+        int t = Integer.parseInt(st.nextToken());
+        for (int te = 0; te < t; te++) {
+            HashSet<Integer> r = new HashSet<>();
+            HashSet<Integer> m = new HashSet<>();
+            st = new StringTokenizer(in.readLine());
+            boolean flag = false;
+            int n = Integer.parseInt(st.nextToken());
+            for (int i = 0; i < n; i++) {
+                int x = Integer.parseInt(st.nextToken());
+                if (x < 0) {
+                    r.add(-x);
+                    if (m.contains(-x)) {
+                        flag = true;
+                    }
+                } else {
+                    m.add(x);
+                    if (r.contains(x)) {
+                        flag = true;
+                    }
+                }
+            }
+            if (!flag) {
+                System.out.println("YES");
+                return;
+            }
+        }
+        System.out.println("NO");
+    }
+
+}
+/*
+
+
+ */

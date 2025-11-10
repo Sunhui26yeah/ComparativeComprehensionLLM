@@ -1,0 +1,39 @@
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
+import java.util.*;
+
+/**
+ * Copyright © 2018 Chris. All rights reserved.
+ *
+ * @author Chris
+ * 2018/6/27 22:35
+ * @see ECR46
+ */
+public class Main {
+
+    private static void solve(Scanner sc) {
+        int n = sc.nextInt();
+
+        int cnt[] = new int[128 << 2];
+        for (int i = 0; i < n << 1; i++) {
+            char ch[] = sc.next().toCharArray();
+            for (int j = 0; j < ch.length; j++) {
+                cnt[ch[j] * ch.length] += i < n ? 1 : -1;
+            }
+        }
+
+        int sum = 0;
+        for (int i = 0; i < 128 << 2; i++) {
+            sum += Math.abs(cnt[i]);
+        }
+        System.out.println(sum / 2);
+    }
+
+    public static void main(String args[]) throws FileNotFoundException {
+        //System.setIn(new FileInputStream("in.txt"));
+        //System.setOut(new PrintStream("out.txt"));
+
+        solve(new Scanner(System.in));
+    }
+}

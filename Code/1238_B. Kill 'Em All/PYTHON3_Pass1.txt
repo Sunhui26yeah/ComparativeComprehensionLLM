@@ -1,0 +1,32 @@
+import math,sys
+from collections import Counter, defaultdict, deque
+#for deque append(),pop(),appendleft(),popleft(),count()
+from sys import stdin, stdout
+input = stdin.readline
+lili=lambda:list(map(int,sys.stdin.readlines()))
+li = lambda:list(map(int,input().split()))
+def gcd(x,y):
+    while(y):
+        x, y = y, x % y 
+    return x 
+
+
+q=int(input())
+for j in range(0,q):
+    n,r=li()
+    a=li()
+    #a=list(set(a))
+    a.sort()
+    c=0
+    i=n-1
+    while(i>=0):
+        if(a[i]-(c*r)<=0):
+            break
+        else:
+            c+=1
+        k=i
+        while(k>=0 and a[k]==a[i]):
+            k-=1
+        i=k
+
+    print(c)

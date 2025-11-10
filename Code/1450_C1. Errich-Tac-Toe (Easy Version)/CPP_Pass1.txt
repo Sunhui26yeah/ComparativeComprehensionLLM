@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+const int MOD = 998244353;
+const int INF = 0x3f3f3f3f;
+mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count()); 
+void untie_io() { cin.tie(0)->sync_with_stdio(0); }
+void solve() {
+	int n;
+	cin >> n;
+	vector<string> s(n);
+	for (int i = 0; i < n; i++) {
+		cin >> s[i];
+	}
+	vector<int> x(3), o(3);
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			if (s[i][j] == 'X') x[(i + j) % 3]++;
+			if (s[i][j] == 'O') o[(i + j) % 3]++;
+		}
+	}
+	int m = 0;
+	for (int i = 0; i < 3; i++) {
+		if (x[i % 3] + o[(i + 1) % 3] < x[m % 3] + o[(m + 1) % 3])
+			m = i;
+	}
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			if (s[i][j] == 'X' && (i + j) % 3 == m) s[i][j] = 'O';
+			if (s[i][j] == 'O' && (i + j + 1) % 3 == m) s[i][j] = 'X';
+		}
+	}
+	for (int i = 0; i < n; i++) {
+		cout << s[i] << '\n';
+	}  
+	return;
+}
+int main() {
+	untie_io();
+	int T;
+	cin >> T;
+	while (T--) {
+		solve();
+	}
+	return 0;
+}

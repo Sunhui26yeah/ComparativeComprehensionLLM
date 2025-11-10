@@ -1,0 +1,59 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
+
+/**
+ * @project: Codeforces649
+ * @author: izhanatuly
+ * @date: 13/06/2020
+ */
+
+public class C {
+    static Scanner scanner;
+
+    public static void main(String[] args) {
+        scanner = new Scanner(new BufferedReader(new InputStreamReader(System.in)));
+        runTestCase();
+    }
+
+    private static void runTestCase() {
+        int n = scanner.nextInt();
+        int[] nums = new int[n];
+        boolean[] taken = new boolean[n+1];
+        for(int i=0; i<n; i++) {
+            nums[i] = scanner.nextInt();
+            taken[nums[i]] = true;
+        }
+        int[] res = new int[n];
+        Arrays.fill(res, -1);
+        for(int i=1; i<n; i++) if(nums[i] != nums[i-1]) {
+            res[i] = nums[i-1];
+        }
+        int next = 0;
+        for(int i=0; i<n; i++) if(res[i] == -1) {
+            while(taken[next]) {
+                next++;
+            }
+            res[i] = next;
+            taken[next] = true;
+        }
+        boolean haveGaps = false;
+        int lastTaken = -1;
+        for(int i=0; i<n+1; i++) if(taken[i]) {
+            if(lastTaken != i-1) {
+                haveGaps = true;
+            }
+            lastTaken = i;
+        }
+        if(haveGaps) {
+            System.out.println(-1);
+        } else {
+            StringBuilder sb = new StringBuilder();
+            for(int num : res) {
+                sb.append(num);
+                sb.append(' ');
+            }
+            System.out.println(sb.toString());
+        }
+    }
+}

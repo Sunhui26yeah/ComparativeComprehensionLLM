@@ -1,0 +1,29 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+  long long t1, t2, x1, x2, t0, y1, y2;
+  double ans = 100000000.0;
+  long long ansy1, ansy2;
+  cin >> t1 >> t2 >> x1 >> x2 >> t0;
+  if (t1 == t0) {
+    if (t2 == t0)
+      cout << x1 << " " << x2;
+    else
+      cout << x1 << " " << 0;
+  } else if (t2 == t0)
+    cout << 0 << " " << x2;
+  else {
+    for (long long y2 = 1; y2 <= x2; y2++) {
+      y1 = min((t2 - t0) * y2 / (t0 - t1), x1);
+      double s = (t1 * y1 + t2 * y2) / (double)(y1 + y2) - t0;
+      if (s < 0.0) continue;
+      if (s < ans || fabs(s - ans) < 1e-8 && y1 + y2 > ansy1 + ansy2) {
+        ans = s;
+        ansy1 = y1;
+        ansy2 = y2;
+      }
+    }
+    cout << ansy1 << " " << ansy2;
+  }
+  return 0;
+}

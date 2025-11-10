@@ -1,0 +1,21 @@
+num = int(input());
+i = 0;
+amo = 0;
+while (i < 18):
+    power = 10 ** i;
+    #print("Power: " + str(power));
+    dig = int((num % (power * 10)) / power);
+    #print("Digit: " + str(dig));
+    num -= dig * power;
+    #print("Input: " + str(num));
+    i += 1;
+    if ((dig == 4) | (dig == 7)):
+        amo += 1;
+    elif (num == 0):
+        break;
+    #print("Amount: " + str(amo));
+    #print("Iteration: " + str(i) + "\n\n");
+if ((amo == 4) | (amo == 7)):
+    print("YES");
+else:
+    print ("NO");

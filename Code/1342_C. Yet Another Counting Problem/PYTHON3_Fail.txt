@@ -1,0 +1,50 @@
+def gcd(a,b):
+	a, b = min(a,b), max(a,b)
+	if a == 1:
+		return 1
+	if b%a == 0:
+		return a
+	return gcd(a, b%a)
+
+t = int(input())
+for _ in range(t):
+	a,b, q = [int(i) for i in input().split()]
+	a, b = min(a,b), max(a,b)
+	jump = int((a*b)/gcd(a,b))
+	all_ans = []
+	
+	reusable = []
+	for x in range(jump):
+		if (x - x%b)%a != 0:
+			reusable.append(1)
+		else:
+			reusable.append(0)
+	sum_reusable = [0]
+	for x in range(jump):
+		sum_reusable.append(sum_reusable[-1] + reusable[x])
+
+	for _ in range(q):
+		l , r = [int(i) for i in input().split()]
+		ans = 0
+		shift = l%jump
+		amt1 = int((r-l+1)/jump)
+		# if amt1 >0:
+			# ans += sum(reusable[l%jump:])
+			# ans += sum(reusable[:r%jump + 1])
+		# else:
+		if(l%jump > r%jump):
+			# print('not here')
+			# ans += max(0,amt1)*sum(reusable)
+			ans += max(0,amt1)*sum_reusable[-1]
+			# ans += sum(reusable[l%jump:]) + sum(reusable[:r%jump + 1])
+			ans += (sum_reusable[-1] - sum_reusable[l%jump]) + sum_reusable[r%jump + 1]
+		else:
+			# print('here')
+			# ans += max(0,amt1)*sum(reusable)
+			ans += max(0,amt1)*sum_reusable[-1]
+			# ans += sum(reusable[l%jump : r%jump + 1])
+			ans += sum_reusable[r%jump+1] - sum_reusable[l%jump]
+		# for x in range(min(jump, r - l + 1)):
+		# 	ans += (int((r-l -(x))/jump) +1)*reusable[(shift + x)%jump]
+		all_ans.append(ans)
+	print(*all_ans, sep = ' ')

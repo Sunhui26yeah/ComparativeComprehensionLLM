@@ -1,0 +1,25 @@
+__author__ = 'Darren'
+
+
+def solve():
+    n, m = map(int, input().split())
+    prices = [int(x) for x in input().split()]
+    from collections import defaultdict
+    shopping = defaultdict(int)
+    for _i in range(m):
+        shopping[input()] += 1
+
+    prices.sort()
+    sorted_shopping = sorted(shopping.items(), key=lambda x: x[1], reverse=True)
+    min_sum, max_sum = 0, 0
+    price_index = 0
+    for _x, amount in sorted_shopping:
+        min_sum += amount * prices[price_index]
+        max_sum += amount * prices[n-price_index-1]
+        price_index += 1
+    print(min_sum, max_sum)
+
+
+
+if __name__ == '__main__':
+    solve()

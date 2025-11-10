@@ -1,0 +1,50 @@
+#include <bits/stdc++.h>
+#pragma comment(linker, "/STACK:162777216")
+using namespace std;
+struct point {
+  int value, number;
+};
+bool comp(point a, point b) { return a.value < b.value; }
+int power4(int n) {
+  int res = 1;
+  for (int i = 0; i < n; i++) {
+    res *= 4;
+  }
+  return res;
+}
+int main() {
+  point a[123455];
+  int n;
+  cin >> n;
+  for (int i = 0; i < n; i++) {
+    int l, r;
+    cin >> l >> r;
+    a[i].number = r;
+    a[i].value = l;
+  }
+  sort(a, a + n, comp);
+  for (int i = 1; i < n; i++) {
+    if (a[i].value - a[i - 1].value < 15) {
+      int go = power4(a[i].value - a[i - 1].value);
+      int sibling;
+      sibling = a[i - 1].number / go;
+      if (a[i - 1].number % go) sibling++;
+      a[i].number = max(sibling, a[i].number);
+    }
+  }
+  int ans = 1;
+  int counter = 0;
+  if (a[n - 1].number == 1) {
+    cout << a[n - 1].value + 1;
+    return 0;
+  }
+  while (true) {
+    if (a[n - 1].number <= ans) {
+      cout << a[n - 1].value + counter;
+      return 0;
+    }
+    ans *= 4;
+    counter++;
+  }
+  return 0;
+}

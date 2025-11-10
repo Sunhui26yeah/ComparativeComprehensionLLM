@@ -1,0 +1,30 @@
+import math
+
+
+def main():
+    n = int(input())
+    a = list(map(int, input().split()))
+    b = [-1] * n
+    q = int(input())
+    qs = list()
+    for _ in range(q):
+        qs.append(list(map(int, input().split())))
+    maxx = -1
+    for i in range(q - 1, -1, -1):
+        if qs[i][0] == 1:
+            p = qs[i][1] - 1
+            if qs[i][2] > maxx:
+                b[p] = 1
+                a[p] = qs[i][2]
+            else:
+                a[p] = maxx
+        else:
+            maxx = max(maxx, qs[i][1])
+    for i in range(n):
+        if b[i] == -1:
+            print(max(maxx, a[i]), end=' ')
+        else:
+            print(a[i], end=' ')
+
+
+main()

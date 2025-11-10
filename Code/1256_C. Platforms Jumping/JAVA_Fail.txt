@@ -1,0 +1,213 @@
+// package cf1256;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.InputMismatchException;
+import java.util.stream.Collectors;
+
+public class CFC {
+    private static final long MOD = 1_000_000_007;
+    private static final String INPUT = "10 1 5\n" +
+            "2\n";
+
+    private PrintWriter out;
+    private FastScanner sc;
+
+    public static void main(String[] args) {
+        new CFC().run();
+    }
+
+    public void run() {
+        sc = new FastScanner(oj ? System.in : new ByteArrayInputStream(INPUT.getBytes()));
+        out = new PrintWriter(System.out);
+
+        long s = System.currentTimeMillis();
+        solve();
+        out.flush();
+        tr(System.currentTimeMillis() - s + "ms");
+    }
+
+    public void solve() {
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        int d = sc.nextInt();
+        int[] c = readIntArray(m);
+        int sum = Arrays.stream(c).sum();
+        int max = (d - 1) * (c.length + 1) + sum;
+        if (max < n) {
+            out.println("NO");
+        } else {
+            out.println("YES");
+            int rem = max - n;
+            for (int i = 0; i < c.length; i++) {
+                if (rem >= d-1) {
+                    rem -= d-1;
+                } else {
+                    rem = 0;
+                    for (int j = 0; j < d-1-rem; j++) {
+                        out.print("0 ");
+                    }
+                }
+                for (int j = 0; j < c[i]; j++) {
+                    out.print((i+1) + " ");
+                }
+            }
+            for (int j = 0; j < d-1-rem; j++) {
+                out.print("0 ");
+            }
+            out.println();
+        }
+    }
+
+    //********************************************************************************************
+    //********************************************************************************************
+    //********************************************************************************************
+
+    private static int lowerBound(long[] arr, long key) {
+        int lo = 0;
+        int hi = arr.length - 1;
+        while (lo < hi) {
+            int mid = (lo + hi) / 2;
+            if (key <= arr[mid]) {
+                hi = mid - 1;
+            } else {
+                lo = mid + 1;
+            }
+        }
+        return arr[lo] < key ? lo + 1 : lo;
+    }
+
+    private static int upperBound(long[] arr, long key) {
+        int lo = 0;
+        int hi = arr.length - 1;
+        while (lo < hi) {
+            int mid = (lo + hi) / 2;
+            if (key >= arr[mid]) {
+                lo = mid + 1;
+            } else {
+                hi = mid;
+            }
+        }
+        return arr[lo] <= key ? lo + 1 : lo;
+    }
+
+    private static int ceil(double d) {
+        int ret = (int) d;
+        return ret == d ? ret : ret + 1;
+    }
+
+    private static int round(double d) {
+        return (int) (d + 0.5);
+    }
+
+    private static int gcd(int a, int b) {
+        BigInteger b1 = BigInteger.valueOf(a);
+        BigInteger b2 = BigInteger.valueOf(b);
+        BigInteger gcd = b1.gcd(b2);
+        return gcd.intValue();
+    }
+
+    private static long gcd(long a, long b) {
+        BigInteger b1 = BigInteger.valueOf(a);
+        BigInteger b2 = BigInteger.valueOf(b);
+        BigInteger gcd = b1.gcd(b2);
+        return gcd.longValue();
+    }
+
+    private int[] readIntArray(int n) {
+        int[] res = new int[n];
+        for (int i = 0; i < n; i++) {
+            res[i] = sc.nextInt();
+        }
+        return res;
+    }
+
+    private long[] readLongArray(int n) {
+        long[] res = new long[n];
+        for (int i = 0; i < n; i++) {
+            res[i] = sc.nextLong();
+        }
+        return res;
+    }
+
+    @SuppressWarnings("unused")
+    static class FastScanner {
+        private InputStream stream;
+        private byte[] buf = new byte[1024];
+        private int curChar;
+        private int numChars;
+
+        FastScanner(InputStream stream) {
+            this.stream = stream;
+        }
+
+        int read() {
+            if (numChars == -1)
+                throw new InputMismatchException();
+            if (curChar >= numChars) {
+                curChar = 0;
+                try {
+                    numChars = stream.read(buf);
+                } catch (IOException e) {
+                    throw new InputMismatchException();
+                }
+                if (numChars <= 0) return -1;
+            }
+            return buf[curChar++];
+        }
+
+        boolean isSpaceChar(int c) {
+            return c == ' ' || c == '\n' || c == '\r' || c == '\t' || c == -1;
+        }
+
+        boolean isEndline(int c) {
+            return c == '\n' || c == '\r' || c == -1;
+        }
+
+        public int nextInt() {
+            return Integer.parseInt(next());
+        }
+
+        public long nextLong() {
+            return Long.parseLong(next());
+        }
+
+        public double nextDouble() {
+            return Double.parseDouble(next());
+        }
+
+        public String next() {
+            int c = read();
+            while (isSpaceChar(c)) c = read();
+            StringBuilder res = new StringBuilder();
+            do {
+                res.appendCodePoint(c);
+                c = read();
+            } while (!isSpaceChar(c));
+            return res.toString();
+        }
+
+        public String nextLine() {
+            int c = read();
+            while (isEndline(c))
+                c = read();
+            StringBuilder res = new StringBuilder();
+            do {
+                res.appendCodePoint(c);
+                c = read();
+            } while (!isEndline(c));
+            return res.toString();
+        }
+
+    }
+
+    private boolean oj = System.getProperty("ONLINE_JUDGE") != null;
+
+    private void tr(Object... o) {
+        if (!oj) System.out.println(Arrays.deepToString(o));
+    }
+}

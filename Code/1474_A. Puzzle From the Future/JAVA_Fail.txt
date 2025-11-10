@@ -1,0 +1,33 @@
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+public class CodeA
+{
+	public static void main (String[] args) throws java.lang.Exception
+	{
+	    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	    int t = Integer.parseInt(br.readLine()); 
+	    
+        while (t-- > 0) {
+            int n = Integer.parseInt(br.readLine()); 
+            char[] b = (br.readLine().toCharArray()); 
+            String s;
+            char[] a = new char[n];
+            a[0]='1';
+            for(int i=1;i<n;i++){
+                if(b[i-1]==b[i]){
+                    a[i]=(a[i-1]=='1')?'0':'1';
+                }else{
+                    if(b[i-1]=='1' && a[i-1]==0){
+                        a[i]='0';
+                    }else{
+                        a[i]='1';
+                    }
+                }
+            }
+            s = new String(a);
+            System.out.println(s);
+        }
+	}
+}

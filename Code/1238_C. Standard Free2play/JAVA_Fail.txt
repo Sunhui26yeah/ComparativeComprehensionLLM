@@ -1,0 +1,106 @@
+import java.util.*;
+import java.io.*;
+import java.text.*;
+
+public class C1238 {
+
+	static ArrayList<Integer> arr;
+	static int[][] dp;
+
+	static int dp(int idx, int on) {
+		if(idx==arr.size())
+			return on==1?0:(int)1e9;
+		if(dp[on][idx]!=-1)
+			return dp[on][idx];
+		if (on == 1) {
+			return dp[on][idx] = Math.min(dp(idx + 1, 0), 1 + dp(idx + 1, 1));
+		} else {
+			int next = idx + 1 < arr.size() ? arr.get(idx+1) : 1;
+			return dp[on][idx]= Math.min(1+ dp(idx+1, 0),((next == arr.get(idx) - 1 || arr.get(idx)<=2)? dp(idx + 1, 1) :(int) 1e9));
+		}
+	}
+
+	public static void main(String[] args) throws IOException {
+		Scanner sc = new Scanner(System.in);
+		PrintWriter pw = new PrintWriter(System.out);
+		int q = sc.nextInt();
+		while (q-- > 0) {
+			int h = sc.nextInt();
+			int n = sc.nextInt();
+
+			arr = new ArrayList<Integer>();
+			for (int i = 0; i < n; i++) {
+				arr.add(sc.nextInt());
+			}
+			if (!arr.get(arr.size() - 1).equals(1))
+				arr.add(1);
+			dp = new int[2][n+1];
+			for (int[] x : dp)
+				Arrays.fill(x, -1);
+			pw.println(h <= 3 ? 0 : dp(0, 1));
+
+		}
+		pw.close();
+
+	}
+
+	static class Scanner {
+		StringTokenizer st;
+		BufferedReader br;
+
+		public Scanner(InputStream s) {
+			br = new BufferedReader(new InputStreamReader(s));
+		}
+
+		public Scanner(FileReader r) {
+			br = new BufferedReader(r);
+		}
+
+		public String next() throws IOException {
+			while (st == null || !st.hasMoreTokens())
+				st = new StringTokenizer(br.readLine());
+			return st.nextToken();
+		}
+
+		public int nextInt() throws IOException {
+			return Integer.parseInt(next());
+		}
+
+		public long nextLong() throws IOException {
+			return Long.parseLong(next());
+		}
+
+		public String nextLine() throws IOException {
+			return br.readLine();
+		}
+
+		public double nextDouble() throws IOException {
+			String x = next();
+			StringBuilder sb = new StringBuilder("0");
+			double res = 0, f = 1;
+			boolean dec = false, neg = false;
+			int start = 0;
+			if (x.charAt(0) == '-') {
+				neg = true;
+				start++;
+			}
+			for (int i = start; i < x.length(); i++)
+				if (x.charAt(i) == '.') {
+					res = Long.parseLong(sb.toString());
+					sb = new StringBuilder("0");
+					dec = true;
+				} else {
+					sb.append(x.charAt(i));
+					if (dec)
+						f *= 10;
+				}
+			res += Long.parseLong(sb.toString()) / f;
+			return res * (neg ? -1 : 1);
+		}
+
+		public boolean ready() throws IOException {
+			return br.ready();
+		}
+
+	}
+}

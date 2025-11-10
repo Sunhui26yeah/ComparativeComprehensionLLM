@@ -1,0 +1,25 @@
+q=int(input())
+a,b=map(int,input().split())
+s=set()
+for x in [a,b]:
+    if x%2==0:
+        s.add(2)
+        while x%2==0:
+            x//=2
+    i=3
+    while i*i<=x:
+        if x%i==0:
+            s.add(i)
+            while x%i==0:
+                x//=i
+        i+=2
+    if x!=1:s.add(x)
+for k in range(q-1):
+    u,v=map(int,input().split())
+    s0=set()
+    for z in s:
+        if u%z==0 or v%z==0:
+            s0.add(z)
+    s=s0
+if len(s)==0:print(-1)
+else:print(min(s))

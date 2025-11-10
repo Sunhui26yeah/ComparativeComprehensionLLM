@@ -1,0 +1,46 @@
+//import java.io.DataInputStream; 
+//import java.io.FileInputStream; 
+import java.io.IOException; 
+//import java.io.InputStreamReader; 
+import java.util.Scanner; 
+//import java.util.StringTokenizer; 
+  
+public class Cp 
+{ 
+  
+    public static void main(String[] args) throws IOException 
+    { 
+    	Scanner sc=new Scanner(System.in);
+//       
+       int t=sc.nextInt();
+        while (t-- > 0) 
+        {
+            
+            int n=sc.nextInt();
+            char[][] a=new char[n][n];
+            for(int i=0;i<n;i++)
+            {
+                String s=sc.next();
+                for(int j=0;j<n;j++)
+                {
+                    a[i][j]=s.charAt(j);
+                }
+            }
+            for(int i=0;i<n;i++)
+            {
+                if(a[i][i]=='X')
+                a[i][i]='O';
+            }
+            for(int i=0;i<n;i++)
+            {
+                for(int j=0;j<n;j++)
+                System.out.print(a[i][j]);
+                System.out.println("");
+                
+            }
+            
+            
+            
+        }
+    } 
+}

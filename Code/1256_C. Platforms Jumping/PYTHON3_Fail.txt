@@ -1,0 +1,37 @@
+import sys
+
+[n,m,d]=[int(i) for i in sys.stdin.readline().split()]
+
+c=[int(j) for j in sys.stdin.readline().split()]
+
+tot=n-sum(c)
+
+if(tot//(m+1)>d-1):
+	print("NO")
+else:
+	arr=[0]*(m+1)
+
+	for i in range(m+1):
+		arr[i]=tot//(m+1)
+
+	if(tot%(m+1)>=1 and d==1):
+		print("NO")
+	else:
+		for j in range(tot%(m+1)):
+			arr[j]+=1
+
+		ans=[0]*n
+		last=0
+		for p in range(m):
+			last=last+arr[p]
+			ind=last
+			for q in range(c[p]):
+				ans[ind]=p+1
+				ind+=1
+			last=last+c[p]
+			# last=max(last,ind-1)
+
+		print("YES")
+		for h in range(n):
+			print(ans[h],end=" ")
+		print()

@@ -1,0 +1,16 @@
+#include <bits/stdc++.h>
+int main() {
+  short a1, a2, k1, k2, n;
+  scanf("%hd %hd %hd %hd %hd", &a1, &a2, &k1, &k2, &n);
+  short maxDeletePlayer;
+  if (k1 > k2) {
+    maxDeletePlayer = n / k2 - abs(a2 - (n / k2));
+    maxDeletePlayer += (n - maxDeletePlayer * k2) / k1;
+  } else {
+    maxDeletePlayer = n / k1 - abs(a1 - (n / k1));
+    maxDeletePlayer += (n - maxDeletePlayer * k1) / k2;
+  }
+  short minDeletePlayer = n - (a1 * (k1 - 1) + a2 * (k2 - 1));
+  printf("%hd %hd\n", minDeletePlayer, maxDeletePlayer);
+  return 0;
+}

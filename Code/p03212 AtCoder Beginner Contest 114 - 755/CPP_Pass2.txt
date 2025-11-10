@@ -1,0 +1,16 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int n;
+
+int f(long long s, int b) {
+	if (s > n)
+		return 0;
+	return (b == 7) + f(s * 10 + 3, b | 4) + f(s * 10 + 5, b | 2)
+			+ f(s * 10 + 7, b | 1);
+}
+
+int main() {
+	cin >> n;
+	cout << f(0, 0) << endl;
+}

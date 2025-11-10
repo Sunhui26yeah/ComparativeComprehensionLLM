@@ -1,0 +1,118 @@
+import java.util.*;
+import java.io.*;
+
+public class Main {
+	public static int[] foil;
+	public static void findPattern(String str) {
+		char[] ch = str.toCharArray();
+		int f = -1;
+		foil[0] = -1;
+		for(int i=1;i<str.length();i++) {
+			while(f!=-1 && ch[i]!=ch[f+1]) {
+				f = foil[f];
+			}
+			if(ch[i]==ch[f+1]) {
+				f++;
+			}
+			foil[i] = f;
+		}
+	}
+	
+	public static boolean calculateResult(String str) {
+		int dis = foil[str.length()-1];
+		int t = dis;
+		boolean flag = true;
+		for(int i=str.length()-1;i>=str.length()-1-dis;i--) {
+			if(str.charAt(i)!=str.charAt(t) && i!=t) {
+				flag = false;
+				break;
+			}
+			t--;
+		}
+		
+		//System.out.println(" twe " + (str.length()-2-dis));
+		int t2 = dis;
+		boolean flag2 = false;
+		for(int i=str.length()-2-dis;i>dis;i--) {
+			//System.out.println(str.charAt(i)+ " " + dis);
+			if(str.charAt(i)==str.charAt(t2)) {
+				//System.out.println("te " + str.charAt(i) + " " + foil[i]);
+				t2--;
+				if(t2<0) {
+					t2=dis;
+					flag2 = true;
+				}
+			} 
+			else {
+				t2 = dis;
+			}
+		}
+		
+		if(flag && flag2) {
+			return true;
+		}
+		return false;
+	}
+	
+	public static void main(String[] args) throws Exception {
+		InputReader in = new InputReader(System.in);
+		
+		String str = in.next();
+		
+		foil = new int[str.length()+1];
+		findPattern(str);
+		
+//		for(int i=0;i<str.length();i++) {
+//			System.out.print(foil[i] + " ");
+//		}
+		
+		//System.out.println(pattern);
+		
+		boolean rs = calculateResult(str);
+		int tr = foil[str.length()-1];
+		
+		if(rs) {
+			String q = "";
+			for(int i=0;i<=tr;i++) {
+				q+=str.charAt(i);
+			}
+			
+			System.out.println(q);
+		} else {
+			System.out.println("Just a legend");
+		}
+	}
+	
+	static class InputReader {
+		public BufferedReader reader;
+		public StringTokenizer tokenizer;
+		
+		public InputReader(InputStream stream) {
+			reader = new BufferedReader(new InputStreamReader(stream));
+			tokenizer = null;
+		}
+		
+		public String next() throws Exception {
+			while(tokenizer==null || !tokenizer.hasMoreTokens()) {
+				tokenizer = new StringTokenizer(reader.readLine());
+			}
+			return tokenizer.nextToken();
+		}
+		
+		public String nextLine() throws Exception {
+			return reader.readLine();
+		}
+		
+		public int nextInt() throws Exception {
+			return Integer.parseInt(next());
+		}
+		
+		public long nextLong() throws Exception {
+			return Long.parseLong(next());
+		}
+		
+		public double nextDouble() throws Exception {
+			return Double.parseDouble(next());
+		}
+	}
+}

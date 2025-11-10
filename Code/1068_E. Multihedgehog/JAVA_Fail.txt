@@ -1,0 +1,154 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.LinkedList;
+import java.util.StringTokenizer;
+
+public class Main {
+    
+    static Vertex l, cntr, d;
+    static int max;
+    
+    public static void main(String[] args) throws UnsupportedEncodingException, IOException, Exception {
+        Reader.init(System.in);
+        StringBuilder out = new StringBuilder();
+        int n = Reader.nextInt();
+        long k = Reader.nextLong();
+        Graph g = new Graph(n);
+        while(n-- > 1)
+            g.addEdge(Reader.nextInt(), Reader.nextInt());
+        dfs(g.v[1], null);
+        l.lvl = 1;
+        calcLvl(l, null);
+        if((max & 1) == 0 || max < 5) {
+            System.out.println("No");
+            return;
+        }
+        max = max / 2 + 1;
+        getCntr(l, null);
+        out.append(calc(cntr, null, k) ? "Yes\n" : "No\n");
+        PrintWriter pw = new PrintWriter(System.out);
+        pw.print(out);
+        pw.close();
+    }
+    
+    static boolean calc(Vertex v, Vertex p, long k) {
+        if((k == 0l && v.edges.size() > 1) || (k > 0l && v.edges.size() == 1))
+            return false;
+        for(Vertex c : v.edges)
+            if(c != p && !calc(c, v, k - 1l))
+                return false;
+        return true;
+    }
+    
+    static boolean getCntr(Vertex v, Vertex p) {
+        if(d == v) {
+            if(v.lvl == max)
+                cntr = v;
+            return true;
+        }
+        for(Vertex c : v.edges)
+            if(c != p && getCntr(c, v)) {
+                if(v.lvl == max)
+                    cntr = v;
+                return true;
+            }
+        return false;
+    }
+    
+    static void dfs(Vertex v, Vertex p) {
+        l = v;
+        for(Vertex c : v.edges)
+            if(c != p)
+                dfs(c, v);
+    }
+    
+    static void calcLvl(Vertex v, Vertex p) {
+        if(max < v.lvl) {
+            max = v.lvl;
+            d = v;
+        }
+        for(Vertex c : v.edges)
+            if(c != p) {
+                c.lvl = v.lvl + 1;
+                calcLvl(c, v);
+            }
+    }
+
+}
+
+class Vertex {
+    
+    int name, lvl;
+    LinkedList<Vertex> edges;
+    
+    public Vertex(int n) {
+        name = n;
+        edges = new LinkedList<Vertex>();
+    }
+    
+}
+
+class Graph {
+    
+    Vertex[] v;
+    
+    public Graph(int s) {
+        v = new Vertex[s + 1];
+        for(int i = 1; i <= s; i++)
+            v[i] = new Vertex(i);
+    }
+    
+    public void addEdge(int v1, int v2) {
+        v[v1].edges.add(v[v2]);
+        v[v2].edges.add(v[v1]);
+    }
+    
+}
+
+class Reader {
+
+    static BufferedReader reader;
+    static StringTokenizer tokenizer;
+
+    static void init(InputStream input) throws UnsupportedEncodingException {
+        reader = new BufferedReader(
+                new InputStreamReader(input, "UTF-8"));
+        tokenizer = new StringTokenizer("");
+    }
+
+    static void init(String url) throws FileNotFoundException {
+        reader = new BufferedReader(new FileReader(url));
+        tokenizer = new StringTokenizer("");
+    }
+
+    static String next() throws IOException {
+        while (!tokenizer.hasMoreTokens()) {
+            //TODO add check for eof if necessary
+            tokenizer = new StringTokenizer(
+                    reader.readLine());
+        }
+        return tokenizer.nextToken();
+    }
+
+    static String nextLine() throws IOException {
+        return reader.readLine();
+    }
+
+    static int nextInt() throws IOException {
+        return Integer.parseInt(next());
+    }
+
+    static double nextDouble() throws IOException {
+        return Double.parseDouble(next());
+    }
+
+    static long nextLong() throws IOException {
+        return Long.parseLong(next());
+    }
+}

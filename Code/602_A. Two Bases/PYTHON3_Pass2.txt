@@ -1,0 +1,23 @@
+xcount, xschis = map(int, input().split())
+x = list(map(int, input().split()))
+x = x[::-1]
+sumx = 0
+ycount, yschis = map(int, input().split())
+y = list(map(int, input().split()))
+y = y[::-1]
+sumy = 0
+s = ""
+for i in range(len(x)):
+    sumx += pow(xschis, i) * x[i]
+
+for j in range(len(y)):
+    sumy += pow(yschis, j) * y[j]
+
+if sumx > sumy:
+    s = ">"
+elif sumx == sumy:
+    s = "="
+else:
+    s = "<"
+
+print(s)

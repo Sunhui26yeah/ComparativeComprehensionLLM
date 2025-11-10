@@ -1,0 +1,12 @@
+numbers = lambda: map(int, input().split())
+str = lambda: input().replace(" ", "")
+n, base_x = numbers()
+x = int(str(), base_x)
+m, base_y = numbers()
+y = int(str(), base_y)
+if x < y:
+    print("<")
+elif x > y:
+    print(">")
+elif x == y:
+    print("=")

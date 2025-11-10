@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+using namespace std;
+int ans = 0;
+int lim;
+int cat[100007];
+void edge(vector<int> adj[], int a, int b) {
+  adj[a].push_back(b);
+  adj[b].push_back(a);
+}
+void dfs(vector<int> adj[], int src, int parent, int catsTillNow) {
+  if (cat[src])
+    catsTillNow++;
+  else
+    catsTillNow = 0;
+  cout << src << " " << catsTillNow << " " << ans << endl;
+  if (catsTillNow > lim) return;
+  if (adj[src].size() == 1 && parent != 0) ans++;
+  for (auto v : adj[src]) {
+    if (parent == v) continue;
+    dfs(adj, v, src, catsTillNow);
+  }
+}
+int main() {
+  std::ios::sync_with_stdio(false);
+  int n;
+  cin >> n;
+  cin >> lim;
+  vector<int> adj[n + 1];
+  for (int i = 0; i < n; i++) {
+    int t;
+    cin >> t;
+    cat[i + 1] = t;
+  }
+  for (int i = 0; i < n - 1; i++) {
+    int a, b;
+    cin >> a >> b;
+    edge(adj, a, b);
+  }
+  dfs(adj, 1, 0, 0);
+  cout << ans << endl;
+  return 0;
+}

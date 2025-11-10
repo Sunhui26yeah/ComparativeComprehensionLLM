@@ -1,0 +1,33 @@
+def R(): return map(int, input().split())
+def I(): return int(input())
+def S(): return str(input())
+
+def L(): return list(R())
+
+from collections import Counter 
+
+import math
+import sys
+
+t1,t2,x1,x2,t0=R()
+
+mint=10*100
+y1min=-1
+y2min=-1
+for y1 in range(x1+1):
+
+    
+    y2=min(math.ceil(y1*(t0-t1)/(t2-t0)),x2)
+
+    if y1+y2==0: continue 
+
+    if mint>(y1*t1+y2*t2)/(y1+y2):
+        mint=(y1*t1+y2*t2)/(y1+y2)
+
+        #print(mint)
+
+        y1min=y1
+        y2min=y2
+
+
+print(y1min,y2min)

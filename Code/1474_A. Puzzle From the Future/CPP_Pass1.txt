@@ -1,0 +1,67 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define ll long long
+#define d long double
+
+#define scf(n) scanf("%d",&n)
+#define lscf(n) scanf("%lld",&n)
+#define dscf(n) scanf("%Lf",&n)
+#define pri(n) printf("%d ",(int)n)
+#define lpri(n) printf("%lld ",n)
+#define dpri(n) printf("%Lf ",n)
+#define prin(n) printf("%d\n",(int)n)
+#define lprin(n) printf("%lld\n",n)
+#define dprin(n) printf("%Lf\n",n)
+
+#define fast() ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL)
+#define rep(i,ini,n) for(ll i=ini;i<(int)n;i++)
+#define all(x) x.begin(),x.end()
+#define clr(x) memset(x, 0, sizeof(x))
+#define bitcount(n) __builtin_popcount(n)
+#define tc   int tt; scf(tt); while(tt--)
+#define gcd __gcd
+#define inf INT_MAX
+#define ninf INT_MIN
+
+#define pb push_back
+#define mp make_pair
+#define F first
+#define S second
+#define PI 3.14159265358979323846264
+
+const ll M =1e9+7;
+const int N = 1e6+7;
+
+
+
+int main()
+{
+    tc{
+        ll n; lscf(n); string s; cin>>s; vector<ll> v; 
+        if(s[0]=='1') v.pb(2);
+        else v.pb(1);
+        rep(i,1,n)
+        {
+            if(s[i]=='1')
+            {
+                if(v[i-1]!=2) v.pb(2);
+                else v.pb(1);
+            }
+            else
+            {
+                 if(v[i-1]!=1) v.pb(1);
+                else v.pb(0);
+            }
+        }
+        
+        rep(i,0,n)
+        {
+            int l= int(s[i]-'0');   
+            printf("%lld",v[i]-l);
+        }
+        printf("\n");
+    }
+    
+return 0;
+}

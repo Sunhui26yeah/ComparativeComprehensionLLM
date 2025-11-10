@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+using namespace std;
+const int SS = 5e2 + 123;
+const int N = 1e5 + 123;
+const int NN = 1e6 + 123;
+const int M = 1e7 + 123;
+const int MM = 1e8 + 123;
+const int inf = 1e9 + 123;
+const long long INF = 1e18 + 123;
+const long long MAXN = 1e10 + 123;
+int a[N], n, k, cnt;
+bool eq(int m) {
+  for (int i = 1; i <= n; i++)
+    if (m == a[i]) return 1;
+  return 0;
+}
+int main() {
+  ios_base::sync_with_stdio(0);
+  cin.tie(0);
+  cout.tie(0);
+  cin >> n;
+  for (int i = 1; i <= n; i++) cin >> a[i];
+  for (k = 1; k <= 90; k++) {
+    if (cnt == 15) break;
+    if (!eq(k))
+      cnt++;
+    else
+      cnt = 0;
+  }
+  cout << k - 1;
+}

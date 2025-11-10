@@ -1,0 +1,134 @@
+import java.util.*;
+import java.io.*;
+
+public class codechef
+{
+	public static void main(String[] args) throws IOException
+	{
+		FastReader in=new FastReader();
+		int n=in.nextInt();
+		int m=in.nextInt();
+		int[] arr=new int[n];
+		boolean[] f=new boolean[n];
+		long[] on=new long[n+1];
+		long[] off=new long[n+1];
+		f[0]=false;
+		arr[0]=in.nextInt();
+		on[0]=arr[0];
+		for(int i=1;i<n;i++)
+		{
+			arr[i]=in.nextInt();
+			if(f[i-1]==true)
+			{
+				f[i]=false;
+				on[i]=on[i-1]+arr[i]-arr[i-1];
+				off[i]=off[i-1];
+			}
+			else
+			{
+				f[i]=true;
+				on[i]=on[i-1];
+				off[i]=off[i-1]+arr[i]-arr[i-1];
+			}
+		}
+		if(f[n-1]==true)
+		{
+			on[n]=on[n-1]+m-arr[n-1];
+			off[n]=off[n-1];
+		}
+		else
+		{
+			on[n]=on[n-1];
+			off[n]=off[n-1]+m-arr[n-1];
+		}
+		long ans=Math.max(on[n],off[n]+arr[0]-1);
+		if((n>1 && arr[0]+1<arr[1]) || (n==1 && arr[0]+1<m))
+		{
+			ans=Math.max(ans,arr[0]+off[n]-1);
+		}
+		for(int i=1;i<n;i++)
+		{
+			if(f[i]==false)
+			{
+				if(arr[i-1]<arr[i]-1)
+				{
+					long temp=on[i]-1+off[n]-off[i];
+					ans=Math.max(ans,temp);
+				}
+				if((i==n-1 && arr[i]+1<m) || (i<n-1 && arr[i]+1<arr[i+1]))
+				{
+					long temp=on[i]+off[n]-off[i]-1;
+					ans=Math.max(ans,temp);
+				}
+			}
+		}
+		System.out.print(ans);
+	}
+
+    public static int[][] permute(int[] arr)
+    {
+    	int size=1;
+		for(int i=1;i<=arr.length;i++)
+		    size*=i;
+		int[][] ans=new int[size][arr.length];
+		for(int i=0;i<arr.length;i++)
+		{
+			ans[0][i]=arr[i];
+		}
+		for(int i=1;i<size;i++)
+		{
+			int j=arr.length-1;
+			while(j>0 && arr[j-1]>=arr[j])
+				j--;
+			if(j==0)
+			{
+				Arrays.sort(arr);
+				for(int k=0;k<arr.length;k++)
+					ans[i][k]=arr[k];
+			}
+			else
+			{
+				int k=j;
+				while(k<arr.length && arr[j-1]<arr[k])
+					k++;
+				int temp=arr[j-1];
+				arr[j-1]=arr[k-1];
+				arr[k-1]=temp;
+				Arrays.sort(arr,j,arr.length);
+				for(k=0;k<arr.length;k++)
+					ans[i][k]=arr[k];
+			}
+		}
+		return ans;
+    }
+}
+
+class FastReader
+{
+	BufferedReader br;
+	StringTokenizer st;
+ 
+	public FastReader()
+	{
+		br=new BufferedReader(new InputStreamReader(System.in));
+	}
+ 
+	public String next() throws IOException
+	{
+		if(st==null || !st.hasMoreElements())
+		{
+			st=new StringTokenizer(br.readLine());
+		}
+		return st.nextToken();
+	}
+ 
+	public int nextInt() throws IOException
+	{
+		return Integer.parseInt(next());
+	}
+ 
+	public long nextLong() throws IOException
+	{
+		return Long.parseLong(next());
+	}
+}

@@ -1,0 +1,61 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+//package javaapplication20;
+import java.util.*;
+/**
+ *
+ * @author vicky
+ */
+public class cf1199d {
+    public static void main(String[] args){
+		Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+		long[] money = new long[n];
+		for(int i = 0 ; i < n ; i++){
+			money[i]=sc.nextLong();
+		}
+		int q = sc.nextInt();
+		long[] q1 = new long[n];
+		int[] last = new int[n];
+		Arrays.fill(last, -1);
+		int maxIndex=0;
+		long maxQ2 = 0;
+		for(int i = 0 ; i < q;i++){
+			int opt = sc.nextInt();
+			if(opt==1){
+				int index = sc.nextInt(); 
+				q1[index-1] = sc.nextLong();
+				last[index-1] = i;
+			}
+			else{
+				long temp = sc.nextLong();
+				if(maxQ2<temp){
+					maxQ2 = temp;
+					maxIndex = i;
+				}
+			}
+		}
+		
+		for(int i = 0 ; i < n ; i++){
+			if(last[i]==-1){
+				money[i] = Math.max(maxQ2, money[i]);
+			}
+			else{
+				if(maxIndex<last[i]){
+					money[i]=q1[i];
+				}
+				else{
+					money[i]=maxQ2;
+				}
+			}
+		}
+		
+		
+		
+		for(int i = 0 ; i < n ; i++){
+			System.out.print(money[i]+" ");
+		}
+    }
+}

@@ -1,0 +1,47 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+  int t;
+  scanf("%d", &t);
+  while (t--) {
+    int n, bit[2][32];
+    scanf("%d", &n);
+    for (int i = 0; i < 32; i++) bit[0][i] = 0, bit[1][i] = 0;
+    for (int i = 0; i < n; i++) {
+      int x;
+      scanf("%d", &x);
+      int j = 0;
+      while (j < 32) {
+        bit[x % 2][j++]++;
+        x /= 2;
+      }
+    }
+    for (int i = 0; i < 10; i++) printf("%d ", bit[0][i]);
+    printf("\n");
+    for (int i = 0; i < 10; i++) printf("%d ", bit[1][i]);
+    printf("\n");
+    int flag = 1;
+    for (int i = 31; i >= 0; i--) {
+      if (bit[1][i] % 2 == 0)
+        continue;
+      else {
+        if (bit[1][i] % 4 == 1)
+          flag = 0;
+        else if (bit[1][i] % 4 == 3) {
+          if (bit[0][i] % 2 == 1)
+            flag = 0;
+          else
+            flag = 2;
+        }
+        break;
+      }
+    }
+    if (flag == 0)
+      printf("WIN\n");
+    else if (flag == 1)
+      printf("DRAW\n");
+    else if (flag == 2)
+      printf("LOSE\n");
+  }
+  return 0;
+}

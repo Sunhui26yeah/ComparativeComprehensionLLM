@@ -1,0 +1,81 @@
+#include <bits/stdc++.h>
+using namespace std;
+int a[100101];
+int x, y;
+int n, m;
+int rn = 0;
+int r[11];
+int main() {
+  int i, j, k, l, s, t, sum = 0;
+  bool color4 = false, color1 = false, color2 = false, color3 = false;
+  scanf("%d%d%d%d", &n, &m, &x, &y);
+  for (i = 1; i <= n; i++) scanf("%d", &a[i]);
+  for (i = 1; i <= n; i++) {
+    k = a[i] + x;
+    s = lower_bound(a + 1, a + n + 1, k) - a;
+    if (a[s] == k) {
+      color1 = true;
+      break;
+    }
+  }
+  for (i = 1; i <= n; i++) {
+    k = a[i] + y;
+    s = lower_bound(a + 1, a + n + 1, k) - a;
+    if (a[s] == k) {
+      color2 = true;
+      break;
+    }
+  }
+  if (!color1 && !color2) {
+    for (i = 1; i <= n; i++) {
+      k = a[i] + y + x;
+      if (k < 0) break;
+      s = lower_bound(a + 1, a + n + 1, k) - a;
+      if (a[s] == k) {
+        color3 = true;
+        break;
+      }
+    }
+    if (color3) {
+      printf("1\n%d\n", a[i] + x);
+      return 0;
+    }
+  }
+  if (!color1 && !color2) {
+    for (i = 1; i <= n; i++) {
+      k = a[i] + y - x;
+      if (k < 0 || k > m || a[i] + y > m) break;
+      s = lower_bound(a + 1, a + n + 1, k) - a;
+      if (a[s] == k) {
+        color4 = true;
+        break;
+      }
+    }
+    if (color4) {
+      printf("1\n%d\n", a[i] + y);
+      return 0;
+    } else {
+      for (i = 1; i <= n; i++) {
+        k = a[i] - (y - x);
+        if (k < 0 || k > m || a[i] - y < 0) continue;
+        s = lower_bound(a + 1, a + n + 1, k) - a;
+        if (a[s] == k) {
+          color4 = true;
+          break;
+        }
+      }
+      if (color4) {
+        printf("1\n%d\n", a[i] - y);
+        return 0;
+      }
+    }
+  }
+  if (!color1) r[++rn] = x;
+  if (!color2) {
+    r[++rn] = y;
+  }
+  if (rn == 2 && r[1] == r[2]) rn--;
+  printf("%d\n", rn);
+  for (i = 1; i <= rn - 1; i++) printf("%d ", r[i]);
+  if (rn) printf("%d\n", r[rn]);
+}

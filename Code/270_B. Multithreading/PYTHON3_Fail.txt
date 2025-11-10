@@ -1,0 +1,10 @@
+_ = input()
+a = list(map(int, input().split(' ')))
+
+res = 0
+for x in range(len(a)-1, 0, -1):
+    if a[x] < a[x-1]:
+        res += 1
+
+
+print(res)

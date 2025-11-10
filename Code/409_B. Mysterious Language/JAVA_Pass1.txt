@@ -1,0 +1,30 @@
+public class Intercal
+{
+	public static void main(String[] args)
+	{
+		System.out.println("INTERCAL");
+		
+		/*
+		char[] arr = "INTERCAL".toCharArray();
+		int head = 0;
+		System.out.printf("DO ,1 <- #%d%n", arr.length);
+		for (int i = 0; i < arr.length; i++)
+		{
+			char c = arr[i];
+			String num = String.format("%08d", Integer.parseInt(Integer.toBinaryString(c)));
+			String actual = new StringBuilder(num).reverse().toString();
+			int req = Integer.parseInt(actual, 2);
+			int move = 0;
+			if (head < req)
+				move = head+256-req;
+			else
+				move = head-req;
+			head = req;
+			String please = i % 4 == 0 ? "PLEASE " : "";
+			System.out.printf("%sDO ,1 SUB #%d <- #%d%n", please, i+1, move);
+		}
+		System.out.println("PLEASE READ OUT ,1");
+		System.out.println("PLEASE GIVE UP");
+		*/
+	}
+}

@@ -1,0 +1,85 @@
+import java.util.Scanner;
+public class prombel12Cfruits {
+
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+        
+        int n = scan.nextInt();
+        int m = scan.nextInt();
+        boolean fl = true, fl2 = true;
+        int[] costs = new int[n];
+        
+        for (int i = 0; i < n; i++) 
+            costs[i] = scan.nextInt();
+        
+        String current_fruit = new String("");
+        
+        String[] fruits = new String[m];
+        int[] c= new int[m];
+        int K = 0;
+        
+        for (int i = 0; i<m; i++) {
+            c[i] = 0;
+        }
+        
+        fruits[0] = scan.next();
+        c[0] = 1;
+        K = 1;
+        
+        for (int i = 1; i < m; i++) {
+            current_fruit = scan.next();
+            fl = true;
+            for (int j = 0; j<K+1; j++) {
+                if (current_fruit.equals(fruits[j])) {
+                    c[j]++;
+                    fl = false;
+                    break;
+                }
+            }
+            if (fl == true) {
+                K++;
+                fruits[K-1] = current_fruit;
+                c[K-1]++;
+            }
+        }
+        
+        scan.close();
+
+        int temp = 0;
+        while(true) {
+            fl2 = true;
+            for (int i = 0; i < costs.length-1; i++)
+                if(costs[i]>costs[i+1]) {
+                    temp = costs[i+1];
+                    costs[i+1] = costs[i];
+                    costs[i] = temp;
+                    fl2 = false;
+                }
+            if (fl2) 
+                break;
+        }
+        
+        while(true) {
+            fl2 = true;
+            for (int i = 0; i < K-1; i++)
+                if(c[i]<c[i+1]) {
+                    temp = c[i+1];
+                    c[i+1] = c[i];
+                    c[i] = temp;
+                    fl2 = false;
+                }
+            if (fl2) 
+                break;
+        }
+        
+        int a1 = 0, a2 = 0;
+        
+        for (int i = 0; i<K; i++)
+            a1 += (c[i]*costs[i]);
+        for (int i = 0; i<K; i++)
+            a2 += (c[i]*costs[costs.length-1-i]);
+        
+        System.out.println(a1+" "+a2);
+        
+    }
+}

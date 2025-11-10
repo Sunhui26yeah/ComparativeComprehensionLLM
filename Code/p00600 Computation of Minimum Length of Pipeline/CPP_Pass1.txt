@@ -1,0 +1,70 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <cstring>
+#include <climits>
+#include <algorithm>
+#include <map>
+using namespace std;
+
+struct Edge {
+    int to, cost;
+};
+
+int main() {
+    int s, d; // hot springs, districts
+    while (cin >> s >> d, s || d) {
+        vector<vector<Edge>> G(s+d);
+        int t;
+
+        // edge: hot springs -> districts
+        for (int i=0; i<s; ++i) {
+            for (int j=0; j<d; ++j) {
+                cin >> t;
+                if (t != 0) {
+                    G[i].push_back((Edge){s+j, t});
+                }
+            }
+        }
+        // edge: districs <-> districts
+        for (int i=0; i<d; ++i) {
+            for (int j=i+1; j<d; ++j) {
+                cin >> t;
+                if (t != 0) {
+                    G[s+i].push_back((Edge){s+j, t});
+                    G[s+j].push_back((Edge){s+i, t});
+                }
+            }
+        }
+
+        // visited list & table
+        vector<int> vpt;
+        bool visited[200] = {false};
+        for (int i=0; i<s; ++i) {
+            vpt.push_back(i);
+            visited[i] = true;
+        }
+
+        int res = 0;
+        while ((int)vpt.size() < s+d) {
+            int min_cost = INT_MAX;
+            int to = -1;
+            for (int i=0; i<(int)vpt.size(); ++i) {
+                int from = vpt[i];
+                for (int j=0; j<(int)G[from].size(); ++j) {
+                    Edge e = G[from][j];
+                    if ( ! visited[e.to] && e.cost < min_cost) {
+                        min_cost = e.cost;
+                        to = e.to;
+                    }
+                }
+            }
+            res += min_cost;
+            vpt.push_back(to);
+            visited[to] = true;
+        }
+
+        cout << res << endl;
+    }
+    return 0;
+}

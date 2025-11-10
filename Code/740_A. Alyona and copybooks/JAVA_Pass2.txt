@@ -1,0 +1,44 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+
+import java.util.Scanner;
+
+
+public class AlyonaAndCopyBooks {
+
+    
+    static long min(long num1,long num2,long num3) {
+        long min = num1;
+        long[] arr = new long[3];
+        arr[0] = num1; arr[1] = num2; arr[2] = num3;
+        for(int i = 0; i < 3; i++) {
+            if(arr[i] < min)
+                min = arr[i];
+        }
+        return min;
+    }
+    
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        long a,b,c,n,min = 0;
+        n = in.nextLong();
+        a = in.nextLong();
+        b = in.nextLong();
+        c = in.nextLong();
+        long remain = n%4;
+        if(remain == (long)1) {
+            min = min(a+a+a,b+a,c);
+        } else if(remain == (long)2) {
+            min = min(b,a+a,c+c); 
+        } else if(remain == (long)3){
+            min = min(a,b+c,c+c+c);
+        } 
+        System.out.println(min);
+        in.close();
+    } 
+    
+}

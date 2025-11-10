@@ -1,0 +1,27 @@
+s = input().split(' ')
+n = int(s[0])
+t = int(s[1])
+
+a = dict()
+q = []
+for i in range(t):
+    s = input().split(' ')
+    x = int(s[0])
+    y = int(s[1])
+    a[(x, y)] = 0
+    q.append((x, y))
+a[(0, 0)] = n
+
+while max(a.values()) >= 4:
+    for key, value in a.items():
+        if value >= 4:
+            a[key] = a[key] - 4
+            x = key[0]; y = key[1]
+            a[(x + 1, y)] += 1
+            a[(x - 1, y)] += 1
+            a[(x, y + 1)] += 1
+            a[(x, y - 1)] += 1
+
+for i in q:
+    print(str(a[i]))
+print(a)

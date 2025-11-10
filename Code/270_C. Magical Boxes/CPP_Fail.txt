@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+using namespace std;
+struct Box {
+  long long Size;
+  long long num;
+} box[100005];
+bool cmp(Box a, Box b) {
+  if (a.Size > b.Size) return true;
+  return false;
+}
+int main() {
+  long i, n;
+  long long temp, ans;
+  while (cin >> n) {
+    temp = -1;
+    for (i = 0; i < n; i++) {
+      cin >> box[i].Size >> box[i].num;
+      if (temp < box[i].Size) temp = box[i].Size;
+    }
+    ans = temp + 1;
+    sort(box, box + n, cmp);
+    for (i = 0; i < n; i++) {
+      temp = ans - box[i].Size;
+      temp = pow(4.0, temp);
+      temp = (box[i].num + temp - 1) / temp - 1;
+      ans += temp;
+    }
+    cout << ans << endl;
+  }
+  return 0;
+}

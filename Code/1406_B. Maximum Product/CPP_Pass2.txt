@@ -1,0 +1,30 @@
+#include <bits/stdc++.h>
+using namespace std;
+int t, n;
+long long dpmin[10][100005], dpmax[10][100005], a[100005];
+long long INF = 243000000000000001ll;
+int main() {
+  scanf("%d", &t);
+  while (t--) {
+    scanf("%d", &n);
+    for (int i = 1; i <= n; i++) scanf("%lld", &a[i]);
+    for (int i = 0; i <= 5; i++)
+      for (int j = 0; j <= n; j++) dpmin[i][j] = INF, dpmax[i][j] = -INF;
+    for (int i = 1; i <= n; i++) dpmax[1][i] = dpmin[1][i] = a[i];
+    for (int i = 2; i <= 5; i++) {
+      long long minn = INF, maxx = -INF;
+      for (int j = 1; j <= n; j++) {
+        if (minn != INF) dpmax[i][j] = max(dpmax[i][j], minn * a[j]);
+        if (maxx != -INF) dpmax[i][j] = max(dpmax[i][j], maxx * a[j]);
+        if (minn != INF) dpmin[i][j] = min(dpmin[i][j], minn * a[j]);
+        if (maxx != -INF) dpmin[i][j] = min(dpmin[i][j], maxx * a[j]);
+        minn = min(minn, dpmin[i - 1][j]);
+        maxx = max(maxx, dpmax[i - 1][j]);
+      }
+    }
+    long long ans = -INF;
+    for (int i = 5; i <= n; i++) ans = max(ans, dpmax[5][i]);
+    printf("%lld\n", ans);
+  }
+  return 0;
+}

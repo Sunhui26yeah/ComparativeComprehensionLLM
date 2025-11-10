@@ -1,0 +1,53 @@
+#include <bits/stdc++.h>
+using namespace std;
+int par[105][105];
+int sz[105][105];
+int getpar(int x, int c) {
+  if (par[c][x] == x) {
+    return x;
+  }
+  return par[c][x] = getpar(par[c][x], c);
+}
+void dsu(int a, int b, int c) {
+  a = getpar(a, c);
+  b = getpar(b, c);
+  if (a == b) {
+    return;
+  }
+  if (sz[c][a] < sz[c][b]) {
+    swap(a, b);
+  }
+  par[c][b] = a;
+  sz[c][a] += sz[c][b];
+}
+int main() {
+  int n, m;
+  cin >> n >> m;
+  for (int i = 0; i < 105; i++) {
+    for (int j = 0; j < 105; j++) {
+      par[i][j] = j;
+      sz[i][j] = 1;
+    }
+  }
+  for (int i = 0; i < m; i++) {
+    int a, b, c;
+    cin >> a >> b >> c;
+    dsu(a, b, c);
+  }
+  int k;
+  cin >> k;
+  for (int i = 0; i < k; i++) {
+    int a, b;
+    cin >> a >> b;
+    int ans = 0;
+    int x, y;
+    for (int j = 0; j < 5; j++) {
+      x = par[j][a];
+      y = par[j][b];
+      if (x == y) {
+        ans++;
+      }
+    }
+    cout << ans << endl;
+  }
+}

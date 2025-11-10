@@ -1,0 +1,21 @@
+import io,os
+input = io.BytesIO(os.read(0, os.fstat(0).st_size)).readline
+r,n=map(int,input().split())
+t=[0];x=[1];y=[1]
+cdp=[0]
+dp=[0]
+for i in range(1,n+1):
+    ti,xi,yi=map(int,input().split())
+    t.append(ti)
+    x.append(xi)
+    y.append(yi)
+    mx=-10**9
+    for j in range(i)[::-1]:
+        if cdp[j]<mx:
+            break
+        if abs(xi-x[j])+abs(yi-y[j])<=abs(ti-t[j]):
+            mx=max(mx,dp[j])
+    mx+=1
+    dp.append(mx)
+    cdp.append(max(cdp[-1],mx))
+print(cdp[-1])

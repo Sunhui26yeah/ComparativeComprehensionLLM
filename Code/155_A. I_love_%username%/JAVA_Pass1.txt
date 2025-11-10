@@ -1,0 +1,31 @@
+import java.util.Scanner;
+
+public class Amazing{
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int testCases = sc.nextInt();
+		testCases--;
+		
+		int input = sc.nextInt();
+		int max = input; 
+		int min = input;
+		int count = 0;
+
+		while(testCases-- > 0){
+			input = sc.nextInt();
+
+			if(input < min){
+				min = input;
+				count++;
+			}
+
+			if(input > max){
+				max = input;
+				count++;
+			}
+		}
+
+		System.out.println(count);
+
+	}
+}

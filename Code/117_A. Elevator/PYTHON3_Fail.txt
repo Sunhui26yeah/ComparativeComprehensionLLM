@@ -1,0 +1,14 @@
+a,b=map(int,input().split())
+ans=2*(b-1)
+for i in range(a):
+    x,y,z=map(int,input().split())
+    if x==y:print(z)
+    elif x<y:
+        if z<x:print(y-1)
+        else:print(ans*((z+ans-x)//ans)+y-1)
+    else:
+        x,y=y,x
+        k=b-1
+        z-=k
+        if z<=b-y:print(k+b-x)
+        else:print(k+(ans*((z+ans-1)//ans))+b-x)

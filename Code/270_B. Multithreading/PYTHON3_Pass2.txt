@@ -1,0 +1,21 @@
+# -*- coding: utf-8 -*-
+
+# Baqir Khan
+# Software Engineer (Backend)
+
+from sys import stdin
+
+inp = stdin.readline
+
+n = int(inp())
+a = list(map(int, inp().split()))
+ans = 0
+
+cur_max = a[0]
+
+for i in range(n - 1, 0, -1):
+    if a[i] < a[i - 1]:
+        print(i)
+        exit()
+
+print(0)

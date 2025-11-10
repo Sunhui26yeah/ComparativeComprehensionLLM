@@ -1,0 +1,15 @@
+n = int(input())
+cards = []
+for i in range(n):
+    a, b = map(int, input().split())
+    cards.append((b, a))
+cards.sort()
+cards.reverse()
+score = 0
+counter = 1
+for b, a, in cards:
+    score += a
+    counter += b - 1
+    if counter == 0:
+        break
+print(score)

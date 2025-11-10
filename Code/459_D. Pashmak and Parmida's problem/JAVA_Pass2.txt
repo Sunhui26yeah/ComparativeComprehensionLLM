@@ -1,0 +1,106 @@
+import java.io.*;
+import java.util.*;
+
+/**
+ * Created by vikas.k on 25/12/16.
+ */
+public class CF261D {
+    public static void main(String[] args){
+        CF261D gv = new CF261D();
+        gv.solve();
+    }
+    private int[] rgt;
+    private int[] fnk;
+    int n;
+
+    private void solve(){
+        MyScanner sc = new MyScanner();
+        out = new PrintWriter(new BufferedOutputStream(System.out));
+        n = sc.nextInt();
+
+        List<Integer> str = new ArrayList<>();
+        List<Integer> tmp = new ArrayList<>();
+
+        for(int i=0;i<n;i++){
+            str.add(sc.nextInt());
+            tmp.add(str.get(i));
+        }
+
+        Collections.sort(tmp);
+        for(int i=0;i<n;i++){
+            str.set(i,Collections.binarySearch(tmp,str.get(i)));
+        }
+
+        //out.println(str.toString());
+
+        Map<Integer,Integer> cnt = new HashMap<>();
+        fnk = new int[n+1];
+        rgt = new int[n+1];
+
+        for(int i=n-1;i>=0;i--){
+            int v = str.get(i);
+            if(!cnt.containsKey(v)) cnt.put(v,0);
+            rgt[i] = cnt.get(v)+1;
+            cnt.put(v,rgt[i]);
+            add(rgt[i],1);
+        }
+
+        cnt.clear();
+        long ans =0;
+        for(int i=0;i<n;i++){
+            int v = str.get(i);
+            if(!cnt.containsKey(v)) cnt.put(v,0);
+            add(rgt[i],-1);
+            cnt.put(v,cnt.get(v)+1);
+            ans+= get(cnt.get(v));
+        }
+        out.println(ans);
+
+        out.close();
+    }
+
+    private void add(int x,int v){
+        for(int i = x; i<n+1;i+=i&(-i)) fnk[i]+=v;
+    }
+
+    private long get(int x){
+        long ret =0;
+        for(int i = x-1;i>0;i-=i&(-i)) ret+=fnk[i];
+        return ret;
+    }
+
+    public static PrintWriter out;
+
+    private static class MyScanner{
+        BufferedReader bufferedReader;
+        StringTokenizer stringTokenizer;
+
+        private MyScanner(){
+            bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        }
+
+        private String next(){
+            if(stringTokenizer == null || !stringTokenizer.hasMoreElements()){
+                try {
+                    stringTokenizer = new StringTokenizer(bufferedReader.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return stringTokenizer.nextToken();
+        }
+
+        private int nextInt(){
+            return Integer.parseInt(next());
+        }
+        private String nextLine(){
+            String ret= "";
+            try {
+                ret= bufferedReader.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return ret;
+        }
+    }
+}

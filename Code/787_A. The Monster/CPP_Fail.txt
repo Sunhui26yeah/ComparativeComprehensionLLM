@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+int z[1000000];
+int main() {
+  int a, b, c, d, x, y;
+  scanf("%d%d%d%d", &a, &b, &c, &d);
+  if (a % 2 == 0 && b % 2 == 0) x = 2;
+  if (c % 2 == 0 && d % 2 == 0) y = 2;
+  if ((a % 2 == 1 && b % 2 == 0) || (a % 2 == 0 && b % 2 == 1)) x = 1;
+  if ((c % 2 == 0 && d % 2 == 1) || (c % 2 == 1 && d % 2 == 0)) y = 1;
+  if (b == d)
+    printf("%d\n", b);
+  else if ((x == 2 && y == 1) || (x == 1 && y == 2))
+    printf("-1\n");
+  else {
+    z[b] = 1, z[d] = 1;
+    for (;;) {
+      if (z[b + a] == 1) {
+        x = b + a;
+        break;
+      } else
+        z[b + a] = 1, b += a;
+      if (z[d + c] == 1) {
+        x = d + c;
+        break;
+      } else
+        z[d + c] = 1, d += c;
+    }
+    printf("%d\n", x);
+  }
+  return 0;
+}

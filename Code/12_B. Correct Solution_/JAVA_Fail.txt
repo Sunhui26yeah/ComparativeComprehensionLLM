@@ -1,0 +1,61 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.StreamTokenizer;
+import java.util.Arrays;
+
+
+public class Main {
+	private static StreamTokenizer in;
+	private static PrintWriter out;
+	
+	private static int nextInt() throws Exception {
+		in.nextToken();
+		return (int)in.nval;
+	}
+	
+	private static String nextString() throws Exception {
+		in.nextToken();
+		return in.sval;
+	}
+	
+	public static void main(String[] args) throws Exception {
+		in = new StreamTokenizer(new BufferedReader(new InputStreamReader(System.in)));
+		out = new PrintWriter(System.out);
+
+		in.ordinaryChars('0', '9');
+		in.wordChars('0', '9');
+		
+		char[] ch = nextString().toCharArray();
+		String a = Integer.parseInt(nextString())+"";
+		
+		Arrays.sort(ch);
+		
+		int i=0;
+		for (; i<ch.length; i++) {
+			if (ch[i]!='0') break;
+		}
+		
+		if (i == ch.length) {
+			if (!a.equals("0"))
+				out.println("WRONG_ANSWER");
+			else out.println("OK");
+			out.flush();
+			return;
+		}
+		
+		String s = ch[i]+"";
+		for (int j=0; j<i; j++)
+			s+='0';
+		for (i+=1; i<ch.length; i++)
+			s+=ch[i];
+		
+//		out.println(s);
+		
+		if (!a.equals(s))
+			out.println("WRONG_ANSWER");
+		else out.println("OK");
+		
+		out.flush();
+	}
+}

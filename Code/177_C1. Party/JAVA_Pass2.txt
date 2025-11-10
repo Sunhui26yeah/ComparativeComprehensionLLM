@@ -1,0 +1,83 @@
+import java.util.*;
+import java.io.*;
+ 
+public class Solution {
+	public static void main (String[] args) throws IOException{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); 
+		String[] temp=br.readLine().trim().split(" ");
+		int V=Integer.parseInt(temp[0]);
+		int m=Integer.parseInt(br.readLine());
+		DSU graph=new DSU(V);
+		for(int i=0;i<m;i++){
+		    temp=br.readLine().trim().split(" ");
+		    int u=Integer.parseInt(temp[0]);
+		    int v=Integer.parseInt(temp[1]);
+		    
+		    graph.makeUnion(u,v);
+		}
+		m=Integer.parseInt(br.readLine());
+		boolean[] friendsAndEnemiesPresent=new boolean[V+1];
+		for(int i=0;i<m;i++){
+		    temp=br.readLine().trim().split(" ");
+		    int u=Integer.parseInt(temp[0]);
+		    int v=Integer.parseInt(temp[1]);
+		    
+		    int parent1=graph.getParent(u);
+		    int parent2=graph.getParent(v);
+		    if(parent1==parent2){
+		        friendsAndEnemiesPresent[parent1]=true;
+		    }
+		}
+		int maxComponentSize=0;
+		for(int i=1;i<=V;i++){
+		    int parent=graph.getParent(i);
+		    if(friendsAndEnemiesPresent[parent]==false){
+		        maxComponentSize=Math.max(maxComponentSize,graph.componentSize(parent));
+		    }
+		}
+		System.out.println(maxComponentSize);
+	}
+}
+
+class DSU{
+    private int[] parent;
+    private int[] size;
+    
+    public DSU(int V){
+        parent=new int[V+1];
+        size=new int[V+1];
+        for(int i=1;i<=V;i++){
+            parent[i]=i;
+            size[i]=1;
+        }
+    }
+    public int getParent(int vertex){
+        int temp=vertex;
+        while(vertex!=parent[vertex]){
+            vertex=parent[vertex];
+        }
+        parent[temp]=vertex;
+        return vertex;
+    }
+    public void makeUnion(int u,int v){
+        int parent1=this.getParent(u);
+        int parent2=this.getParent(v);
+        if(parent1==parent2){
+            return;
+        }
+        int size1=size[parent1];
+        int size2=size[parent2];
+        if(size2<size1){
+            parent[parent2]=parent1;
+            size[parent1]+=size[parent2];
+        }
+        else{
+            parent[parent1]=parent2;
+            size[parent2]+=size[parent1];
+        }
+    }
+    public int componentSize(int vertex){
+        int parent=this.getParent(vertex);
+        return size[parent];
+    }
+}

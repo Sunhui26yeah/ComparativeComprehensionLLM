@@ -1,0 +1,135 @@
+//package codeforces.practice.oneVone.Oct22_2020;
+
+import java.io.*;
+import java.util.*;
+
+public class B1198_Editorial {
+    static InputReader in;
+    static PrintWriter out;
+
+    public static void main(String[] args) {
+        //initReaderPrinter(true);
+        initReaderPrinter(false);
+        //solve(in.nextInt());
+        solve(1);
+    }
+
+    static void solve(int testCnt) {
+        for (int testNumber = 0; testNumber < testCnt; testNumber++) {
+            int n = in.nextInt();
+            Integer[] a = in.nextIntArray(n);
+            int q = in.nextInt();
+            int[][] t1 = new int[n][2];
+            int[] t2 = new int[q];
+            for(int i = 0; i < n; i++) {
+                t1[i][0] = -1;
+                t1[i][1] = a[i];
+            }
+            for(int i = 0; i < q; i++) {
+                int t = in.nextInt();
+                if(t == 1) {
+                    int p = in.nextInt() - 1;
+                    int x = in.nextInt();
+                    t1[p][0] = i;
+                    t1[p][1] = x;
+                }
+                else {
+                    int x = in.nextInt();
+                    t2[i] = x;
+                }
+            }
+            int[] suffixMax = new int[q];
+            suffixMax[q - 1] = t2[q - 1];
+            for(int i = q - 2; i >= 0; i--) {
+                suffixMax[i] = Math.max(t2[i], suffixMax[i + 1]);
+            }
+            for(int i = 0; i < n; i++) {
+                if(t1[i][0] == q - 1) {
+                    out.print(t1[i][1] + " ");
+                }
+                else {
+                    int balance = Math.max(t1[i][1], suffixMax[t1[i][0] + 1]);
+                    out.print(balance + " ");
+                }
+            }
+            out.println();
+        }
+        out.close();
+    }
+
+    static void initReaderPrinter(boolean test) {
+        if (test) {
+            try {
+                in = new InputReader(new FileInputStream("src/input.in"));
+                out = new PrintWriter(new FileOutputStream("src/output.out"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            in = new InputReader(System.in);
+            out = new PrintWriter(System.out);
+        }
+    }
+
+    static class InputReader {
+        BufferedReader br;
+        StringTokenizer st;
+
+        InputReader(InputStream stream) {
+            try {
+                br = new BufferedReader(new InputStreamReader(stream), 32768);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        String next() {
+            while (st == null || !st.hasMoreTokens()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
+
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
+
+        long nextLong() {
+            return Long.parseLong(next());
+        }
+
+        double nextDouble() {
+            return Double.parseDouble(next());
+        }
+
+        String nextLine() {
+            String str = "";
+            try {
+                str = br.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return str;
+        }
+
+        Integer[] nextIntArray(int n) {
+            Integer[] a = new Integer[n];
+            for (int i = 0; i < n; i++) {
+                a[i] = nextInt();
+            }
+            return a;
+        }
+
+        Long[] nextLongArray(int n) {
+            Long[] a = new Long[n];
+            for (int i = 0; i < n; i++) {
+                a[i] = nextLong();
+            }
+            return a;
+        }
+    }
+}

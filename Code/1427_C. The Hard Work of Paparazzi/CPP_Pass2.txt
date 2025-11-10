@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+using namespace std;
+const int inf = 0x3f3f3f3f;
+const long long linf = 0x3f3f3f3f3f3f3f3f;
+long long dp[100005];
+struct st {
+  long long t, x, y;
+} s[100005];
+void solve() {
+  int r, n;
+  cin >> r >> n;
+  for (int i = 1; i <= n; i++) {
+    cin >> s[i].t >> s[i].x >> s[i].y;
+    dp[i] = -1;
+  }
+  s[0].t = 0;
+  s[0].x = 1;
+  s[0].y = 1;
+  dp[0] = 0;
+  for (int i = 1; i <= n; i++) {
+    for (int j = i - 1; j >= 0; j--) {
+      if (i - j > 4 * r) break;
+      if (dp[j] >= 0 &&
+          abs(s[i].t - s[j].t) >= abs(s[i].x - s[j].x) + abs(s[i].y - s[j].y)) {
+        dp[i] = max(dp[i], dp[j] + 1);
+      }
+    }
+  }
+  long long ans = 0;
+  for (int i = 1; i <= n; i++) {
+    ans = max(ans, dp[i]);
+  }
+  cout << ans << endl;
+}
+int main() {
+  int t = 1;
+  while (t--) {
+    solve();
+  }
+}

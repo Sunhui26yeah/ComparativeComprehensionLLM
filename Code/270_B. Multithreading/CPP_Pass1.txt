@@ -1,0 +1,23 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+  int n;
+  int a[100005];
+  cin >> n;
+  int fa = 1;
+  for (int i = 1; i <= n; i++) {
+    cin >> a[i];
+    if (a[i] != i) {
+      fa = 0;
+    }
+  }
+  if (fa == 1) {
+    cout << "0";
+  } else {
+    int ji = n - 1;
+    while (a[ji] < a[ji + 1]) {
+      ji--;
+    }
+    cout << ji;
+  }
+}

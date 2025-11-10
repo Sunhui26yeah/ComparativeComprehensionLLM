@@ -1,0 +1,37 @@
+#include <bits/stdc++.h>
+using namespace std;
+int n, m, p[2001], t1, t2, t3, f[2001], s[2001];
+int findd(int x1) {
+  if (p[x1] == x1) return x1;
+  return p[x1] = findd(p[x1]);
+}
+int unionn(int x1, int x2) {
+  if (findd(x1) != findd(x2)) p[findd(x1)] = findd(x2);
+}
+int main() {
+  cin >> n;
+  cin >> m;
+  for (int i = 1; i <= n; i++) {
+    p[i] = i;
+  }
+  for (int i = 1; i <= m; i++) {
+    cin >> t1 >> t2;
+    unionn(t1, t2);
+  }
+  cin >> m;
+  for (int i = 1; i <= m; i++) {
+    cin >> t1 >> t2;
+    if (findd(t1) == findd(t2)) f[findd(t1)] = 1;
+  }
+  int ma = 0;
+  for (int i = 1; i <= n; i++) {
+    s[findd(i)]++;
+  }
+  for (int i = 1; i <= n; i++) {
+    if (f[i] == 0 && s[i] > ma) ma = s[i];
+  }
+  cout << ma << endl;
+  cin.get();
+  cin.get();
+  return 0;
+}

@@ -1,0 +1,41 @@
+#include <bits/stdc++.h>
+using namespace std;
+int ans[1005][1005];
+int power(int a, int b) {
+  if (b == 0) return 1;
+  int p = power(a, b / 2);
+  if (b % 2 == 0)
+    return p * p;
+  else
+    return p * p * a;
+}
+int main() {
+  int n, k, d;
+  scanf("%d%d%d", &n, &k, &d);
+  double tmp = pow(2, log2(n) / d);
+  int tk = (int)ceil((float)tmp);
+  if (tk > k) {
+    printf("-1\n");
+  } else {
+    k = tk;
+    for (int i = d - 1; i >= 0; i--) {
+      int change = power(k, (d - 1) - i);
+      int cnt = 0;
+      int print = 1;
+      for (int j = 0; j < n; j++) {
+        if (cnt == change) {
+          cnt = 0;
+          print = (print + 1) % k;
+          if (print == 0) print = k;
+        }
+        ans[i][j] = print;
+        cnt++;
+      }
+    }
+    for (int i = 0; i < d; i++) {
+      for (int j = 0; j < n; j++) printf("%d ", ans[i][j]);
+      printf("\n");
+    }
+  }
+  return 0;
+}

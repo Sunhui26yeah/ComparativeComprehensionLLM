@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+  int n, m;
+  cin >> n >> m;
+  vector<int> prc;
+  prc.resize(n);
+  for (int i = 0; i < n; ++i) cin >> prc[i];
+  map<string, int> ris;
+  vector<int> frts;
+  frts.push_back(0);
+  int fal = 1;
+  for (int i = 1; i <= m; ++i) {
+    string s;
+    cin >> s;
+    int lak = ris[s];
+    if (lak == 0) {
+      ris[s] = fal;
+      frts.push_back(1);
+      fal++;
+    } else {
+      frts[lak]++;
+    }
+  }
+  sort(frts.begin(), frts.end());
+  sort(prc.begin(), prc.end());
+  int mini = 0, decap = 0;
+  for (int i = frts.size() - 1; i > 0; --i) {
+    mini += frts[i] * prc[decap];
+    decap++;
+  }
+  sort(prc.rbegin(), prc.rend());
+  int macsi = 0;
+  decap = 0;
+  for (int i = frts.size() - 1; i > 0; --i) {
+    macsi += frts[i] * prc[decap];
+    decap++;
+  }
+  cout << mini << " " << macsi << endl;
+}

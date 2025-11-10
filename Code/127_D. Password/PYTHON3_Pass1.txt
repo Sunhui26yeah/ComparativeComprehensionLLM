@@ -1,0 +1,42 @@
+def z_func(s):
+    n = len(s)
+    z = [0] * n
+    l, r = 0, 0
+    for i in range(1, n):
+        if i <= r:
+            z[i] = min(r - i + 1, z[i - l])
+        while i + z[i] < n and s[z[i]] == s[i + z[i]]:
+            z[i] += 1
+        if i + z[i] - 1 > r:
+            l = i
+            r = i + z[i] - 1
+    return z
+
+
+def solve(s):
+    z = z_func(s)
+    n = len(z)
+    max_substr = 0
+    max_suffix = 0
+
+    for i in range(1, n):
+        # if i + z[i] == n:
+        #     max_suffix = max(max_suffix, z[i])
+        max_substr = max(max_substr, min(z[i], n - i - 1))
+
+    for i in range(n - max_substr, n):
+        if i + z[i] == n:
+            max_suffix = max(max_suffix, z[i])
+
+    # print('max_substr:', max_substr)
+    # print('max_suffix:', max_suffix)
+
+    return max_suffix
+
+
+s = input()
+ans = solve(s)
+if ans > 0:
+    print(s[:ans])
+else:
+    print('Just a legend')

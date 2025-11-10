@@ -1,0 +1,102 @@
+import java.util.*;
+import java.io.*;
+ 
+public class C {
+    public static long lcm;
+    public static void main(String[] args) throws IOException {
+        FastScanner input = new FastScanner(System.in);
+        PrintWriter output = new PrintWriter(System.out);
+
+        int T = input.nextInt();
+        for (int t = 0; t < T; t++) {
+            long a = input.nextLong(), b = input.nextLong(), q = input.nextInt();
+            if (a < b) {
+                long temp = a;
+                a = b;
+                b = temp;
+            }
+            lcm = lcm(a, b);
+
+            for (int i = 0; i < q; i++) {
+                long l = input.nextLong(), r = input.nextLong();
+                if (i == 0)
+                    System.out.print(getCount(a, b, l, r));
+                else
+                    System.out.print(" " + getCount(a, b, l, r));
+            }
+            System.out.println();
+        }
+
+        output.close();
+    }
+ 
+    public static long getCount(long a, long b, long l, long r) {
+        if (a == b)
+            return 0;
+
+
+        long start = l / lcm * lcm;
+        long finish = r / lcm * lcm;
+        long count = (finish - start) / lcm * a;
+        if (start + a <= l)
+            count -= a;
+        else 
+            count -= (l - start);
+
+        if (r - finish >= a)
+            count += a;
+        else 
+            count += (r - finish + 1);
+
+        return r - l + 1 - count;
+    }
+
+    public static long gcd(long x, long y) {
+        if (x == 0 || y == 0)
+            return x + y;
+        
+        if (x > y)
+            return gcd(x % y, y);
+
+        return gcd(x, y % x);
+    }
+
+    public static long lcm(long x, long y) {
+        return x * y / gcd(x, y);
+    }
+
+    static class FastScanner {
+        BufferedReader br;
+        StringTokenizer st;
+ 
+        FastScanner(InputStream s) {
+            br = new BufferedReader(new InputStreamReader(s));
+        }
+ 
+        FastScanner(FileReader s) {
+            br = new BufferedReader(s);
+        }
+ 
+        String next() throws IOException {
+            while (st == null || !st.hasMoreTokens())
+                st = new StringTokenizer(br.readLine());
+            return st.nextToken();
+        }
+ 
+        String nextLine() throws IOException {
+            return br.readLine();
+        }
+ 
+        double nextDouble() throws IOException {
+            return Double.parseDouble(next());
+        }
+ 
+        int nextInt() throws IOException {
+            return Integer.parseInt(next());
+        }
+ 
+        long nextLong() throws IOException {
+            return Long.parseLong(next());
+        }
+    }
+}

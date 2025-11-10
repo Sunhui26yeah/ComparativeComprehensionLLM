@@ -1,0 +1,107 @@
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.util.Arrays;
+import java.io.BufferedReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.util.StringTokenizer;
+import java.io.InputStream;
+
+/**
+ * Built using CHelper plug-in
+ * Actual solution is at the top
+ * @author vadimmm
+ */
+public class Main {
+	public static void main(String[] args) {
+		InputStream inputStream = System.in;
+		OutputStream outputStream = System.out;
+		InputReader in = new InputReader(inputStream);
+		PrintWriter out = new PrintWriter(outputStream);
+		TaskE solver = new TaskE();
+		solver.solve(1, in, out);
+		out.close();
+	}
+}
+
+class TaskE {
+
+    private final int MODULO = 1000000007;
+    private long[][] combination;
+    private long[] factorial;
+
+    public void solve(int testNumber, InputReader in, PrintWriter out) {
+        int counter = in.nextInt();
+        calculate(counter);
+        int[] permutation = new int[counter];
+        boolean[] can = new boolean[counter];
+        Arrays.fill(can, true);
+        int freeCount = 0;
+        for (int i = 0; i < counter; i++) {
+            permutation[i] = in.nextInt() - 1;
+            if (permutation[i] != -2) {
+                freeCount++;
+                can[permutation[i]] = false;
+            }
+            can[i] = false;
+        }
+        int badCount = 0;
+        for (int i = 0; i < counter; i++)
+            if (can[i])
+                badCount++;
+        int mul = 1;
+        long answer = 0;
+        for (int i = 1; i <= badCount; i++) {
+            answer = (answer + combination[badCount][i] * factorial[freeCount - i] * mul) % MODULO;
+            mul = -mul;
+        }
+        answer = factorial[freeCount] - answer;
+        while (answer < 0)
+            answer += MODULO;
+        out.println(answer);
+    }
+
+    private void calculate(int counter) {
+        combination = new long[counter + 1][];
+        for (int i = 0; i <= counter; i++)
+            combination[i] = new long[i + 3];
+        combination[0][1] = 1;
+        for (int i = 1; i <= counter; i++)
+            for (int j = 1; j <= i + 1; j++) {
+                combination[i][j] = combination[i - 1][j - 1] + combination[i - 1][j];
+                if (combination[i][j] > MODULO)
+                    combination[i][j] -= MODULO;
+            }
+        factorial = new long[counter + 1];
+        factorial[0] = 1;
+        for (int i = 1; i <= counter; i++)
+            factorial[i] = factorial[i - 1] * i % MODULO;
+    }
+}
+
+class InputReader {
+
+    private static BufferedReader bufferedReader;
+    private static StringTokenizer stringTokenizer;
+
+    public InputReader(InputStream inputStream) {
+        bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        stringTokenizer = null;
+    }
+
+    public String next() {
+        while(stringTokenizer == null || !stringTokenizer.hasMoreTokens()) {
+            try {
+                stringTokenizer = new StringTokenizer(bufferedReader.readLine());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return stringTokenizer.nextToken();
+    }
+
+    public int nextInt() {
+        return Integer.parseInt(next());
+    }
+
+    }

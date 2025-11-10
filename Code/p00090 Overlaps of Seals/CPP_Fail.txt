@@ -1,0 +1,78 @@
+#include <bits/stdc++.h>
+using namespace std;
+struct Point {
+  double x, y;
+  Point(double x = 0, double y = 0) : x(x), y(y) {}
+  Point operator+(Point p) { return Point(x + p.x, y + p.y); }
+  Point operator-(Point p) { return Point(x - p.x, y - p.y); }
+  Point operator*(double a) { return Point(x * a, y * a); }
+  Point operator/(double a) { return Point(x / a, y / a); }
+  bool operator<(const Point &p) const {
+    return x != p.x ? p.x - x > (1.0e-6) : p.y - y > (1.0e-6);
+  }
+  bool operator==(const Point &p) const {
+    return (fabs((x) - (p.x)) < (1.0e-6)) && (fabs((y) - (p.y)) < (1.0e-6));
+  }
+  bool operator!=(const Point &p) const { return !(*this == p); }
+};
+struct Segment {
+  Point p1, p2;
+  Segment(Point p1, Point p2) {
+    this->p1 = p1;
+    this->p2 = p2;
+  }
+};
+double norm(Point a) { return pow(a.x, 2.0) + pow(a.y, 2.0); }
+double abs(Point a) { return sqrt(norm(a)); }
+double cross(Point a, Point b) { return a.x * b.y - a.y * b.x; }
+bool isParallel(Point a, Point b) {
+  return (fabs((cross(a, b)) - (0.0)) < (1.0e-6));
+}
+bool isParallel(Segment s1, Segment s2) {
+  return isParallel(s1.p2 - s1.p1, s2.p2 - s2.p1);
+}
+Point getCrossPoint(Segment s1, Segment s2) {
+  Point a = s1.p2 - s1.p1;
+  Point b = s2.p2 - s2.p1;
+  double d1 = cross(b, a);
+  double d2 = cross(b, s2.p1 - s1.p1);
+  return s1.p1 + a * d2 / d1;
+}
+Point getOrthogonal(Point a) { return Point(-a.y, a.x); }
+int N;
+Point P[100];
+void solve() {
+  vector<Segment> L;
+  for (int i = 0; i < N; ++i) {
+    for (int j = i + 1; j < N; ++j) {
+      if (abs(P[i] - P[j]) <= 2.0) {
+        Point m = (P[i] + P[j]) / 2.0;
+        L.push_back(Segment(m, m + getOrthogonal(P[i] - P[j])));
+      }
+    }
+  }
+  vector<Point> V;
+  for (int i = 0; i < L.size(); ++i) {
+    for (int j = i + 1; j < L.size(); ++j) {
+      if (!isParallel(L[i], L[j])) V.push_back(getCrossPoint(L[i], L[j]));
+    }
+  }
+  V.erase(unique(V.begin(), V.end()), V.end());
+  int ans = 1;
+  for (int i = 0; i < V.size(); ++i) {
+    int cnt = 0;
+    for (int j = 0; j < N; ++j) {
+      if (abs(V[i] - P[j]) <= 1.0) cnt++;
+    }
+    ans = max(ans, cnt);
+  }
+  cout << ans << endl;
+}
+int main() {
+  while ((cin >> N) && N) {
+    for (int i = 0; i < N; ++i) {
+      scanf("%lf,%lf", &P[i].x, &P[i].y);
+    }
+    solve();
+  }
+}

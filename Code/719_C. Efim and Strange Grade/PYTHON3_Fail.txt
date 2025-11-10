@@ -1,0 +1,44 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Sep 17 19:15:41 2016
+
+@author: bigu
+"""
+
+
+n,t = map(int, input().split(' '))
+num = input()
+
+head,tail = num.split('.')
+tail = ['0']+list(tail)
+
+stack = []
+for i,x in enumerate(tail):
+    if int(x)>=5:
+        stack.append(i)
+stack.reverse()
+
+last = len(tail)        
+for _ in range(t):
+    if len(stack)==0 or last==0: 
+        break
+    ind = stack[-1]-1
+    while True:
+        #print('ind: ', ind)
+        tmp = int(tail[ind])+1
+        #print('tmp: ',tmp)
+        if tmp<10:
+            tail[ind]=str(tmp)
+            break
+        else:
+            tail[ind]='0'
+            ind -= 1
+    last = ind
+    stack.pop()
+    if int(tail[ind])>=5:
+        stack.append(ind)
+        
+head = str(int(head)+int(tail[0]))
+tail = ''.join(tail[1:last+1])
+
+print(head+'.'+tail)

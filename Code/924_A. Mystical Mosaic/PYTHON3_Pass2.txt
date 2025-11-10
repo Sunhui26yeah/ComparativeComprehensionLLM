@@ -1,0 +1,50 @@
+def run():
+    h, w = (int(x) for x in input().split())
+
+    g = []
+    for _ in range(h):
+        g.append(input())
+
+    rows_tkn = [False] * h
+
+    for i in range(h):
+        if rows_tkn[i]:
+            continue
+        rows_tkn[i] = True
+
+        curr_row = g[i]
+        col_i = [i for i,x in enumerate(curr_row) if x == '#']
+        # col_i = []
+        # for ii, x in enumerate(curr_row):
+        #     if x == '#':
+        #         col_i.append(ii)
+        if len(col_i) == 0:
+            continue
+
+
+        cols = [''.join([g[_][ind] for _ in range(h)]) for ind in col_i]
+        # cols = []
+        # for ii in col_i:
+        #     _col = []
+        #     for _ in range(h):
+        #         _col.append(g[_][ii])
+        #     _col = ''.join(_col)
+        #     cols.append(_col)
+        curr_col = cols[0]
+
+        for cccc in cols:
+            if cccc != curr_col:
+                return False
+
+        rows = [curr_row]
+        for ii, x in enumerate(curr_col):
+            if x == '#':
+                rows.append(g[ii])
+                rows_tkn[ii] = True
+
+        for rrrr in rows:
+            if rrrr != curr_row:
+                return False
+
+    return True
+print('Yes' if run() else 'No')

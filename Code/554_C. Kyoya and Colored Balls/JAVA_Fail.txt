@@ -1,0 +1,220 @@
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.util.*;
+
+/**
+ * Created by Snayde on 05.01.2015.
+ */
+public class Main {
+
+    private static int[] a;
+    private static long l = 1000000007l;
+
+    public static void solve() {
+        int n = IO.readInt();
+        a = new int[n];
+        int sum = 0;
+        for (int index = 0; index < n; ++index) {
+            a[index] = IO.readInt();
+            sum += a[index];
+        }
+        IO.println(dp(n - 1, sum));
+    }
+
+    private static long dp(int index, int sum) {
+        long result = index == 0 ? 1 : (dp(index - 1, sum - a[index]) % l) * c(sum - 1, a[index] - 1);
+        return result;
+    }
+
+    private static long c(int n, int k) {
+        long r = 1;
+        for (int index = k + 1; index <= n; ++index) {
+            r *= index;
+            r %= l;
+        }
+        for (int index = 2; index <= n - k; ++index) {
+            r /= index;
+            r %= l;
+        }
+        return r;
+    }
+
+    // Input/Output ================================
+    public static class IO {
+
+        private static Scanner scanner;
+        private static PrintWriter writer;
+
+        public static void setUp(InputStream in, OutputStream out) {
+            scanner = new Scanner(new java.io.BufferedInputStream(in));
+            writer = new PrintWriter(out);
+        }
+
+        public static boolean isEmpty() {
+            return !scanner.hasNext();
+        }
+
+        public static boolean hasNextLine() {
+            return scanner.hasNextLine();
+        }
+
+        public static String readLine() {
+            String line;
+            try {
+                line = scanner.nextLine();
+            } catch (Exception e) {
+                line = null;
+            }
+            return line;
+        }
+
+        public static String readString() {
+            return scanner.next();
+        }
+
+        public static int readInt() {
+            return scanner.nextInt();
+        }
+
+        public static double readDouble() {
+            return scanner.nextDouble();
+        }
+
+        public static float readFloat() {
+            return scanner.nextFloat();
+        }
+
+        public static long readLong() {
+            return scanner.nextLong();
+        }
+
+        public static char readChar() {
+            return scanner.findInLine("[^\\s]").charAt(0);
+        }
+
+        public static void print(Object o) {
+            writer.print(o);
+            writer.flush();
+        }
+
+        public static void println(Object o) {
+            writer.println(o);
+            writer.flush();
+        }
+    }
+
+    // Algorithms ================================
+
+    private static class Algo {
+
+        private static int binSearch(int[] array, int n, int lo, int hi) {
+            if (lo > hi) {
+                return lo;
+            }
+
+            int mid = lo + (hi - lo) / 2;
+            int cmp = (int) Math.signum(n - array[mid]);
+            if (cmp < 0) {
+                return binSearch(array, n, lo, mid - 1);
+            } else if (cmp == 0) {
+                return mid;
+            } else {
+                return binSearch(array, n, mid + 1, hi);
+            }
+        }
+
+        private static void permutations(int n) {
+            int[] p = new int[n];
+            for (int index = 0; index < n; ++index) {
+                p[index] = index + 1;
+            }
+
+            while (true) {
+                IO.println(Arrays.toString(p));
+
+                int k = n - 1;
+                while (k > 0) {
+                    if (p[k] < p[k - 1]) {
+                        k--;
+                    }
+                    else {
+                        break;
+                    }
+                }
+                if (k == 0) {
+                    break;
+                }
+                int j = n - 1;
+                while (p[j] < p[k - 1]) {
+                    j--;
+                }
+
+                int t = p[j];
+                p[j] = p[k - 1];
+                p[k - 1] = t;
+
+                int i = 0;
+                while (k + i < n - 1 - i) {
+                    t = p[k + i];
+                    p[k + i] = p[n - i - 1];
+                    p[n - i - 1] = t;
+                    i++;
+                }
+            }
+        }
+
+        private static final boolean isPrime(int number) {
+            if (number <= 1) {
+                return false;
+            }
+            if (number <= 3) {
+                return true;
+            }
+            if (number % 2 == 0 || number % 3 == 0) {
+                return false;
+            }
+            int i = 5;
+            while (i * i <= number) {
+                if (number % i == 0 || number % (i + 2) == 0) {
+                    return false;
+                }
+                i += 6;
+            }
+            return true;
+        }
+
+        private static boolean isPalindrome(int number) {
+            int n = number;
+            int reverse = 0;
+            while (n > 0) {
+                reverse *= 10;
+                reverse += (n % 10);
+                n /= 10;
+            }
+            return reverse == number;
+        }
+
+        public static int gcd(int a,int b) {
+            while (b != 0) {
+                int tmp = a % b;
+                a = b;
+                b = tmp;
+            }
+            return a;
+        }
+    }
+
+    public static final void main(String[] args) {
+        IO.setUp(System.in, System.out);
+        /*
+        try {
+            IO.setUp(new FileInputStream("encode.in"), new FileOutputStream("encode.out"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return;
+        }
+        */
+        solve();
+    }
+}

@@ -1,0 +1,26 @@
+n,a,b,c=map(int,input().split())
+if n%4==0:
+  print(0)
+elif n%4==1:
+  if c<=3*a and c<=a+b:
+    print(c)
+  elif 3*a<a+b:
+    print(3*a)
+  else:
+    print(a+b)
+elif n%4==2:
+  if b<=2*a and b<=2*c and b<=3*a+c:
+    print(b)
+  elif 2*a<=2*c:
+    print(2*a)
+  elif 2*c<=3*a+c:
+    print(2*c)
+  else:
+    print(3*a+c)
+else:
+  if a<=b+c and a<=3*c:
+    print(a)
+  elif b+c<=3*c:
+    print(b+c)
+  else:
+    print(3*c)

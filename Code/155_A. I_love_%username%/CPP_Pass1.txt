@@ -1,0 +1,26 @@
+#include <bits/stdc++.h>
+#pragma GCC optimize("Ofast,no-stack-protector,unroll-loops")
+#pragma GCC optimize("no-stack-protector,fast-math")
+using namespace std;
+double PI = 3.1415926535897;
+const int N = 1e5 + 5, M = 1e2 + 5, MOD = 1e9 + 7, inf = 0x3f3f3f3f;
+int n, ans, mn = 1e9 + 5, mx = -1e9 + 5, ar[N], cnt[N];
+int main() {
+  ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+  ;
+  scanf("%d", &n);
+  for (int i = 0; i < n; i++) scanf("%d", ar + i);
+  for (int i = 0; i < n; i++) {
+    if (i == 0) mx = ar[i], mn = ar[i];
+    if (mx < ar[i]) {
+      ans++;
+      mx = ar[i];
+    }
+    if (mn > ar[i]) {
+      ans++;
+      mn = ar[i];
+    }
+  }
+  printf("%d\n", ans);
+  return 0;
+}

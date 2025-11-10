@@ -1,0 +1,82 @@
+import java.io.OutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+import java.io.BufferedReader;
+
+public class A {
+	public static void main(String[] args) {
+		InputStream inputStream = System.in;
+		OutputStream outputStream = System.out;
+		InputReader in = new InputReader(inputStream);
+		PrintWriter out = new PrintWriter(outputStream);
+		TaskF solver = new TaskF();
+		solver.solve(1, in, out);
+		out.close();
+	}
+
+	static class TaskF {
+
+		public void solve(int testNumber, InputReader in, PrintWriter out) {
+			int a = in.nextInt();
+			int b = in.nextInt();
+			int x = in.nextInt();
+			int y = in.nextInt();
+			int n = in.nextInt();
+
+			int mx;
+			int mn;
+			int l;
+			int m;
+			int p;
+			int q;
+			if (x < y) {
+				l = x;
+				m = a;
+				p = y;
+				q = b;
+			} else {
+				l = y;
+				m = b;
+				p = x;
+				q = a;
+			}
+			int r = Math.min(n / l, m);
+			int s = (n - (r * l)) / p;
+			mx = r;
+			if (s > 0)
+				mx = r + s;
+			mn = n - (l - 1) * m - (p - 1) * q;
+			out.println(mn + " " + mx);
+		}
+
+	}
+
+	static class InputReader {
+		public BufferedReader reader;
+		public StringTokenizer tokenizer;
+
+		public InputReader(InputStream stream) {
+			reader = new BufferedReader(new InputStreamReader(stream), 32768);
+			tokenizer = null;
+		}
+
+		public String next() {
+			while (tokenizer == null || !tokenizer.hasMoreTokens()) {
+				try {
+					tokenizer = new StringTokenizer(reader.readLine());
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+			}
+			return tokenizer.nextToken();
+		}
+
+		public int nextInt() {
+			return Integer.parseInt(next());
+		}
+
+	}
+}

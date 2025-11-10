@@ -1,0 +1,69 @@
+t = int(input())
+for case in range(t):
+    n,k = map(int,input().split())
+    s = input().split()[0]
+    prev = "L"
+    score = 0
+    curr = 0
+    l = []
+    foundW = False
+    for i in range(n):
+        if s[i] == "W":
+            foundW = True
+            if curr != 0:
+                l.append(curr)
+            curr = 0
+            if prev == "L":
+                score += 1
+            else:
+                score += 2
+        else:
+            curr += 1
+        prev = s[i]
+    if curr != 0:
+        l.append(curr)
+    if len(l) == 0:
+        print(score)
+        continue
+    beg, end = False, False
+    if s[0] == "L":
+        beg = True
+    if s[n-1] == "L":
+        end = True
+    if foundW == False:
+        score = max(2*k-1,0)
+        print(score)
+        continue
+    
+    bonus = sum(l)
+    bonusPts = 2*sum(l)+len(l)
+    reg = 0
+    regPts = 0
+    if beg:
+        bonus -= l[0]
+        reg += l[0]
+        bonusPts -= 2*l[0]+1
+        regPts += 2*l[0]
+    if end:
+        bonus -= l[len(l)-1]
+        reg += l[len(l)-1]
+        bonusPts -= 2*l[len(l)-1]+1
+        regPts += 2*l[len(l)-1]
+    if k > bonus:
+        score += bonusPts
+        k -= bonus
+        score += 2*min(reg, k)
+    else:
+        if beg:
+            del l[0]
+        if end:
+            del l[-1]
+        l.sort()
+        for i in range(len(l)):
+            if k >= l[i]:
+                score += 2*l[i]+1
+                k -= l[i]
+            else:
+                score += 2*k
+                break
+    print(score)

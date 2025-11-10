@@ -1,0 +1,22 @@
+import math
+i1=int(input())
+for z in range(i1):
+    i = [int(a) for a in input().split()]
+    t=[]
+    a1=0
+    for x in range(i[0]):
+        t1= [int(a) for a in input().split()]
+        t.append(t1)
+    for x in t:
+        s=0
+        for z in t:
+            if math.fabs(x[0]-z[0])+math.fabs(x[1]-z[1])>i[1]:
+                s=1
+            if s==1:
+                break
+        if s==0:
+            a1=1
+            print(1)
+            break
+    if a1==0:
+      print(-1)

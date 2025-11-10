@@ -1,0 +1,105 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.StringTokenizer;
+
+public class SolutionE {
+
+    StringTokenizer st;
+    BufferedReader in;
+    PrintWriter out;
+
+    public static void main(String[] args) throws NumberFormatException,
+            IOException {
+        SolutionE solver = new SolutionE();
+        solver.open();
+        long time = System.currentTimeMillis();
+        solver.solve();
+        if (!"true".equals(System.getProperty("ONLINE_JUDGE"))) {
+            System.out.println("Spent time: "
+                    + (System.currentTimeMillis() - time));
+            System.out.println("Memory: "
+                    + (Runtime.getRuntime().totalMemory() - Runtime
+                    .getRuntime().freeMemory()));
+        }
+        solver.close();
+    }
+
+    public void open() throws IOException {
+        in = new BufferedReader(new InputStreamReader(System.in));
+        out = new PrintWriter(System.out);
+    }
+
+    public String nextToken() throws IOException {
+        while (st == null || !st.hasMoreTokens()) {
+            String line = in.readLine();
+            if (line == null)
+                return null;
+            st = new StringTokenizer(line);
+        }
+        return st.nextToken();
+    }
+
+    public int nextInt() throws NumberFormatException, IOException {
+        return Integer.parseInt(nextToken());
+    }
+
+    public long nextLong() throws NumberFormatException, IOException {
+        return Long.parseLong(nextToken());
+    }
+
+    public double nextDouble() throws NumberFormatException, IOException {
+        return Double.parseDouble(nextToken());
+    }
+
+    int n;
+    long[] a;
+    long[][] b;
+    long answ = 0, mask = 1;
+
+    boolean check() {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i != j) {
+                    if ((mask&(a[i]^a[j])) != (mask&b[i][j])) return false;
+                }
+            }
+        }
+        return true;
+    }
+
+
+    public void solve() throws NumberFormatException, IOException {
+        n = nextInt();
+        a = new long[n];
+        b = new long[n][n];
+        if (n == 1) {
+            out.println(0);
+            return;
+        }
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                b[i][j] = nextLong();
+            }
+        }
+
+        for (int i = 0; i < n; i++) {
+            a[i]=0;
+            for (int j = 0; j < n; j++) {
+                if (i != j) a[j]|=b[i][j];
+            }
+        }
+
+        for (long t: a) {
+            out.println(t + " ");
+        }
+        out.println();
+    }
+
+    public void close() {
+        out.flush();
+        out.close();
+    }
+}

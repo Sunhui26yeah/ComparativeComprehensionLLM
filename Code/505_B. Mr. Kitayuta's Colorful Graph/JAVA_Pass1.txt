@@ -1,0 +1,79 @@
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Queue;
+import java.util.Scanner;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+/**
+ * Date: 18-01-2015
+ * Time: 14:21
+ */
+public class MrKitayutasColorfulGraph {
+    private static ArrayList<Integer>[][] colors;
+    private static int n;
+    private static HashSet<Integer> colorsUsed;
+
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+
+        colorsUsed = new HashSet<>();
+
+        n = in.nextInt();
+
+        colors = new ArrayList[n+1][n+1];
+
+        for (int i = 0; i < n + 1; i++) {
+            for (int j = 0; j < n + 1; j++) {
+                colors[i][j] = new ArrayList<>();
+            }
+        }
+
+        int m = in.nextInt();
+
+        for (int i = 0; i < m; i++) {
+            int a = in.nextInt(), b = in.nextInt(), c = in.nextInt();
+
+            colorsUsed.add(c);
+            colors[a][b].add(c);
+            colors[b][a].add(c);
+        }
+
+        int q = in.nextInt();
+
+        for (int i = 0; i < q; i++) {
+            int u = in.nextInt(), v = in.nextInt();
+            System.out.println(answerQuery(u, v));
+        }
+    }
+
+    private static int answerQuery(int u, int v) {
+        int res = 0;
+        for (int c : colorsUsed) {
+            if (isConnected(u, v, c)) res++;
+        }
+
+        return res;
+    }
+
+    private static boolean isConnected(int u, int v, int c) {
+        Queue<Integer> next = new ConcurrentLinkedQueue<>();
+        HashSet<Integer> visited = new HashSet<>();
+        next.add(u);
+        visited.add(u);
+        while (!next.isEmpty()) {
+            int t = next.remove();
+
+            if (t == v) return true;
+
+            for (int i = 0; i < n + 1; i++) {
+                for (int col : colors[t][i]) {
+                    if (col == c && !visited.contains(i)) {
+                        next.add(i);
+                        visited.add(i);
+                    }
+                }
+            }
+        }
+        return false;
+    }
+}

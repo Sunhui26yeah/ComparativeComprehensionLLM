@@ -1,0 +1,210 @@
+import java.io.*;
+import java.util.*;
+
+public class Main{
+	static LinkedList<Integer>[]adj;
+	static int k,dep[],par[];
+	static boolean[]take,v;
+	static LinkedList<Integer>cycle;
+	static void dfs(int i,boolean leaf) {
+		v[i]=true;
+		boolean isLeaf=true;
+		boolean adjc=false;
+		for(int j:adj[i]) {
+			if(!v[j]) {
+				isLeaf=false;
+				dfs(j,leaf);
+			}
+			adjc|=take[j];
+		}
+		if(isLeaf) {
+			take[i]=leaf;
+			return;
+		}
+		if(!adjc) {
+			take[i]=true;
+		}
+	}
+	static void dfs2(int i,int depth) {
+//		System.out.println(i);
+		dep[i]=depth;
+		v[i]=true;
+		for(int j:adj[i]) {
+			if(j==par[i])continue;
+			if(!v[j]) {
+				par[j]=i;
+				dfs2(j,depth+1);
+			}
+			else {
+				if(dep[i]<=dep[j])continue;
+				int cnt=dep[i]-dep[j]+1;
+				if(cnt<=k && cycle==null) {
+//					System.out.println(i+" "+j);
+					cycle=new LinkedList<>();
+					int cur=i;
+					while(cur!=j) {
+						cycle.add(cur);
+						cur=par[cur];
+					}
+					cycle.add(j);
+				}
+			}
+		}
+	}
+	static void main() throws Exception{
+		int n=sc.nextInt(),m=sc.nextInt();k=sc.nextInt();
+		adj=new LinkedList[n];
+		for(int i=0;i<n;i++)adj[i]=new LinkedList<>();
+		for(int j=0;j<m;j++) {
+			int x=sc.nextInt()-1,y=sc.nextInt()-1;
+			adj[x].add(y);
+			adj[y].add(x);
+		}
+		dep=new int[n];
+		par=new int[n];
+		take=new boolean[n];
+		v=new boolean[n];
+		StringBuilder opt1=new StringBuilder(),opt2=new StringBuilder();
+		dfs(0,true);
+		int c=0;
+		int half=(k+1)/2;
+		for(int i=0;i<n && c<half;i++) {
+			if(take[i]) {
+				opt1.append((i+1)+" ");
+				c++;
+			}
+		}
+		if(c==half) {
+			pw.println(1);
+			pw.println(opt1);
+			return;
+		}
+		take=new boolean[n];
+		v=new boolean[n];
+		dfs(0,false);
+		c=0;
+		for(int i=0;i<n && c<half;i++) {
+			if(take[i]) {
+				opt2.append((i+1)+" ");
+				c++;
+			}
+		}
+		if(c==half) {
+			pw.println(1);
+			pw.println(opt2);
+			return;
+		}
+		
+		v=new boolean[n];
+		par[0]=-1;
+		dfs2(0, 0);
+		
+		
+		pw.println(2);
+		pw.println(cycle.size());
+		while(!cycle.isEmpty()) {
+			pw.print((cycle.poll()+1)+" ");
+		}
+		pw.println();
+		
+		
+	}
+	public static void main(String[] args) throws Exception{
+		pw=new PrintWriter(System.out);
+		sc = new MScanner(System.in);
+//		int tc=sc.nextInt();
+//		while(tc-->0)
+			main();
+		pw.flush();
+	}
+	static PrintWriter pw;
+	static MScanner  sc;
+	static class MScanner {
+		StringTokenizer st;
+		BufferedReader br;
+		public MScanner(InputStream system) {
+			br = new BufferedReader(new InputStreamReader(system));
+		}
+ 
+		public MScanner(String file) throws Exception {
+			br = new BufferedReader(new FileReader(file));
+		}
+ 
+		public String next() throws IOException {
+			while (st == null || !st.hasMoreTokens())
+				st = new StringTokenizer(br.readLine());
+			return st.nextToken();
+		}
+		public int[] intArr(int n) throws IOException {
+	        int[]in=new int[n];for(int i=0;i<n;i++)in[i]=nextInt();
+	        return in;
+		}
+		public long[] longArr(int n) throws IOException {
+	        long[]in=new long[n];for(int i=0;i<n;i++)in[i]=nextLong();
+	        return in;
+		}
+		public int[] intSortedArr(int n) throws IOException {
+	        int[]in=new int[n];for(int i=0;i<n;i++)in[i]=nextInt();
+	        shuffle(in);
+	        Arrays.sort(in);
+	        return in;
+		}
+		public long[] longSortedArr(int n) throws IOException {
+	        long[]in=new long[n];for(int i=0;i<n;i++)in[i]=nextLong();
+	        shuffle(in);
+	        Arrays.sort(in);
+	        return in;
+		}
+		public Integer[] IntegerArr(int n) throws IOException {
+	        Integer[]in=new Integer[n];for(int i=0;i<n;i++)in[i]=nextInt();
+	        return in;
+		}
+		public Long[] LongArr(int n) throws IOException {
+	        Long[]in=new Long[n];for(int i=0;i<n;i++)in[i]=nextLong();
+	        return in;
+		}
+		public String nextLine() throws IOException {
+			return br.readLine();
+		}
+ 
+		public int nextInt() throws IOException {
+			return Integer.parseInt(next());
+		}
+ 
+		public double nextDouble() throws IOException {
+			return Double.parseDouble(next());
+		}
+ 
+		public char nextChar() throws IOException {
+			return next().charAt(0);
+		}
+ 
+		public long nextLong() throws IOException {
+			return Long.parseLong(next());
+		}
+ 
+		public boolean ready() throws IOException {
+			return br.ready();
+		}
+ 
+		public void waitForInput() throws InterruptedException {
+			Thread.sleep(3000);
+		}
+	}
+	static void shuffle(int[]in) {
+		for(int i=0;i<in.length;i++) {
+			int idx=(int)(Math.random()*in.length);
+			int tmp=in[i];
+			in[i]=in[idx];
+			in[idx]=tmp;
+		}
+	}
+	static void shuffle(long[]in) {
+		for(int i=0;i<in.length;i++) {
+			int idx=(int)(Math.random()*in.length);
+			long tmp=in[i];
+			in[i]=in[idx];
+			in[idx]=tmp;
+		}
+	}
+}

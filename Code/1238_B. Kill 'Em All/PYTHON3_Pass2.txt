@@ -1,0 +1,12 @@
+import sys
+input=sys.stdin.readline
+t = int(input())
+for _ in range(t):
+    n,r = map(int,input().split())
+    arr= sorted(list(set(list(map(int,input().split())))),reverse=True)
+    i = 0
+    se = 0
+    while i<len(arr) and arr[i]-se>0:
+        i+=1
+        se+=r
+    print (i)

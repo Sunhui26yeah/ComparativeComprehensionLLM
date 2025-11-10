@@ -1,0 +1,8 @@
+import math as m
+p=[]
+for _ in range(int(input())):
+    k,a=[int(x) for x in input().split()]
+    e=0;v=1
+    while v<a: v*=4;e+=1
+    p+=[e+k]
+print(max(k+1,*p))

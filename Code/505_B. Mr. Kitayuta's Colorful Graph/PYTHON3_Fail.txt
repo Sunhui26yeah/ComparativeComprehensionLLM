@@ -1,0 +1,33 @@
+n,m = map(int,input().split())
+adj = [[] for _ in range(n)]
+for i in range(m):
+    a,b,c = map(int,input().split())
+    a-=1
+    b-=1
+    adj[a].append([b,c])
+    adj[b].append([a,c])
+
+def dfs(v,c,u,vis):
+    ans = 0
+    vis[v] = True
+    if v==u:
+        return 1
+    for i in adj[v]:
+        if vis[i[0]] or i[1]!=c:
+            continue
+        ans += dfs(i[0],c,u,vis)
+    return ans
+
+q = int(input())
+
+while q>0:
+    q-=1
+    a,b = map(int,input().split())
+    a-=1
+    b-=1
+    ans = 0
+    for i in adj[a]:
+        vis = [False]*n
+        vis[a] = True
+        ans += dfs(i[0],i[1],b,vis)
+    print(ans)

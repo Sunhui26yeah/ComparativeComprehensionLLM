@@ -1,0 +1,89 @@
+def process(A, m, k):
+    n = len(A)
+    start = n*m
+    d = []
+    for i in range(n):
+        if len(d)==0 or d[-1][0] != A[i]:
+            d.append([A[i], 1])
+        else:
+            d[-1][1]+=1
+        if d[-1][1]==k:
+            start-=k*m
+            d.pop()
+    if m==1:
+        return start
+    p1 = 0
+    start_d = []
+    middle_d = []
+    end_d = []
+    for x in d:
+        a, b = x
+        start_d.append([a, b])
+        middle_d.append([a, b])
+        end_d.append([a, b])
+    if m==2:
+        middle_d = []
+    else:
+        middle_d = [x for x in d]
+  #  print(start_d, middle_d, end_d, start)
+    #the sequence is start_d + (m-2)* middle_d + end_d
+    while True:
+        if p1 >= len(middle_d):
+            if len(start_d)==0 or p1==len(end_d):
+                break
+            v1, c1 = start_d[-1]
+            v2, c2 = end_d[p1]
+            if v1==v2 and (c1+c2) >= k:
+                start-=k
+                start_d.pop()
+                if (c1+c2)==k:
+                    p1+=1
+                else:
+                    end_d[1] = (c1+c2) % k
+            else:
+                break
+        else:
+            if len(middle_d)-p1==1:
+                v1, c1 = start_d[-1]
+                v2, c2 = middle_d[p1]
+                v3, c3 = end_d[p1]
+                total_value = c2*(m-2)
+                if v2==v1:
+                    total_value+=c1
+                if v2==v3:
+                    total_value+=c3
+                start-=(total_value-(total_value%k))
+                if total_value % k==0:
+                    middle_d = []
+                    if v2==v1:
+                        start_d.pop()
+                    if v2==v3:
+                        end_d = end_d
+                        p1+=1
+                else:
+                    break
+            else:
+                v1, c1 = start_d[-1]
+                v2, c2 = middle_d[p1]
+                v3, c3 = middle_d[-1]
+                v4, c4 = end_d[p1]
+                if v2==v3 and (c2+c3) >= k:
+                    this_value = (c2+c3-(c2+c3) % k)*(m-1)
+                    start-=this_value
+                    middle_d.pop()
+                    start_d.pop()
+                    middle_d[p1][1] = (c2+c3) % k
+                    end_d[p1][1] = (c2+c3) % k
+                    if middle_d[p1][1]==0:
+                        p1+=1
+                 
+                else:
+                    break
+       # print('start', start_d, start)
+       # print('middle', middle_d)
+       # print('end', end_d)
+    return start
+
+n, k, m = [int(x) for x in input().split()]
+A = [int(x) for x in input().split()]
+print(process(A, m, k))

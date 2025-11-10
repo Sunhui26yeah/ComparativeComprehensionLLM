@@ -1,0 +1,30 @@
+def team(arr):
+    t1=[]
+    t2=[]
+    st1=0
+    st2=0
+    for i in range(len(arr)):
+        if st1>=st2:
+            t2.append(i+1)
+            st2+=arr[i]
+        else:
+            t1.append(i+1)
+            st1+=arr[i]
+    if len(t1)>len(t2) and len(t1)-len(t2)>1:
+        mini=min(t1,key=lambda s:arr[s-1])
+        t1.remove(mini)
+        t2.append(mini)
+    if len(t2)>len(t1) and len(t2)-len(t1)>1:
+        mini=min(t2,key=lambda s:arr[s-1])
+        t2.remove(mini)
+        t1.append(mini)
+
+
+    print(len(t1))
+    print(*t1)
+    print(len(t2))
+    print(*t2)
+    return ""
+a=input()
+lst=list(map(int,input().strip().split()))
+print(team(lst))

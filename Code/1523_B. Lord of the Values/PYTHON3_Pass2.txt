@@ -1,0 +1,23 @@
+from sys import stdin
+from collections import defaultdict, deque, Counter
+from math import floor, ceil, log, inf, sqrt
+from heapq import *
+from functools import lru_cache
+import itertools
+from bisect import bisect_left, bisect_right
+
+T = int(stdin.readline())
+
+for t in range(T):
+    N = int(stdin.readline())
+    nums = [int(x) for x in stdin.readline().split()]
+    
+    print((N//2)*6)
+    
+    for i in range(0,N,2):
+        print("1 {} {}".format(i+1,i+2))
+        print("2 {} {}".format(i+1,i+2))
+        print("1 {} {}".format(i+1,i+2))
+        print("1 {} {}".format(i+1,i+2))
+        print("2 {} {}".format(i+1,i+2))
+        print("1 {} {}".format(i+1,i+2))

@@ -1,0 +1,28 @@
+import java.lang.*;
+import java.io.*;
+
+public class A22July{
+  public static void main(String[] args){
+    byte[] out = new byte[1000];
+    int i;
+    byte[] in;
+    try{
+      BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+      String str = br.readLine();
+      in = str.getBytes();
+      for(i=0;(char)in[i]!='.';i++)
+        out[i] = in[i];
+      if((char)in[i-1] == '9'){
+        System.out.println("GOTO Vasilisa.");
+        return;
+      }
+      else if((char)in[i+1] >= '5')
+        out[i-1]++;
+    out[i] = '\0';
+    }
+    catch(IOException ioe){
+      System.out.println("IOException occured.  "+ioe);
+    }
+    System.out.println(new String(out));
+  }
+}

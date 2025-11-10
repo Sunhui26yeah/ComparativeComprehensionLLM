@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+char s[1000005];
+int next[1000005] = {-1};
+int sum[1000005], lens;
+void getnext(void) {
+  int i = 0, j = -1;
+  while (i < lens)
+    if (j == -1 || s[i] == s[j]) {
+      ++i;
+      ++j;
+      next[i] = j;
+    } else
+      j = next[j];
+}
+int main() {
+  int i, l;
+  while (scanf("%s", s) != EOF) {
+    lens = (int)strlen(s);
+    getnext();
+    memset(sum, 0, sizeof(sum));
+    for (i = lens; i; --i) sum[next[i]] += ++sum[i];
+    for (l = next[lens]; l; l = next[l])
+      if (sum[l] >= 3) break;
+    if (l) {
+      for (i = 0; i < l; ++i) putchar(s[i]);
+      puts("");
+    } else
+      puts("Just a legend");
+  }
+  return 0;
+}

@@ -1,0 +1,14 @@
+n=int(input())
+start=1
+end=-1
+times=list(map(int,input().split()))
+for t in times:
+    d=t-start
+    if d>=15:
+        end=start
+        break
+    start=t
+if end>=0:
+    print(min(end+15,times[n-1]))
+else:
+    print(times[n-1])

@@ -1,0 +1,72 @@
+/* package codechef; // don't place package name! */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+/* Name of the class has to be "Main" only if the class is public. */
+public class Codechef
+{
+	public static void main (String[] args) throws java.lang.Exception
+	{
+		Scanner in = new Scanner(System.in);
+		int tc = in.nextInt();
+		for(int f = 0; f < tc; f++)
+		{
+		    int len = in.nextInt();
+		    HashMap<Integer,Integer> map = new HashMap<Integer,Integer>();
+		
+	    	for(int y = 0; y < 101; y++)
+	    	{
+	    	    map.put(y,0);
+	    	}
+		
+	    	int val = 0;
+		
+	    	for(int x = 0; x < len; x++)
+    		{
+    		    val = in.nextInt();
+    		    map.put(val, map.get(val) + 1);
+    		}
+    		
+    		System.out.println(map);
+        		
+    		if(map.get(0) == 0)
+    		{
+    		    System.out.println(0);
+    		    return;
+    		}
+		
+    		int ansA = 101;
+    		int ansB = 101;
+    		boolean flagA = false;
+    		boolean flagB = false;
+		
+    		for(int i = 0; i < 100; i++)
+    		{
+    		    if(map.get(i) == 0 && flagA == false)
+    		    {
+    		        ansA = i;
+    		        flagA = true;
+    		    }
+    		    else if(map.get(i) == 1 && flagB == false)
+	    	    {
+    		        ansB = i;
+    		        flagB = true;
+	    	    }
+	    	    else if(flagB == true && flagA == true)
+	    	    {
+		            break;
+		        }
+	    	}
+	    	
+	    	System.out.println(ansA + ansB);
+	    	
+	    	
+		}
+		
+		
+		
+		
+	}
+}

@@ -1,0 +1,62 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Jul 30 19:31:49 2019
+
+@author: Aman Seth
+
+
+def fun(a):
+    s=sum(a)
+    print(s//2)
+    
+    
+    
+    
+    
+for i in range(int(input())):
+    a=list(map(int,input().split()))
+    fun(a)
+    
+    
+    
+    
+
+def fun(a,n,x,y):
+    if x==n or y==n:
+        if a[-1]==min(a):
+            print(n)
+    else:
+        for i in range(x-1,n-y):
+            if a[i]<min(a[i-x:i]) and a[i]<min(a[i+1:i+y]):
+                print(i+1)
+                break
+n,x,y=map(int,input().split())
+a=list(map(int,input().split()))
+fun(a,n,x,y)
+def find_partition(int_list):
+    "returns: An attempt at a partition of `int_list` into two sets of equal sum"
+    A = set()
+    B = set()
+    for n in sorted(int_list, reverse=True):
+        if sum(A) < sum(B):
+           A.add(n)
+        else:
+           B.add(n)
+    return (A, B)
+"""
+from collections import Counter
+import math
+def fun(n,a,I):
+    K=len(Counter(a))
+    k=n*math.ceil(math.log2(K))
+    print(k)
+    if k<I*8:
+        print(0)
+    else:
+        print(int(abs((I*8) - k)/2))
+    
+    
+    
+n,I = map(int,input().split())
+a=list(map(int,input().split()))
+fun(n,a,I)

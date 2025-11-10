@@ -1,0 +1,29 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+  (ios_base::sync_with_stdio(false), cin.tie(NULL));
+  int n;
+  cin >> n;
+  vector<int> d(n);
+  for (int i = 0; i < (int)(n); ++i) cin >> d[i];
+  int l = 0, r = 0, min_, max_;
+  min_ = max_ = d[0];
+  multiset<int> s;
+  s.insert(d[0]);
+  int ans = 1;
+  while (r < n) {
+    if (max_ - min_ <= 1) {
+      ++r;
+      if (r < n) {
+        s.insert(d[r]);
+      }
+    } else {
+      s.erase(d[l]);
+      ++l;
+    }
+    max_ = *(s.rbegin()), min_ = *(s.begin());
+    if (max_ - min_ <= 1 && r < n) ans = max(ans, r - l + 1);
+  }
+  cout << ans;
+  return 0;
+}

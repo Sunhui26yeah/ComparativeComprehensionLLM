@@ -1,0 +1,41 @@
+n, l, x, y = map(int, input().split())
+a = list(map(int, input().split()))
+
+def check(i, x):
+    l = i
+    r = n
+    while l + 1 < r:
+        mid = (l + r) // 2
+        if a[mid] - a[i] > x:
+            r = mid
+        else:
+            l = mid
+    if a[l] - a[i] == x:
+        return True
+    return False
+
+xOK = False
+yOK = False
+ans = 2
+tmp = -1
+for i in range(n):
+    if (not xOK) and check(i, x):
+        xOK = True
+        ans -= 1
+    if (not yOK) and check(i, y):
+        yOK = True
+        ans -= 1
+    if not yOK and not xOK and check(i, y - x):
+        xOK = True
+        yOK = True
+        ans -= 1
+        tmp = a[i] + y
+
+print(ans)
+if tmp > 0:
+    print(tmp)
+else:
+    if not xOK:
+        print(x, end = ' ')
+    if not yOK:
+        print(y)

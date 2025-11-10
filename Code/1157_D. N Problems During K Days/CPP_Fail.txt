@@ -1,0 +1,49 @@
+#include <bits/stdc++.h>
+using namespace std;
+long long bin_pow(long long a, long long n) {
+  long long res = 1;
+  while (n) {
+    if (n & 1) res *= a;
+    a *= a;
+    n >>= 1;
+  }
+  return res;
+}
+int main() {
+  ios_base::sync_with_stdio(false);
+  cin.tie(nullptr);
+  cout.tie(nullptr);
+  long long n, k;
+  cin >> n >> k;
+  long long mi = k + (k - 1) * k / 2;
+  long long ma = (k >= 30 ? n + 1 : bin_pow(2, k + 1) - 1);
+  if (n < mi || n > ma) {
+    cout << "NO";
+    return 0;
+  }
+  long long ak = n - (k - 1) * k / 2;
+  long long m = ak % k;
+  vector<long long> ans(k);
+  for (int i = 0; i < k; ++i) {
+    ans[i] = ak / k + i;
+  }
+  int ind = k - 1;
+  while (ind > 0 && m) {
+    long long delta = max(2 * ans[ind - 1] - ans[ind], 0LL);
+    ans[ind] += min(m, delta);
+    m -= min(m, delta);
+    ind--;
+  }
+  if (m) {
+    cout << "NO";
+    return 0;
+  }
+  for (int i = 1; i < k; ++i) {
+    if (ans[i - 1] * 2 < ans[i]) {
+      cout << "NO";
+      return 0;
+    }
+  }
+  cout << "YES\n";
+  for (long long i : ans) cout << i << ' ';
+}

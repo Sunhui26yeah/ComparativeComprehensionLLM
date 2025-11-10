@@ -1,0 +1,51 @@
+#include <bits/stdc++.h>
+using namespace std;
+const int MAXN = 100003;
+int n, m;
+vector<unordered_set<int> > colores;
+vector<unordered_map<int, int> > cual;
+map<pair<int, int>, int> queries;
+int rep(int v, int col) {
+  if (cual[col][v] != v) cual[col][v] = rep(cual[col][v], col);
+  return cual[col][v];
+}
+void unir(int u, int v, int col) { cual[col][rep(u, col)] = rep(v, col); }
+int query(int u, int v) {
+  if (queries.find({u, v}) != queries.end()) return queries[{u, v}];
+  int ans = 0;
+  for (int col : colores[u])
+    if (colores[v].find(col) != colores[v].end() and
+        cual[col][u] == cual[col][v])
+      ++ans;
+  return queries[{u, v}] = ans;
+}
+int main() {
+  ios_base::sync_with_stdio(false);
+  cin.tie(0);
+  cin >> n >> m;
+  colores = vector<unordered_set<int> >(n, unordered_set<int>());
+  cual = vector<unordered_map<int, int> >(MAXN, unordered_map<int, int>());
+  vector<pair<int, int> > que;
+  que.reserve(2 * n);
+  for (int i = 0; i < m; ++i) {
+    int u, v, c;
+    cin >> u >> v >> c;
+    --u, --v;
+    que.push_back({u, c});
+    que.push_back({v, c});
+    colores[u].insert(c), colores[v].insert(c);
+    if (cual[c].find(u) == cual[c].end()) cual[c][u] = u;
+    if (cual[c].find(v) == cual[c].end()) cual[c][v] = v;
+    unir(u, v, c);
+  }
+  for (auto q : que) rep(q.first, q.second);
+  int q;
+  cin >> q;
+  while (q--) {
+    int u, v;
+    cin >> u >> v;
+    --u, --v;
+    if (colores[u].size() > colores[v].size()) swap(u, v);
+    cout << query(u, v) << "\n";
+  }
+}

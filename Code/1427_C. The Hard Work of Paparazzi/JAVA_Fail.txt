@@ -1,0 +1,67 @@
+import java.util.*;
+
+public class C1427 {
+    private final static Scanner scanner = new Scanner(System.in);
+
+    private static int street;
+    private static int manNum;
+
+    public static void main(String[] args) {
+        street = scanner.nextInt();
+        manNum = scanner.nextInt();
+        List<Person> persons = new ArrayList<>();
+        persons.add(new Person(0, 1, 1));
+        for (int i = 0; i < manNum; i++) {
+            persons.add(new Person(scanner.nextInt(),scanner.nextInt(),scanner.nextInt()));
+        }
+        math(persons);
+    }
+
+    private static void math(List<Person> persons){
+        int[] pictureNum = new int[manNum+1];
+        Arrays.fill(pictureNum, -1);
+        pictureNum[0] = 0;
+        int ans = 0;
+        for (int i = 1; i < manNum+1; i++) {
+            for (int j = i; j >= 0; j--) {
+                if (persons.get(i).getTime() - persons.get(j).getTime() > (street-1)*2 && pictureNum[j] != -1){
+                    pictureNum[i] = Math.max(pictureNum[i] , pictureNum[j] + 1);
+                    break;
+                }
+                if (Math.abs(persons.get(i).getPoint1()-persons.get(j).getPoint1())
+                +   Math.abs(persons.get(i).getPoint2()-persons.get(j).getPoint2())
+                <=  persons.get(i).getTime() - persons.get(j).getTime()
+                &&  pictureNum[j] != -1){
+                    pictureNum[i] = Math.max(pictureNum[i] , pictureNum[j] + 1);
+                }
+            }
+            ans = Math.max(ans, pictureNum[i]);
+            if (pictureNum[i] != -1){
+                pictureNum[i] = ans;
+            }
+        }
+        System.out.println(ans);
+    }
+
+}
+
+class Person {
+    private int time;
+    private int point1;
+    private int point2;
+
+    public Person(int time, int point1, int point2) {
+        this.time = time;
+        this.point1 = point1;
+        this.point2 = point2;
+    }
+    public int getTime() {
+        return time;
+    }
+    public int getPoint1() {
+        return point1;
+    }
+    public int getPoint2() {
+        return point2;
+    }
+}

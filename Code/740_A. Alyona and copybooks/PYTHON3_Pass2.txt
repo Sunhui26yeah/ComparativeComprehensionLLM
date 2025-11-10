@@ -1,0 +1,17 @@
+line=[int(x) for x in input().split(' ')]
+N=line[0]
+a=line[1]
+b=line[2]
+c=line[3]
+prices1=[0,a,b,c]
+prices2=[a+b,a+c,b+c,a+b+c]
+price=10**9
+for i in range(4):
+    for t in range(1,4):
+        if (N+i*t)%4==0 and prices1[i]*t<price:
+            price=prices1[i]*t
+for j in range(3,7):
+    for t in range(1,2):
+        if (N+j*t)%4==0 and prices2[j-3]*t<price:
+            price=prices2[j-3]
+print(price)

@@ -1,0 +1,43 @@
+from collections import deque
+def question3():
+    boys = int(input())
+    skills = list(map(int,input().split()))
+    arr = []
+    max1 = max(skills)
+    for i in range(boys):
+        arr.append([skills[i],i+1])
+    arr.sort(key = lambda x:x[0])
+    team1 = deque([])
+    team2 = deque([])
+    sum1 = 0
+    sum2 = 0
+    for i in range(boys):
+        if i < boys//2:
+            team1.append(arr[i])
+            sum1 += arr[i][0]
+        else:
+            team2.append(arr[i])
+            sum2 += arr[i][0]
+    while abs(sum1-sum2) > max1:
+        k1 = team1.popleft()
+        k2 = team2.pop()
+        sum1 = sum1 - k1[0] + k2[0]
+        sum2 = sum2 - k2[0] + k1[0]
+        team2.appendleft(k1)
+        team1.append(k2)
+    print(len(team1))
+    for i in range(len(team1)):
+        print(team1[i][1],end=" ")
+    print()
+    print(len(team2))
+    for i in range(len(team2)):
+        print(team2[i][1],end=" ")
+    print()    
+        
+    
+    
+    
+remained_test_cases = 1 
+while remained_test_cases > 0:
+    question3()
+    remained_test_cases -= 1

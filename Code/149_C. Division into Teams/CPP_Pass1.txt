@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+using namespace std;
+void solve() {
+  long long int n;
+  cin >> n;
+  vector<pair<int, int> > arr(n);
+  vector<int> v1, v2;
+  for (int i = 0; i < n; i++) {
+    cin >> arr[i].first;
+    arr[i].second = i + 1;
+  }
+  sort(arr.begin(), arr.end());
+  for (int i = 0; i < n; i++) {
+    if (i % 2)
+      v1.push_back(arr[i].second);
+    else
+      v2.push_back(arr[i].second);
+  }
+  cout << v1.size() << endl;
+  for (auto x : v1) cout << x << " ";
+  cout << endl;
+  cout << v2.size() << endl;
+  for (auto x : v2) printf("%d ", x);
+}
+int main() {
+  ios_base::sync_with_stdio(false);
+  cin.tie(0);
+  cout.tie(0);
+  int t = 1;
+  while (t--) solve();
+}

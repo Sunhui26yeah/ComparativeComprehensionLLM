@@ -1,0 +1,32 @@
+#include <bits/stdc++.h>
+using namespace std;
+int mod = pow(10, 9) + 7;
+const int MAX = 99999;
+int main() {
+  int t;
+  cin >> t;
+  for (int i = 1; i < t + 1; i++) {
+    int n;
+    cin >> n;
+    vector<int> arr(n);
+    bool b = true;
+    for (int &x : arr) cin >> x;
+    for (int pos = 30; pos >= 0; pos--) {
+      int x, y;
+      x = 0;
+      for (int a : arr) {
+        if (a & (1 << pos)) x += 1;
+      }
+      if (x % 2 == 1) {
+        b = false;
+        y = n - x;
+        if (x % 4 == 3 && y % 2 == 0)
+          cout << "LOSE\n";
+        else
+          cout << "WIN\n";
+        break;
+      }
+    }
+    if (b) cout << "DRAW\n";
+  }
+}

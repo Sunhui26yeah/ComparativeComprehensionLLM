@@ -1,0 +1,78 @@
+// Imports
+import java.util.*;
+import java.io.*;
+
+public class D1157 {
+
+    /**
+     * @param args the command line arguments
+     * @throws IOException, FileNotFoundException 
+     */
+    public static void main(String[] args) throws IOException, FileNotFoundException {
+        
+        // TODO UNCOMMENT WHEN ALGORITHM CORRECT
+        BufferedReader f = new BufferedReader(new InputStreamReader(System.in));
+        
+        // BufferedReader f = new BufferedReader(new StringReader("26 6"));
+        
+        // TODO code application logic here
+        StringTokenizer st = new StringTokenizer(f.readLine());
+        
+        long n = Integer.parseInt(st.nextToken());
+        long m = Integer.parseInt(st.nextToken());
+        
+        if(n - m*(m+1)/2 < 0) {
+            System.out.println("NO");
+        }
+        else {
+            long[] arr = new long[(int)m];
+            long k = n - m*(m+1)/2;
+            for(int i = 0; i < m; i++) {
+                if(i >= m - k%m) {
+                    arr[i] = k/m + 1;
+                }
+                else {
+                    arr[i] = k/m;
+                }
+                arr[i] += i + 1;
+            }
+            
+            if(k == m-1) {
+                if(m > 3) {
+                    arr[1] --;
+                    arr[(int)m - 1] ++;
+                }
+                if(m == 2 || m == 3) {
+                    System.out.println("NO");
+                }
+                else {
+                    System.out.println("YES");
+                    StringBuilder sb = new StringBuilder();
+                
+                    for(int i = 0; i < arr.length; i++) {
+                        System.out.print(arr[i]);
+                        if(i < arr.length - 1) {
+                            System.out.print(" ");
+                        }
+                    }
+                    System.out.println();
+                }
+            }
+            else {
+                
+                System.out.println("YES");
+                StringBuilder sb = new StringBuilder();
+                
+                for(int i = 0; i < arr.length; i++) {
+                    System.out.print(arr[i]);
+                    if(i < arr.length - 1) {
+                        System.out.print(" ");
+                    }
+                }
+                System.out.println();
+            }
+            
+        }
+    }
+
+}

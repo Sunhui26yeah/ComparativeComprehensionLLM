@@ -1,0 +1,79 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Set;
+import java.util.TreeSet;
+
+public class Main{
+	public static void main(String arg[]) throws Exception{
+		BufferedReader input = null;
+		input = new BufferedReader(new InputStreamReader(System.in));
+		int queries = Integer.parseInt(input.readLine());
+		for (int i=0; i<queries; i++){
+			Set<Monster> monsters = new TreeSet<>();
+			String input_nr = input.readLine();
+			String input_positions = input.readLine();
+			String nr[] = input_nr.split(" ");
+			String monsters_positions[] = input_positions.split(" ");
+			int n = Integer.parseInt(nr[0]);
+			int r = Integer.parseInt(nr[1]);
+			for (int j = 0; j < n; j++){
+				int position = Integer.parseInt(monsters_positions[j]);
+				if(position>0){
+					Monster monster = new Monster(position);
+					monsters.add(monster);
+				}
+				else{
+					FlyingMonster monster = new FlyingMonster(position);
+					monsters.add(monster);
+				}
+			}
+			int output = min_moves(monsters, r);
+			System.out.println(output);
+		}
+	}
+	public static int min_moves(Set<Monster> monsters, int r){
+		int move = 0;
+		for(Monster monster : monsters){
+			int monster_position = monster.getPosition();
+			boolean flying = monster.getFlying();
+			if (monster_position-move*r>0 || flying==true){
+				move++;
+			}
+			monster.killMonster();
+		}
+		return move;
+	}
+}
+
+class Monster implements Comparable<Monster>{
+	protected int position;
+	protected boolean alive;
+	public Monster(int position){
+		this.position = position;
+		this.alive = true;
+	}
+	public int getPosition(){
+		return this.position;
+	}
+	public void killMonster(){
+		this.alive = false;
+	}
+	public boolean getFlying(){
+		return false;
+	}
+	public int compareTo(Monster other){
+		if(this.position!=other.position){
+			return other.position - this.position;
+		}
+		return(0);
+	}
+}
+
+class FlyingMonster extends Monster{
+	public FlyingMonster(int position){
+		super(position);
+	}
+	public boolean getFlying(){
+		return true;
+	}
+}

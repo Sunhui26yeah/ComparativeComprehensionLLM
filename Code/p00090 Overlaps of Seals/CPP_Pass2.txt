@@ -1,0 +1,72 @@
+#include <iostream>
+#include <queue>
+#include <vector>
+#include <string>
+#include <map>
+#include <algorithm>
+#include <complex>
+
+#define REP(i,n) for(int i=0;i<(int)(n);i++)
+
+using namespace std;
+
+typedef long double ld;
+typedef complex<ld> P;
+typedef vector<P> VP;
+
+const ld EPS = 1e-10;
+
+namespace std {
+  bool operator<(const P& l, const P& r){
+    return real(l) < real(r) ? true : imag(l) < imag(r);
+  }
+}
+
+pair<int,int> cnt(VP& pl, P st, ld l) {
+  P c = st + P(l/2.0, l/2.0);
+  ld br = 1 + l / sqrt(2.0);      
+  ld sr = 1 - l / sqrt(2.0);      
+  int cnt1 = 0,cnt2 = 0;
+  for (P p:pl){
+    if(abs(c-p) <= br + EPS) ++cnt1;
+    if(abs(c-p) <= sr + EPS) ++cnt2;
+  }
+  return make_pair(cnt2, cnt1);
+}
+
+int main() {
+  while(1){
+    int n;
+    cin>>n;
+    if(!n)break;
+    VP pl;
+    REP(i,n){
+      ld x,y;
+      scanf("%llf,%llf",&x,&y);
+      pl.emplace_back(x,y);
+    }
+    priority_queue<tuple<int, int, int, P, ld>> q;
+    int mn = 1;
+    REP(i,10)REP(j,10){
+      auto p = cnt(pl, P(i,j), 1.0);
+      mn = max(mn, p.first);
+      q.push(make_tuple(p.second, p.first, 0, P(i,j),1.0));
+    }
+    while(!q.empty()){
+      int minn,maxn,depth;
+      P st;
+      ld l;
+      tie(maxn,minn,depth,st,l) = q.top(); q.pop();
+      if (maxn <= mn) break;
+      REP(i,2)REP(j,2){
+        P stq = st + P(l/2.0*i, l/2.0*j);
+        auto p = cnt(pl, stq, l/2.0);
+        mn = max(mn, p.first);
+        if (p.second <= mn) continue;
+        q.push(make_tuple(p.second, p.first, depth+1, stq, l/2.0));
+      }
+    }
+    cout<<mn<<endl;
+  }
+  return 0;
+}

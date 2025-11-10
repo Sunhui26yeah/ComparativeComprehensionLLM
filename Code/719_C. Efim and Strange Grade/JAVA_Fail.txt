@@ -1,0 +1,147 @@
+import java.io.*;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.MathContext;
+import java.text.CollationElementIterator;
+import java.util.*;
+
+public class CodeForces {
+    private final BufferedReader reader;
+    private final PrintWriter writer;
+    private StringTokenizer tokenizer;
+
+    final int INF = 1400000000;
+
+    private void solve() {
+        int n = nextInt();
+        int t = nextInt();
+        String input = next();
+        int a[] = new int[n];
+        int dp[] = new int[n];
+        int index = 0;
+        while (input.charAt(index) != '.') index++;
+        for (int i = 0; i < index - 1; i++) {
+            dp[i] = INF;
+        }
+        for (int i = 0; i < n; i++) {
+            if (i != index) {
+                a[i] = input.charAt(i) - '0';
+            }
+        }
+        int pos = -1;
+        if (input.charAt(index + 1) >= '5') {
+            pos = index - 1;
+        } else {
+            dp[n - 1] = a[n - 1] >= 5 ? 1 : INF;
+            for (int i = n - 2; i > index; i--) {
+                if (a[i] >= 5) dp[i] = 1;
+                else if (a[i] == 4) dp[i] = dp[i + 1] + 1;
+                else dp[i] = INF;
+            }
+            for (int i = index + 1; i < n; i++) {
+                if (dp[i] <= t) {
+                    pos = i - 1;
+                    break;
+                }
+            }
+        }
+        if (pos == -1) {
+            writer.print(input);
+        } else {
+            a[pos]++;
+            if (pos > 0) {
+                a[pos - 1] += a[pos] / 10;
+                a[pos] %= 10;
+            }
+            for (int i = pos - 1; i > index + 1; i--) {
+                if (a[i] >= 10) {
+                    a[i - 1] += a[i] / 10;
+                    a[i] %= 10;
+                }
+            }
+            a[index - 1] += a[index + 1] / 10;
+            a[index + 1] %= 10;
+            if (pos < index) {
+                for (int i = 0; i <= pos; i++) {
+                    writer.print(a[i]);
+                }
+            } else {
+                for (int i = 0; i <= pos; i++) {
+                    if (i == index) writer.print('.');
+                    else writer.print(a[i]);
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        new CodeForces(System.in, System.out);
+    }
+
+    private CodeForces(InputStream inputStream, OutputStream outputStream) {
+        this.reader = new BufferedReader(new InputStreamReader(inputStream));
+        this.writer = new PrintWriter(outputStream);
+        solve();
+        writer.close();
+    }
+
+    private String next() {
+        while (tokenizer == null || !tokenizer.hasMoreTokens()) {
+            tokenizer = new StringTokenizer(readLine());
+        }
+        return tokenizer.nextToken();
+    }
+
+    private String readLine() {
+        String line;
+        try {
+            line = reader.readLine();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return line;
+    }
+
+    private int nextInt() {
+        return Integer.parseInt(next());
+    }
+
+    private long nextLong() {
+        return Long.parseLong(next());
+    }
+
+    private double nextDouble() {
+        return Double.parseDouble(next());
+    }
+
+    public boolean hasNext() {
+        while (tokenizer == null || !tokenizer.hasMoreTokens()) {
+            String line = readLine();
+            if (line == null) {
+                return false;
+            }
+            tokenizer = new StringTokenizer(line);
+        }
+        return true;
+    }
+
+    public BigInteger nextBigInteger() {
+        return new BigInteger(next());
+    }
+
+    public static int upperBinarySearch(int[] array, int start, int finish, int key) {
+        int low = 0;
+        int high = array.length - 1;
+        if (high < 0) return -1;
+        while (low < high) {
+            int mid = (low + high + 1) >>> 1;
+            if (array[mid] <= key) low = mid;
+            else high = mid - 1;
+        }
+        if (array[low] != key) {
+            if (array[low] < key) low++;
+            low = -(low + 1);
+        }
+        return low;
+    }
+}

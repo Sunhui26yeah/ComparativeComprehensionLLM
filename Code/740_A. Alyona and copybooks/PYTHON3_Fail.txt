@@ -1,0 +1,13 @@
+import math
+n,a,b,c = map(int,input().split())
+x = math.ceil(n/4)
+if x == n//4:
+	print(0)
+else:
+	l = 4*x - n
+	if l==1:
+		print(a)
+	elif l==2:
+		print(min(2*a,b))
+	else:
+		print(min(3*a, 2*a + b, c))

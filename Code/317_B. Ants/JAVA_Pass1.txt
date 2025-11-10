@@ -1,0 +1,74 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.Arrays;
+
+public class ProblemB {
+	
+	static final int MAX = 200;
+	
+	static final int[] dx = {1, 0, -1, 0};
+	static final int[] dy = {0, 1, 0, -1};
+	
+	public static int[][] simulate(int n) {
+		int[][] ants = new int[MAX][MAX];
+		ants[MAX/2][MAX/2] = n;
+		return simulate(ants);
+	}	
+	
+	public static int[][] simulate(int[][] ants) {
+		int cur = 0;
+		int med = MAX/2;
+		while (true) {
+			boolean upd = false;
+			int fr = Math.max(0, med-cur);
+			int to = Math.min(MAX-1, med+cur);
+			for (int i = fr ; i <= to ; i++) {
+				for (int j = fr ; j <= to ; j++) {
+					if (ants[i][j] >= 4) {
+						upd = true;
+						int scat = ants[i][j] >> 2;
+						ants[i+1][j] += scat;
+						ants[i-1][j] += scat;
+						ants[i][j+1] += scat;
+						ants[i][j-1] += scat;
+						ants[i][j] &= 3;
+					}
+				}
+			}
+			if (!upd) {
+				break;
+			}
+			cur++;
+		}
+		return ants;
+	}
+	
+	public static void main(String[] args) throws IOException {
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		PrintWriter out = new PrintWriter(System.out);
+		
+		String[] nt = in.readLine().split(" ");
+		int n = Integer.valueOf(nt[0]);
+		int t = Integer.valueOf(nt[1]);
+		
+		int[][] base = simulate(n);
+		
+		for (int i = 0 ; i < t ; i++) {
+			String[] xy = in.readLine().split(" ");
+			int x = Integer.valueOf(xy[0])+MAX/2;
+			int y = Integer.valueOf(xy[1])+MAX/2;
+			if (x < 0 || x >= MAX || y < 0 || y >= MAX) {
+				out.println(0);
+			} else {
+				out.println(base[y][x]);
+			}
+		}
+		out.flush();
+	}
+
+	public static void debug(Object... o) {
+		System.err.println(Arrays.deepToString(o));
+	}
+}

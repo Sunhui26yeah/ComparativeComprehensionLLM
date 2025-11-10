@@ -1,0 +1,7 @@
+n, k, s=map(int,input().split())
+#a= [list(map(int,input().split())) for _ in range(n)]
+c=[s]*k+[-s]*(n-k)
+#' '.join(c)
+#d=int(c)
+#print(c)
+print(" ".join(map(str,answer)))

@@ -1,0 +1,14 @@
+for _ in range(int(input())):
+    n,k=map(int,input().split())
+    a=input()
+    ans=[1]*n
+    place=0
+    for i in range(n):
+        if a[i]=="0":
+            s=min(k,i-place)
+            k-=s
+            ans[i-s]=0
+            place+=1
+    for i in range(n):
+        print(ans[i],end="")
+    print()

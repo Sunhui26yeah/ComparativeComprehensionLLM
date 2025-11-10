@@ -1,0 +1,110 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+import java.util.TreeSet;
+
+public class C177 {
+
+    static BufferedReader br;
+    static StringTokenizer st;
+    static PrintWriter pw;
+
+    static String nextToken() {
+        try {
+            while (st == null || !st.hasMoreTokens()) {
+                st = new StringTokenizer(br.readLine());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return st.nextToken();
+    }
+
+    static int nextInt() {
+        return Integer.parseInt(nextToken());
+    }
+
+    static long nextLong() {
+        return Long.parseLong(nextToken());
+    }
+
+    static String nextLine() throws IOException {
+        return br.readLine();
+    }
+
+    static char nextChar() throws IOException {
+        return (char) br.read();
+    }
+
+    public static void main(String[] args) {
+        br = new BufferedReader(new InputStreamReader(System.in));
+        pw = new PrintWriter(System.out);
+        run();
+        pw.close();
+    }
+
+    static ArrayList<Integer> grafF[];
+    static ArrayList<Integer> grafUnF[];
+
+    private static void run() {
+        int n = nextInt();
+        int k = nextInt();
+        grafF = buildGraf(k, n);
+        int m = nextInt();
+        grafUnF = buildGraf(m, n);
+        used = new boolean[n];
+        int ans = 0;
+        for (int i = 0; i < n; i++) {
+            max = 0;
+            set = new TreeSet<>();
+            dfs(i);
+            boolean tr = true;
+            for (int j = 0; j < was.size(); j++) {
+                if (set.contains(was.get(i))) {
+                    tr = false;
+                    break;
+                }
+            }
+            if (tr) {
+                ans = Math.max(max, ans);
+            }
+        }
+        pw.println(ans);
+    }
+
+    static int max;
+    static TreeSet<Integer> set = new TreeSet<>();
+    static ArrayList<Integer> was = new ArrayList<>();
+
+    private static void dfs(int v) {
+        if (used[v]) return;
+        max++;
+        used[v] = true;
+        was.add(v);
+        for (int i = 0; i < grafUnF[v].size(); i++) {
+            set.add(grafUnF[v].get(i));
+        }
+        for (int i = 0; i < grafF[v].size(); i++) {
+            dfs(grafF[v].get(i));
+        }
+    }
+
+    static boolean used[];
+
+    private static ArrayList<Integer>[] buildGraf(int k, int n) {
+        ArrayList<Integer>[] graf = new ArrayList[n];
+        for (int i = 0; i < n; i++) {
+            graf[i] = new ArrayList<>();
+        }
+        for (int i = 0; i < k; i++) {
+            int x = nextInt() - 1;
+            int y = nextInt() - 1;
+            graf[x].add(y);
+            graf[y].add(x);
+        }
+        return graf;
+    }
+}

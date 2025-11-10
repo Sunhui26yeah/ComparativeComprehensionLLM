@@ -1,0 +1,21 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main()
+{
+  int N, num[100010] = {0};
+  cin >> N;
+  for(int i = 0; i < N; i++){
+    int a, b;
+    cin >> a >> b;
+    num[a]++, num[b+1]--;
+  }
+  partial_sum(num, num + 100010, num);
+  int ans = 0;
+  for(int i = 1; i <= N; i++){
+    if(i <= num[i+1]) ans = max(ans, i);
+  }
+  cout << ans << endl;
+  return 0;
+}

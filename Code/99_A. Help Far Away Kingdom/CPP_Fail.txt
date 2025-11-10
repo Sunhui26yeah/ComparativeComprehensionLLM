@@ -1,0 +1,14 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+  double n;
+  cin >> n;
+  int a = floor(n);
+  int d = a % 10;
+  if (d != 9 && n - a < 0.5)
+    cout << a;
+  else if (d != 9 && n - a > 0.5)
+    cout << a + 1;
+  else
+    cout << "GOTO Vasilisa.";
+}

@@ -1,0 +1,76 @@
+#include <bits/stdc++.h>
+using namespace std;
+template <class T>
+using max_pq = priority_queue<T>;
+template <class T>
+using min_pq = priority_queue<T, vector<T>, greater<T>>;
+int oo = 0x3f3f3f3f;
+long long n, k;
+vector<vector<pair<int, int>>> graph;
+vector<int> redGroups;
+set<int> visited;
+int dfs(int curr) {
+  int size = 1;
+  visited.insert(curr);
+  for (int i = 0; i < graph[curr].size(); i++) {
+    if (graph[curr][i].second == 0 &&
+        visited.find(graph[curr][i].first) == visited.end()) {
+      size += dfs(graph[curr][i].first);
+    }
+  }
+  return size;
+}
+class CEdgyTrees {
+ public:
+  void solve(istream& cin, ostream& cout) {
+    graph.clear();
+    redGroups.clear();
+    cin >> n >> k;
+    for (int i = 0; i < n; i++) {
+      vector<pair<int, int>> tmp;
+      graph.push_back(tmp);
+    }
+    for (int i = 0; i < n - 1; i++) {
+      int u, v, x;
+      cin >> u >> v >> x;
+      u--;
+      v--;
+      graph[u].push_back(make_pair(v, x));
+      graph[v].push_back(make_pair(u, x));
+    }
+    for (int i = 0; i < n; i++) {
+      if (visited.find(i) == visited.end()) {
+        redGroups.push_back(dfs(i));
+      }
+    }
+    long long ans = 1;
+    for (int i = 0; i < k; i++) {
+      ans = ((ans % 1000000007ll) * n) % 1000000007ll;
+    }
+    for (int i = 0; i < redGroups.size(); i++) {
+      if (redGroups[i] == 1) {
+        ans--;
+      } else {
+        int x = 1;
+        for (int j = 0; j < k; j++) {
+          x = ((x % 1000000007ll) * (redGroups[i] % 1000000007ll)) %
+              1000000007ll;
+        }
+        ans -= x;
+        if (ans < 0) ans += 1000000007ll;
+      }
+    }
+    cout << ans;
+  }
+};
+int main() {
+  ios_base::sync_with_stdio(0);
+  cin.tie(NULL);
+  cout.tie(NULL);
+  ;
+  CEdgyTrees solver;
+  std::istream& in(std::cin);
+  std::ostream& out(std::cout);
+  solver.solve(in, out);
+  return 0;
+}

@@ -1,0 +1,57 @@
+import java.math.*;
+import java.util.*;
+import java.io.*;
+import static java.lang.Math.*;
+import static java.util.Arrays.*;
+import static java.util.Collections.*;
+
+public class A {
+    public static void main(String[] args) throws Exception {
+        String s = next();
+        BigInteger a = new BigInteger(s.substring(0, s.indexOf('.')));
+        String b = (s.substring(s.indexOf('.') + 1));
+        if (a.toString().charAt(a.toString().length() - 1) == '9') {
+            System.out.println("GOTO Vasilisa.");
+        } else {
+            if (b.toString().charAt(0) < '5') {
+                System.out.println(a);
+            } else {
+                System.out.println(a.add(BigInteger.ONE));
+            }
+        }
+    }
+
+    static BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+    static StringTokenizer st = new StringTokenizer("");
+
+    static String next() throws Exception {
+        while (!st.hasMoreTokens()) {
+            String s = in.readLine();
+            if (s == null)
+                return null;
+            st = new StringTokenizer(s);
+        }
+        return st.nextToken();
+    }
+
+    static int nextInt() throws Exception {
+        return Integer.parseInt(next());
+    }
+
+    static long nextLong() throws Exception {
+        return Long.parseLong(next());
+    }
+
+    static double nextDouble() throws Exception {
+        return Double.parseDouble(next());
+    }
+
+    static void DBG(Object... objects) {
+        System.err.println(deepToString(objects));
+    }
+
+    static int RAND(int from, int to) {
+        return (int) (random() * (to - from + 1)) + from;
+    }
+
+}

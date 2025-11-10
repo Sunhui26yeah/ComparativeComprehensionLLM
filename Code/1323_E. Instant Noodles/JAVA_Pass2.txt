@@ -1,0 +1,102 @@
+import java.util.*;
+import java.io.*;
+public class EdB {
+	static long num = 998244353;
+	public static void main(String[] args) throws Exception{
+		
+
+		// TODO Auto-generated method stub
+ 		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+ 		PrintWriter out = new PrintWriter(System.out);
+ 		int t = Integer.parseInt(bf.readLine());
+ 		for(int i =0 ;i<t-1;i++){
+ 			StringTokenizer st1 = new StringTokenizer(bf.readLine());
+ 			int n = Integer.parseInt(st1.nextToken());
+ 			int m = Integer.parseInt(st1.nextToken());
+ 			long[] cost = new long[n+1];
+ 			StringTokenizer st3 = new StringTokenizer(bf.readLine());
+ 			for(int j =1;j<=n;j++){
+ 				cost[j] = Long.parseLong(st3.nextToken());
+ 			}
+ 			Map<Integer, Set<Integer>> edges = new HashMap<Integer, Set<Integer>>();
+ 			Map<Set<Integer>, Long> mp = new HashMap<Set<Integer>, Long>();
+ 			for(int k =0 ;k<m;k++){
+ 				StringTokenizer st2 = new StringTokenizer(bf.readLine());
+ 				int u = Integer.parseInt(st2.nextToken());
+ 				int v = Integer.parseInt(st2.nextToken());
+ 				if (!edges.containsKey(v)){
+ 					edges.put(v,  new HashSet<Integer>());
+ 				}
+ 				edges.get(v).add(u);
+ 			}
+ 			for(int j : edges.keySet()){
+ 				if (!mp.containsKey(edges.get(j))){
+ 					mp.put(edges.get(j),  0L);
+ 				}
+ 				mp.put(edges.get(j), mp.get(edges.get(j))+cost[j]);
+ 			}
+ 			long gcd = -1;
+ 			for(Set<Integer> j : mp.keySet()){
+ 				if (gcd == -1)
+ 					gcd = mp.get(j);
+ 				else
+ 					gcd = gcd(gcd, mp.get(j));
+ 				
+ 			}
+ 			out.println(gcd);
+ 			bf.readLine();
+ 		}
+ 		
+ 		StringTokenizer st1 = new StringTokenizer(bf.readLine());
+			int n = Integer.parseInt(st1.nextToken());
+			int m = Integer.parseInt(st1.nextToken());
+			long[] cost = new long[n+1];
+			StringTokenizer st3 = new StringTokenizer(bf.readLine());
+			for(int j =1;j<=n;j++){
+				cost[j] = Long.parseLong(st3.nextToken());
+			}
+			Map<Integer, Set<Integer>> edges = new HashMap<Integer, Set<Integer>>();
+			Map<Set<Integer>, Long> mp = new HashMap<Set<Integer>, Long>();
+			for(int k =0 ;k<m;k++){
+				StringTokenizer st2 = new StringTokenizer(bf.readLine());
+				int u = Integer.parseInt(st2.nextToken());
+				int v = Integer.parseInt(st2.nextToken());
+				if (!edges.containsKey(v)){
+					edges.put(v,  new HashSet<Integer>());
+				}
+				edges.get(v).add(u);
+			}
+			for(int j : edges.keySet()){
+				if (!mp.containsKey(edges.get(j))){
+					mp.put(edges.get(j),  0L);
+				}
+				mp.put(edges.get(j), mp.get(edges.get(j))+cost[j]);
+			}
+			long gcd = -1;
+			for(Set<Integer> j : mp.keySet()){
+				if (gcd == -1)
+					gcd = mp.get(j);
+				else
+					gcd = gcd(gcd, mp.get(j));
+				
+			}
+			out.println(gcd);
+ 		
+ 		out.println();
+	 		
+ 		out.close();
+ 		
+ 		
+ 		
+ 	}
+	public static long gcd(long a, long b){ 
+	      if (b == 0) 
+	        return a; 
+	      return gcd(b, a % b);  
+	    }
+}
+ 	
+ 
+//StringJoiner sj = new StringJoiner(" "); 
+//sj.add(strings)
+//sj.toString() gives string of those stuff w spaces or whatever that sequence is

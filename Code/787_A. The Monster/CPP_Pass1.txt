@@ -1,0 +1,17 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+  int a, b, c, d;
+  cin >> a >> b >> c >> d;
+  int morty = b, rick = d;
+  int ans = -1;
+  for (int i = 0; i < 1000; i++) {
+    if (morty < rick) morty += a;
+    if (rick < morty) rick += c;
+    if (rick == morty) {
+      ans = rick;
+      break;
+    }
+  }
+  cout << ans << endl;
+}

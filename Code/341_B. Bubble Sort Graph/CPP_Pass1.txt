@@ -1,0 +1,34 @@
+#include <bits/stdc++.h>
+using namespace std;
+int ceilIndex(vector<int> v, int l, int r, int x) {
+  while (r - l > 1) {
+    int mid = l + (r - l) / 2;
+    if (v[mid] >= x)
+      r = mid;
+    else
+      l = mid;
+  }
+  return r;
+}
+int main() {
+  int n, i;
+  scanf("%d", &n);
+  int ar[n + 5];
+  vector<int> tail;
+  for (i = 0; i < n; i++) {
+    scanf("%d", &ar[i]);
+    tail.push_back(0);
+  }
+  tail[0] = ar[0];
+  int len = 1;
+  for (i = 1; i < n; i++) {
+    auto b = tail.begin(), e = tail.begin() + len;
+    auto it = lower_bound(b, e, ar[i]);
+    if (it == tail.begin() + len)
+      tail[len++] = ar[i];
+    else
+      *it = ar[i];
+  }
+  printf("%d\n", len);
+  return 0;
+}

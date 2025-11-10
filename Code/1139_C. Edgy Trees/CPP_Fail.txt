@@ -1,0 +1,33 @@
+#include <bits/stdc++.h>
+using namespace std;
+bool visited[10000007];
+vector<long long> g[10000007];
+long long ct = 0;
+void dfs(long long i) {
+  if (visited[i]) return;
+  ct++;
+  ct = ct % 1000000007;
+  visited[i] = true;
+  for (auto it : g[i]) dfs(it);
+}
+int32_t main() {
+  long long n, k, u, v, x;
+  cin >> n >> k;
+  for (long long i = 0; i < n - 1; i++) {
+    cin >> u >> v >> x;
+    if (x == 0) {
+      g[u - 1].push_back(v - 1);
+      g[v - 1].push_back(u - 1);
+    }
+  }
+  long long ct1 = 0;
+  memset(visited, false, sizeof(visited));
+  for (long long i = 0; i < n; i++) {
+    if (visited[i] == true) continue;
+    ct = 0;
+    dfs(i);
+    ct1 += pow(ct, k);
+    ct1 = ct1 % 1000000007;
+  }
+  cout << pow(n, k) - ct1;
+}

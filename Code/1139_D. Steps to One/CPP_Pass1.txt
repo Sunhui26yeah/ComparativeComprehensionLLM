@@ -1,0 +1,63 @@
+#include <bits/stdc++.h>
+using namespace std;
+long long m, inv, ans, dp[100005], i;
+vector<int> G[100005];
+int mu[100005], pr[100005], cnt, vi[100005];
+long long pw(long long bs, long long x) {
+  long long ans = 1;
+  while (x) {
+    if (x & 1) ans = ans * bs % 1000000007;
+    bs = bs * bs % 1000000007;
+    x >>= 1;
+  }
+  return ans;
+}
+void get_mu() {
+  mu[1] = 1;
+  for (int i = 2; i < 100005; i++) {
+    if (!vi[i]) {
+      mu[i] = -1;
+      pr[++cnt] = i;
+    }
+    for (int j = 1; j <= cnt && pr[j] * i < 100005; j++) {
+      vi[i * pr[j]] = 1;
+      if (i % pr[j] == 0) break;
+      mu[i * pr[j]] = -mu[i];
+    }
+  }
+}
+void sol() {
+  dp[1] = 0;
+  for (int i = 2; i <= m; i++) {
+    dp[i] = m;
+    for (int j = 0; j < G[i].size(); j++) {
+      long long cnt = 0, x = G[i][j];
+      if (x == i) continue;
+      for (int k = 0; k < G[i / x].size(); k++) {
+        long long tp = G[i / x][k];
+        cnt += mu[tp] * (m / x / tp) % 1000000007;
+        cnt %= 1000000007;
+        cnt += 1000000007;
+        cnt %= 1000000007;
+      }
+      dp[i] += dp[x] * cnt % 1000000007;
+      dp[i] %= 1000000007;
+    }
+    dp[i] = dp[i] * pw((m - m / i) % 1000000007, 1000000007 - 2) % 1000000007;
+  }
+}
+int main() {
+  get_mu();
+  cin >> m;
+  inv = pw(m, 1000000007 - 2);
+  for (int i = 1; i <= m; i++)
+    for (int j = i; j <= m; j += i) G[j].push_back(i);
+  sol();
+  for (int i = 1; i <= m; i++) {
+    ans += dp[i] % 1000000007;
+    ans %= 1000000007;
+  }
+  ans = ans * inv % 1000000007;
+  ans++;
+  cout << ans % 1000000007;
+}

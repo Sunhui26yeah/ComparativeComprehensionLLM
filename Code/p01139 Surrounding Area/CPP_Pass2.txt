@@ -1,0 +1,74 @@
+#include<iostream>
+#include<string>
+using namespace std;
+bool white[50][50],black[50][50],fre[50][50];
+int main(){
+	int w,h;
+	char z;
+	while(true){
+	cin>>w>>h;
+	if(w==0&&h==0)
+		break;
+	for(int i=0;i<h;i++){
+		for(int j=0;j<w;j++){
+			white[i][j]=false;
+			black[i][j]=false;
+			fre[i][j]=true;
+		}
+	}
+	for(int i=0;i<h;i++){
+		for(int j=0;j<w;j++){
+			cin>>z;
+			if(z=='W'){
+				fre[i][j]=false;
+				white[i][j]=true;
+			}
+			if(z=='B'){
+				fre[i][j]=false;
+				black[i][j]=true;
+			}
+		}
+	}
+	int dx[]={0,1,0,-1},dy[]={1,0,-1,0};
+	while(true){
+		bool cha=false;
+		for(int i=0;i<h;i++){
+			for(int j=0;j<w;j++){
+				if(fre[i][j]==true){
+				for(int k=0;k<4;k++){
+					if(i+dy[k]>=0&&i+dy[k]<h&&j+dx[k]>=0&&j+dx[k]<w){
+						if(white[i+dy[k]][j+dx[k]]==true){
+							if(white[i][j]==false)
+								cha=true;
+							white[i][j]=true;
+						}
+						if(black[i+dy[k]][j+dx[k]]==true){
+							if(black[i][j]==false)
+								cha=true;
+							black[i][j]=true;
+						}
+					}
+				}
+				}
+			}
+		}
+		if(cha==false)
+			break;
+	}
+	int wans=0,bans=0;
+	for(int i=0;i<h;i++){
+		for(int j=0;j<w;j++){
+			if(fre[i][j]==true){
+				if(white[i][j]==true)
+					wans++;
+				if(black[i][j]==true)
+					bans++;
+				if(white[i][j]==true&&black[i][j]==true)
+					wans--,bans--;
+			}
+		}
+	}
+	cout<<bans<<" "<<wans<<endl;
+	}
+	return 0;
+}

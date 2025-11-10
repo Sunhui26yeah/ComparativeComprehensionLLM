@@ -1,0 +1,29 @@
+#include <bits/stdc++.h>
+#pragma gcc optimize("Ofast,no-stack-protector,tune=native")
+#pragma gcc optimize("sse,sse2,sse3,sse4,ssse3")
+#pragma gcc optimize("abm,mmx,avx,avx2,unroll-loops,fast-math,section-anchors")
+using namespace std;
+signed main() {
+  ios_base::sync_with_stdio(0);
+  cin.tie(0);
+  cout.tie(0);
+  long long n, a, b, c;
+  cin >> n >> a >> b >> c;
+  long long mn = 1e10;
+  for (long long i = 0; i < 21; i++) {
+    long long tmp = n + i;
+    if (tmp % 4 == 0) mn = min(i * a, mn);
+    for (long long j = 0; j < 21; j++) {
+      long long tmp1 = n + j * 2;
+      if (tmp1 % 4 == 0) mn = min(j * b, mn);
+      if (tmp + j * 2 % 4 == 0) mn = min((i * a) + (j * b), mn);
+      for (long long q = 0; q < 21; q++) {
+        if ((tmp + j * 2 + q * 3) % 4 == 0)
+          mn = min((q * c) + (j * b) + (a * i), mn);
+        if ((tmp1 + (q * 3)) % 4 == 0) mn = min((q * c) + (j * b), mn);
+        if ((n + (q * 3)) % 4 == 0) mn = min((q * c), mn);
+      }
+    }
+  }
+  cout << mn;
+}

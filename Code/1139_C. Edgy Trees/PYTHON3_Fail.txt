@@ -1,0 +1,59 @@
+"""
+if num edges red <= k - 1:
+    return (n choose k)
+
+# num edges red >= k
+"""
+
+def n_perm_k(n, k):
+    return n ** k
+
+def ways(xs, k):
+    total = n_perm_k(sum(xs), k)
+
+    for x in xs:
+        total -= n_perm_k(x, k)
+    
+    return total
+
+def dfs(i, graph, visited):
+    stack = [i]
+    count = 0
+    while stack:
+        current = stack.pop()
+        count += 1
+        visited.add(current)
+        for neighbor, black in graph[current].items():
+            if not black and neighbor not in visited:
+                stack.append(neighbor)
+    return count                
+
+def get_forest_sizes(n, graph):
+    visited = set()
+    components = []
+    for i in range(1, n + 1):
+        if i not in visited:
+            ans = dfs(i, graph, visited)
+            components.append(ans)
+    return components
+
+def solve(n, k, graph, black_count):
+    if black_count == 0:
+        # no black
+        return 0
+    elif black_count == n - 1:
+        # all black
+        return n_perm_k(n, k)
+    else:
+        return ways(get_forest_sizes(n, graph), k)
+
+n, k = map(int, input().split())
+graph = { x: {} for x in range(1, n + 1) }
+black_count = 0
+for _ in range(1, n):
+    a, b, black = map(int, input().split())
+    black_count += black
+    graph[a][b] = (black == 1)
+    graph[b][a] = (black == 1)
+
+print(solve(n, k, graph, black_count) % (10 ** 9 + 7))

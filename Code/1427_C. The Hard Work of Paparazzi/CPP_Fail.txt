@@ -1,0 +1,27 @@
+#include <bits/stdc++.h>
+using namespace std;
+const int maxn = 2e6;
+int main() {
+  ios::sync_with_stdio(0);
+  cin.tie(0);
+  int n, r, t, x, y, ans = 0, dp[maxn] = {};
+  for (int i = 0; i < maxn; ++i) dp[i] = INT_MIN;
+  cin >> r >> n;
+  pair<pair<int, int>, int> c[n + 1];
+  c[0] = {{1, 1}, 0};
+  for (int i = 0; i < n; ++i) {
+    cin >> t >> x >> y;
+    c[i + 1] = {{x, y}, t};
+  }
+  dp[0] = 0;
+  for (int i = 0; i < n + 1; ++i) {
+    ans = max(ans, dp[i]);
+    for (int j = i + 1; j <= min(n, i + 2 * r); ++j)
+      if (abs(c[i].first.first - c[j].first.first) +
+              abs(c[i].first.second - c[j].first.second) <=
+          c[j].second - c[i].second)
+        dp[j] = max(dp[j], dp[i] + 1);
+  }
+  cout << ans << "\n";
+  return 0;
+}

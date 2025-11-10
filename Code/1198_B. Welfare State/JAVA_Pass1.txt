@@ -1,0 +1,43 @@
+//package com.company;
+
+//import java.io.file.Paths;
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+        // write your code here
+        Scanner s=new Scanner(System.in);
+    int n=s.nextInt();
+    int[] a=new int[n];
+    for(int i=0;i<n;i++){
+        a[i]=s.nextInt();
+    }Stack<Integer> g=new Stack<Integer>();
+    int    q=s.nextInt();Stack<Integer> i1=new Stack<Integer>();Stack<Integer> v2=new Stack<Integer>();Stack<Integer> v1=new Stack<Integer>();
+    while(q-->0){int x=s.nextInt();
+        g.push(x);
+        if(x==1){
+            i1.push(s.nextInt());
+            v1.push(s.nextInt());
+        }else {
+            v2.push(s.nextInt());
+        }
+    }
+    int max=Integer.MIN_VALUE;int[] vis=new int[n];
+    while(!g.isEmpty()){
+        int x=g.pop();
+        if(x==2){
+            max=Math.max(max,v2.pop());
+
+        }else {int z=i1.pop()-1;
+            if(vis[z]==0){
+                vis[z]=1;
+                a[z]=Math.max(v1.pop(),max);
+            }else v1.pop();
+        }
+
+        }for(int i=0;i<n;i++) {if(vis[i]==1)System.out.print(a[i]+" ");else System.out.print(Math.max(a[i],max)+" ");}
+
+
+    }
+}

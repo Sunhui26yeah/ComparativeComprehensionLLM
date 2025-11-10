@@ -1,0 +1,17 @@
+number = input()
+integer = ''
+fraction = ''
+for i in range(len(number)):
+    if number[i] == '.':
+        break
+    integer += number[i]
+fraction = number[i:]
+
+if integer[-1] != '9' and float(fraction) < 0.5:
+    round_num = int(integer)
+elif integer[-1] != '9' and float(fraction) >= 0.5 :
+    round_num = int(integer) +1
+elif integer[-1] == '9':
+    round_num = "GOTO Vasilisa"
+
+print(round_num)

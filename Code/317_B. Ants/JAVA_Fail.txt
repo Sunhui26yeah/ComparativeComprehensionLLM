@@ -1,0 +1,131 @@
+import java.util.*;
+
+/**
+ * Created by Oleksiy on 21.07.2014.
+ */
+public class Muravi {
+
+    static List<Integer[]> queries = new LinkedList<Integer[]>();
+    static int queryCount;
+    static Coordinates coordinates;
+    static Coordinates tmpCoordinates;
+    static Set<Integer[]> queXY = new HashSet<Integer[]>(100);
+    static Set<Integer[]> tmpQueXY;
+    static {
+        queXY.add(new Integer[] {0, 0});
+    }
+
+
+
+    public static void main(String[] args) {
+        initiate();
+        long time = System.currentTimeMillis();
+        process();
+        //System.out.println(System.currentTimeMillis() - time);
+        printResult();
+
+
+
+    }
+
+
+    static void initiate() {
+        Scanner scanner = new Scanner(System.in);
+        int murCount =  scanner.nextInt();
+        coordinates = new Coordinates(murCount);
+        queryCount = scanner.nextInt();
+        for (int i = 0; i < queryCount; i++ ) {
+            int x = scanner.nextInt();
+            int y = scanner.nextInt();
+            queries.add(new Integer[] {x, y});
+        }
+    }
+
+    static boolean iteration() {
+        boolean atLeastOneMove = false;
+        for(Integer[] coord : queXY) {
+            tmpCoordinates = new Coordinates(0);
+            tmpQueXY = new HashSet<Integer[]>(100);
+            int x = coord[0];
+            int y = coord[1];
+            int murNum;
+            if ((murNum = coordinates.get(x, y)) >= 4) {
+                addNumMur(tmpCoordinates, x - 1, y, 1);
+                addNumMur(tmpCoordinates, x + 1, y, 1);
+                addNumMur(tmpCoordinates, x, y - 1, 1);
+                addNumMur(tmpCoordinates, x, y + 1, 1);
+                tmpCoordinates.set(x, y, murNum - 4);
+                tmpQueXY.add(new Integer[] {x - 1, y});
+                tmpQueXY.add(new Integer[] {x + 1, y});
+                tmpQueXY.add(new Integer[] {x, y - 1});
+                tmpQueXY.add(new Integer[] {x, y + 1});
+                tmpQueXY.add(new Integer[] {x, y});
+                atLeastOneMove = true;
+            } else {
+                
+                addNumMur(tmpCoordinates, x , y, 0);
+            }
+            coordinates = tmpCoordinates;
+        }
+        queXY = tmpQueXY;
+        return atLeastOneMove;
+    }
+
+    static void addNumMur(Coordinates coordinates, int x, int y, int num) {
+        int initNum = coordinates.get(x, y);
+        coordinates.set(x, y, initNum + num);
+    }
+
+
+    static void process() {
+        while (iteration());
+
+    }
+
+
+
+    static void printResult() {
+        for (Integer[] coord : queries) {
+
+            System.out.println(coordinates.get(coord[0], coord[1]));
+
+        }
+    }
+
+}
+
+class Coordinates {
+
+    Map<Integer, Map<Integer, Integer>> mapX = new HashMap<Integer, Map<Integer, Integer>>(100);
+    Map<Integer, Integer> mapY;
+
+    Coordinates(int initNumber) {
+
+        set(0, 0, initNumber);
+
+    }
+
+    Coordinates(Map<Integer, Map<Integer, Integer>> mapX) {
+        this.mapX = new HashMap<Integer, Map<Integer, Integer>>(mapX);
+    }
+
+    void set(int x, int y, int number) {
+        if (mapX.containsKey(x)) {
+            mapY = mapX.get(x);
+        }
+        else {
+            mapY = new HashMap<Integer, Integer>(100);
+        }
+        mapY.put(y, number);
+        mapX.put(x, mapY);
+    }
+
+    int get(int x, int y) {
+        if (!mapX.containsKey(x)) return 0;
+        mapY = mapX.get(x);
+        if (!mapY.containsKey(y)) return 0;
+        return mapY.get(y);
+
+
+    }
+}

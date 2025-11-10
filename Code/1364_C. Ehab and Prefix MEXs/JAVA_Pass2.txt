@@ -1,0 +1,88 @@
+import java.time.temporal.Temporal;
+import java.util.*;
+
+public class A{
+    public static void main(String args[])
+    {
+        Scanner sc=new Scanner(System.in);
+        long mod=1000000007l;
+        int n=sc.nextInt();
+        int arr[]=new int[n];
+        for(int j=0;j<n;j++)
+        {
+            arr[j]=sc.nextInt();
+        }
+
+        int ans[]=new int[n+1];
+
+
+//        TreeMap<Integer,Integer> l=new TreeMap<>();
+//        TreeMap<Integer,Integer> map=new TreeMap<>();
+        TreeMap<Integer,Integer> f=new TreeMap<>();
+
+
+//        for(int j=0;j<n;j++)
+//        {
+//            //if(arr[j]!=arr[j-1])
+//            {
+//                l.put(arr[j],1);
+//                map.put(arr[j],1);
+//            }
+//        }
+
+        int ind=0;
+
+
+//        for(int j=0;j<n;j++)
+//        {
+//            if(l.containsKey(arr[j])&&arr[j]!=0)
+//            {
+//                ans[j]=f.firstKey();
+//                f.remove(ans[j]);
+//                l.remove(arr[j]);
+//            }
+//            else
+//            {
+//
+//
+//                while(map.containsKey(ind+1))
+//                {
+//                    ind++;
+//                }
+//
+//                if(arr[j]<=j)
+//                {
+//                    ind=j+1;
+//                }
+//                ans[j]=ind;
+//                f.remove(ind);
+//                ind++;
+//            }
+//        }
+
+        for(int j=0;j<n+1;j++)
+        {
+            ans[j]=j;
+            f.put(ans[j],j);
+        }
+
+        for(int j=0;j<n;j++)
+        {
+            if(f.get(arr[j])<=j)
+            {
+                int temp=ans[j+1];
+                int loc=f.get(arr[j]);
+                ans[loc]=temp;
+                ans[j+1]=arr[j];
+                f.put(arr[j],j+1);
+                f.put(temp,loc);
+            }
+        }
+
+        for(int j=0;j<n;j++)
+        {
+            System.out.print(ans[j]+" ");
+        }
+
+    }
+}

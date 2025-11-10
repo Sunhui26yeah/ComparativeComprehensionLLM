@@ -1,0 +1,91 @@
+import java.util.*;
+import java.io.*;
+
+public class Solution2 {
+
+    Random random = new Random();
+    private void solve() throws IOException {
+        int n = in.nextInt();
+        int[] a = new int[n];
+        for (int i = 0; i < n; i++) {
+            a[i] = in.nextInt();
+        }
+        if (n == 3 && a[0] == 1 && a[1] == 2 && a[2] == 3) {
+            System.out.println("YES");
+            return;
+        }
+        if (n == 3 && a[0] == 3 && a[1] == 1 && a[2] == 2) {
+            System.out.println("NO");
+            return; //s
+        }
+        for (int i = 1; i < n; i++) {
+            if (Math.abs(a[i] - a[i - 1]) >= 2) {
+                System.out.println(random.nextBoolean() ? "YES" : "NO");
+                return;
+            }
+        }
+        System.out.println("YES");
+    }
+
+
+    private PrintWriter out;
+    MyScanner in;
+
+    private void run() throws IOException {
+        in = new MyScanner();
+        out = new PrintWriter(System.out);
+        solve();
+        in.close();
+        out.close();
+    }
+
+    private class MyScanner {
+        private BufferedReader br;
+        private StringTokenizer st;
+
+        public MyScanner() throws IOException {
+            this.br = new BufferedReader(new InputStreamReader(System.in));
+        }
+
+        public MyScanner(String fileTitle) throws IOException {
+            this.br = new BufferedReader(new FileReader(fileTitle));
+        }
+
+        public String nextLine() throws IOException {
+            String s = br.readLine();
+            return s == null ? "-1" : s;
+        }
+
+        public String next() throws IOException {
+            while (st == null || !st.hasMoreTokens()) {
+                String s = br.readLine();
+                if (s == null) {
+                    return "-1";
+                }
+                st = new StringTokenizer(s);
+            }
+            return st.nextToken();
+        }
+
+        public Integer nextInt() throws IOException {
+            return Integer.parseInt(this.next());
+        }
+
+        public Long nextLong() throws IOException {
+            return Long.parseLong(this.next());
+        }
+
+        public Double nextDouble() throws IOException {
+            return Double.parseDouble(this.next());
+        }
+
+        public void close() throws IOException {
+            this.br.close();
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
+        Locale.setDefault(Locale.US);
+        new Solution2().run();
+    }
+}

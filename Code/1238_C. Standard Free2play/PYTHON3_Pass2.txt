@@ -1,0 +1,28 @@
+#import sys,atexit
+#from io import BytesIO
+#inp = BytesIO(sys.stdin.buffer.read())
+#input = lambda:inp.readline().decode('ascii')
+#buf = BytesIO()
+#sys.stdout.write = lambda s: buf.write(s.encode('ascii'))
+#print = lambda s: buf.write(s.encode('ascii'))
+#atexit.register(lambda:sys.__stdout__.buffer.write(buf.getvalue()))
+
+for i in range(int(input())):
+    h,n=map(int,input().split())
+    p=list(map(int,input().split()))
+    p.append(0)
+    s=set(p)
+    ans=0
+    i=1
+    while i<n+1 and h>2:
+        if h-1 in s:
+            h-=2
+            while i<n+1 and p[i]>=h:
+                i+=1                
+            if h not in s:
+                ans+=1
+        else:
+            h=p[i]+1
+        
+
+    print(ans)

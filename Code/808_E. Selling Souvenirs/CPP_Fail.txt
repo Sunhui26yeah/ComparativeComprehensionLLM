@@ -1,0 +1,67 @@
+#include <bits/stdc++.h>
+using namespace std;
+const int N = 100005;
+struct A {
+  int w;
+  long long c;
+} a[N];
+int n, m;
+long long dp[105];
+void DP() {
+  for (int i = 1; i <= n; i++) {
+    for (int j = m; j >= 0; j--) {
+      if (j >= a[i].w) {
+        dp[j] = max(dp[j], dp[j - a[i].w] + a[i].c);
+      }
+    }
+  }
+  printf("%I64d\n", dp[m]);
+}
+bool operator<(const A &a1, const A &a2) {
+  return (double)a1.c / a1.w > (double)a2.c / a2.w;
+}
+void foo() {
+  sort(a + 1, a + n + 1);
+  long long ans = 0, i;
+  for (i = 1; i <= n; i++) {
+    if (m >= 6) {
+      ans += a[i].c;
+      m -= a[i].w;
+    } else
+      break;
+  }
+  long long x[4][10], cnt[4];
+  for (int j = i; j <= n; j++) {
+    if (cnt[a[i].w] < 6) {
+      x[a[i].w][++cnt[a[i].w]] = a[i].c;
+    }
+  }
+  long long y = 0, sum = 0;
+  for (int i = 0; i < 6; i++) {
+    sum += x[1][i];
+    for (int j = 0; j < (6 - i) / 2; j++) {
+      sum += x[2][j];
+      for (int k = 0; k < (6 - i - 2 * j) / 3; k++) {
+        y = max(y, sum + x[3][k]);
+      }
+      y = max(y, sum);
+      sum -= x[2][j];
+    }
+    y = max(y, sum);
+    sum -= x[1][i];
+  }
+  ans += y;
+  printf("%I64d", ans);
+}
+int main() {
+  scanf("%d%d", &n, &m);
+  for (int i = 1; i <= n; i++) {
+    scanf("%d%I64d", &a[i].w, &a[i].c);
+  }
+  if (m <= 100) {
+    DP();
+  } else {
+    foo();
+  }
+  return 0;
+}

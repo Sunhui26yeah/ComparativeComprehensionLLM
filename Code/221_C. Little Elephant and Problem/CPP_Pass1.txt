@@ -1,0 +1,50 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+  int n, in1, in2;
+  cin >> n;
+  int arr[n];
+  for (int i = 0; i < n; i++) cin >> arr[i];
+  int flag = 0;
+  for (int i = 1; i < n; i++) {
+    if (arr[i] < arr[i - 1]) {
+      in1 = i - 1;
+      flag = 1;
+      break;
+    }
+  }
+  if (!flag)
+    cout << "YES";
+  else {
+    if (in1 != 0) {
+      while (arr[in1] == arr[in1 - 1]) {
+        if (in1 > 1)
+          in1--;
+        else {
+          in1--;
+          break;
+        }
+      }
+    }
+    int m = 1000000010;
+    for (int i = in1 + 1; i < n; i++) {
+      if (arr[i] <= m) {
+        m = arr[i];
+        in2 = i;
+      }
+    }
+    arr[in1] = arr[in1] + arr[in2] - (arr[in2] = arr[in1]);
+    flag = 0;
+    for (int i = 1; i < n; i++) {
+      if (arr[i] < arr[i - 1]) {
+        flag = 1;
+        break;
+      }
+    }
+    if (!flag)
+      cout << "YES";
+    else
+      cout << "NO";
+  }
+  return 0;
+}

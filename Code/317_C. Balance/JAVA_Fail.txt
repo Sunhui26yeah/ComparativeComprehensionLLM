@@ -1,0 +1,176 @@
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Scanner;
+
+/**
+ * Created with IntelliJ IDEA.
+ * Author   : Dylan
+ * Date     : 2013-07-15
+ * Time     : 09:24
+ * Project  : Balance
+ * Problem  : http://codeforces.com/problemset/problem/317/C
+ */
+public class Main {
+    static int n, e;
+    static long v;
+    static long[] a;
+    static long[] b;
+    static int[] root;
+    static int[][] map;
+    static LinkedList st;
+    static boolean[] visited;
+
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        n = in.nextInt();
+        v = in.nextLong();
+        e = in.nextInt();
+        a = new long[n + 5];
+        b = new long[n + 5];
+        map = new int[n + 5][n + 5];
+        for (int i = 1; i <= n; i++) {
+            a[i] = in.nextInt();
+        }
+        for (int i = 1; i <= n; i++) {
+            b[i] = in.nextInt();
+        }
+        root = new int[n + 5];
+        for (int i = 1; i <= n; i++) {
+            root[i] = i;
+        }
+        HashSet hashSet = new HashSet<Tube>();
+        for (int i = 0; i < e; i++) {
+            int u = in.nextInt();
+            int v = in.nextInt();
+            if (hashSet.contains(new Tube(u, v)) || hashSet.contains(new Tube(v, u))) {
+                continue;
+            } else {
+                hashSet.add(new Tube(u, v));
+            }
+            map[u][++map[u][0]] = v;
+            map[v][++map[v][0]] = u;
+            if (root[u] != root[v]) {
+                if (root[u] < root[v]) {
+                    setRoot(v, root[u]);
+                } else {
+                    setRoot(u, root[v]);
+                }
+            }
+        }
+        long[] waterOfSubGraph = new long[n + 5];
+        for (int i = 1; i <= n; i++) {
+            waterOfSubGraph[root[i]] += a[i];
+            waterOfSubGraph[root[i]] -= b[i];
+        }
+        boolean bingo = false;
+        for (int i = 1; i <= n; i++) {
+            if (waterOfSubGraph[i] != 0) {
+                bingo = true;
+                break;
+            }
+        }
+        if (bingo) {
+            System.out.println("NO");
+        } else {
+            st = new LinkedList<String>();
+            visited = new boolean[n + 5];
+            for (int i = 1; i <= n; i++) {
+                visited[i] = true;
+                for (int j = 1; j <= map[i][0] && a[i] > b[i]; j++) {
+                    long t = dfs(i, map[i][j], a[i] - b[i]);
+                    //if (t < a[i] - b[i]) st.add("" + map[i][j] + " " + i + " " + (a[i] - b[i] - t));
+                    a[i] -= t;
+                }
+                visited[i] = false;
+            }
+            //System.out.println(Arrays.toString(a));
+            //System.out.println(Arrays.toString(b));
+            System.out.println(st.size());
+            for (Object i : st) {
+                System.out.println(i);
+            }
+        }
+    }
+
+    static void setRoot(int x, int y) {
+        if (root[x] != x) {
+            setRoot(root[x], y);
+        }
+        root[x] = y;
+    }
+
+    static long dfs(int from, int x, long c) {
+        visited[x] = true;
+
+        long cc = c;
+        while (a[x] + c > v) {
+            c -= v - a[x];
+            if (a[x] < v) st.add("" + from + " " + x + " " + (v - a[x]));
+            a[x] = v;
+            for (int i = 1; i <= map[x][0] && a[x] > 0; i++) {
+                if (visited[map[x][i]]) continue;
+                long t = dfs(x, map[x][i], a[x]);
+                //if (t < cc - c) st.add("" + map[x][i] + " " + x + " " + (cc - c - t));
+                a[x] -= t;
+            }
+            if (v == a[x]) break;
+        }
+
+        if(a[x] + c <= v && c > 0) {
+            a[x] += c;
+            st.add("" + from + " " + x + " " + c);
+            c = 0;
+            for (int i = 1; i <= map[x][0] && a[x] > 0; i++) {
+                if (visited[map[x][i]]) continue;
+                long t = dfs(x, map[x][i], a[x]);
+                //if (t < a[x]) st.add("" + map[x][i] + " " + x + " " + (a[x] - t));
+                a[x] -= t;
+            }
+        }
+        if(b[x] < a[x]) {
+            if(c + a[x] - b[x] <= cc) {
+                st.add("" + x + " " + from + " " + (a[x] - b[x]));
+                c += a[x] - b[x];
+            } else {
+                if(cc != c) {
+                    st.add("" + x + " " + from + " " + (cc - c));
+                    c = cc;
+                }
+            }
+        }
+
+        visited[x] = false;
+        return cc - c;
+    }
+
+}
+
+class Tube {
+    int x;
+    int y;
+
+    Tube(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Tube tube = (Tube) o;
+
+        if (x != tube.x) return false;
+        if (y != tube.y) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = x;
+        result = 31 * result + y;
+        return result;
+    }
+}

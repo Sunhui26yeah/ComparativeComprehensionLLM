@@ -1,0 +1,67 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class nextgraph {
+	static boolean visited[];
+	static ArrayList<Integer> ar[];
+	static long mod = (long)1e9 + 7;
+	static long count=0l;
+	public static void dfs(int i)
+	{
+		visited[i]=true;
+		count++;
+		
+		for(int x:ar[i])
+		{
+			if(!visited[x])
+			{
+				dfs(x);
+			}
+		}
+		
+	}static long fast_pow(long a, long b) {
+		if(b == 0)
+			return 1L;
+
+		long val = fast_pow(a, b / 2);
+
+		if(b % 2 == 0)
+			return val * val % mod;
+		else 
+			return val * val % mod * a % mod;
+	}
+	public static void main(String args[])
+	{
+		Scanner scan=new Scanner(System.in);
+		int n=scan.nextInt();
+		int k=scan.nextInt();
+		ar=new ArrayList[n];
+		for(int i=0;i<n;i++)ar[i]=new ArrayList<Integer>();
+		for(int i=0;i<n-1;i++)
+		{
+			int u=scan.nextInt()-1;
+			int v=scan.nextInt()-1;
+			int col=scan.nextInt();
+			if(col==0)
+			{
+				ar[u].add(v);
+				ar[v].add(u);
+			}
+		}
+		visited=new boolean[n];
+		long tot=fast_pow(n,k);
+		long diff=0L;
+		for(int i=0;i<n;i++)
+		{
+			if(!visited[i])
+			{
+				count=0L;
+				dfs(i);
+				
+				diff+=fast_pow(count,k);
+			}
+		}
+		diff=diff%mod;
+		System.out.println((tot-diff+mod)%mod);
+	}
+}

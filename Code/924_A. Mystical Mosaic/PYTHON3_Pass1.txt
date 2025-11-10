@@ -1,0 +1,38 @@
+used =[]
+a = []
+def dfs(v, c):
+    vert = v + 100*c
+    if used[vert] == 0:
+        used[vert] = 1
+        a[c].append(v)
+        for i in range(0, len(g[vert])):
+            if used[g[vert][i]] == 0:
+                dfs(g[vert][i] - (1-c)*100, 1-c)
+            
+            
+
+n,m = map(int, input().split())
+r = []
+for i in range(0,n):
+    s = input()
+    r.append(s)
+g = []
+for i in range (0,200):
+    g.append([])
+    used.append(0)
+for i in range (0,n):
+    for j in range (0,m):
+        if(r[i][j] == "#"):
+            g[i].append(100 + j)
+            g[100+j].append(i)
+#print(g)
+for i in range(0,n):
+    a = [[],[]]
+    dfs(i,0)
+    #print(a)
+    for j in range (0, len(a[0])):
+        for k in range (0, len(a[1])):
+            if(r[a[0][j]][a[1][k]] != "#"):
+                print ("NO")
+                raise SystemExit
+print("YES")

@@ -1,0 +1,13 @@
+ans=1
+prev=0
+M=10**9+7
+for _ in range(int(input())):
+    x=int(input())
+    prev+=x
+    if(_==0):
+        continue
+    a=1
+    for i in range(1,x):
+        a=a*(prev-i)//(i)
+    ans=(ans*a)%M    
+print(ans)

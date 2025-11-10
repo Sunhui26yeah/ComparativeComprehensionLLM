@@ -1,0 +1,139 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+const int MAX_STRING_LENGTH = 32;
+
+typedef struct {
+  char key[32];
+  int value;
+} Node;
+
+typedef struct {
+  Node* items;
+  //char** keys;//[MAX_STRING_LENGTH];
+  //int* values;
+  int size;
+  int count;
+} Map;
+
+void initMap(Map* map, int size);
+void increment(Map* map, char* key);
+void appendMap(Map* map, char* key);
+void printMap(Map* map);
+long minMap(Map* map, int*, int);
+long maxMap(Map* map, int*);
+
+void initMap(Map* map, int size) {
+  map->size = size;
+  map->count = 0;
+  map->items = malloc(sizeof(Node) * map->size);
+  /*map->keys = malloc(sizeof(char[MAX_STRING_LENGTH]) * map->size);
+  for (int i  = 0; i < map->size; i++) {
+    map->keys[i] = malloc(sizeof(char) * MAX_STRING_LENGTH);
+  }*/
+
+}
+
+void increment(Map* map, char* key) {
+  //printf("increment(%s)\n", key);
+  for (int i = 0; i < map->count; i++) {
+    //printf("map key[%s] vs key[%s]\n", map->keys[i], key);
+
+    if (strcmp(map->items[i].key, key) == 0) {
+      //printf("keys equal\n");
+      map->items[i].value++;
+      return;
+    }
+  }
+
+  appendMap(map, key);
+}
+
+void appendMap(Map* map, char* key) {
+  //printf("appendMap(%s) count=%d\n", key, map->count);
+
+  strcpy(map->items[map->count].key, key);
+  map->items[map->count].value = 1;
+  map->count++;
+}
+
+void printMap(Map* map) {
+  for (int i = 0; i < map->count; i++) {
+    printf("%s = %d\n", map->items[i].key, map->items[i].value);
+  }
+}
+
+long maxMap(Map* map, int* prices) {
+  long sum = 0;
+  for (int i = 0; i < map->count; i++) {
+    //int index = map->count - i - 1;
+    sum += map->items[i].value * prices[i];
+  }
+
+  return sum;
+}
+
+long minMap(Map* map, int* prices, int size) {
+  long sum = 0;
+  for (int i = 0; i < map->count; i++) {
+    int index = size - i - 1;
+    sum += map->items[i].value * prices[index];
+  }
+
+  return sum;
+}
+
+int compFunction (const void* fv, const void* sv) {
+  int f = *((int*) fv);
+  int s = *((int*) sv);
+  if (f > s) return -1;
+  if (f < s) return 1;
+  return 0;
+}
+
+int compareNodes (const void* fv, const void* sv) {
+  Node fn = *((Node*) fv);
+  Node sn = *((Node*) sv);
+  int f = fn.value;
+  int s = sn.value;
+  if (f > s) return -1;
+  if (f < s) return 1;
+  return 0;
+}
+
+
+
+int main() {
+  int m, n;
+  scanf("%d %d", &m, &n);
+
+  int prices[m];
+  for (int i = 0; i < m; i++) {
+    int x;
+    scanf("%d", &x);
+    prices[i] = x;
+  }
+
+  qsort(prices, sizeof(prices)/sizeof(*prices), sizeof(*prices), compFunction);
+
+  /*for (int i = 0; i < m; i++) {
+    printf("%d ", prices[i]);
+  }
+  printf("\n");*/
+  Map map;
+  initMap(&map, n);
+
+  for (int i = 0; i < n; i++) {
+    char key[MAX_STRING_LENGTH];
+    scanf("%s", key);
+    increment(&map, key);
+  }
+  //printMap(&map);
+  //printf("\n");
+  qsort(map.items, map.count, sizeof(Node), compareNodes);
+  //printMap(&map);
+
+  printf("%ld %ld\n", minMap(&map, prices, m), maxMap(&map, prices));
+  return 0;
+}

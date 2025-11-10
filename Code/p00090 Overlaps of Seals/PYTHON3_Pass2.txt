@@ -1,0 +1,34 @@
+def get_intersections(p0, p1):
+    dist = abs(p0 - p1)
+
+    if dist > 2:
+        return []
+    elif dist == 2:
+        return [(p0 + p1) / 2]
+    else:
+        m = (p0 + p1) / 2
+        v = m - p0
+        w = complex(v.imag, -v.real)
+        n = w / abs(w)
+        d = abs(v)
+        l = (1 - d ** 2)**.5
+
+        inter0 = m + l * n
+        inter1 = m - l * n
+        return [inter0, inter1]
+
+for e in iter(input, '0'):
+    n = int(e)
+    P = [complex(*map(float,input().split(',')))for _ in[0]*n]
+    intersections = []
+    for i in range(n):
+        for j in range(i+1,n):
+            intersections += get_intersections(P[i], P[j])
+    c = 1
+    for intersection in intersections:
+        cnt = 0
+        for p in P:
+            if abs(intersection - p) <= 1.01:
+                cnt += 1
+        c=max(c,cnt)
+    print(c)

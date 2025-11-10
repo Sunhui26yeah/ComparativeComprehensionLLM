@@ -1,0 +1,38 @@
+def main():
+
+    from bisect import bisect_left as bl, bisect_right as br, insort
+    import sys,io,os
+    import heapq
+    from collections import defaultdict as dd, deque
+    data = io.BytesIO(os.read(0, os.fstat(0).st_size)).readline
+    def mdata() : return list(map(int,data().split()))
+    out = sys.stdout.write
+    # sys.setrecursionlimit(100000)
+    INF=int(1e9)
+
+    n,k = mdata()
+    M = mdata()
+    C = mdata()
+    print(n,k,M,C)
+    M.sort()
+    d1=[0]*n
+    d2=[0]*n
+    ans=[]
+    n1=n-1
+    m=INF
+    while n1>=0:
+        s=bl(d1,C[M[n1]-1])-1
+        d2[n1]=s
+        d1[s]+=1
+        m=min(m,s)
+        n1-=1
+    ans=[[] for i in range(n-m)]
+    for i in range(n):
+        ans[n-1-d2[i]].append(str(M[i]))
+    for i in range(len(ans)):
+        ans[i]=str(len(ans[i]))+' '+' '.join(ans[i])
+    out(str(len(ans))+'\n')
+    out('\n'.join(ans))
+
+if __name__ == '__main__':
+    main()

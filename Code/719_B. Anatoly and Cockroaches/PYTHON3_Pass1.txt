@@ -1,0 +1,14 @@
+n=int(input())
+s=input()
+e=s[::2]
+o=s[1::2]
+c=n
+for i in range(2):
+    if i==0:
+        a=len(e)-e.count('r')
+        b=len(o)-o.count('b')
+    else:
+        a=len(e)-e.count('b')
+        b=len(o)-o.count('r')
+    c=min(c,max(a,b))
+print(c)

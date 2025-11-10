@@ -1,0 +1,163 @@
+import java.util.Arrays;
+import java.util.Scanner;
+import java.util.Stack;
+
+/**
+ * Created by shhuan on 2017/11/5.
+ */
+public class Main_878B {
+	public static void main(String[] args) {
+		Scanner scanner = new Scanner(System.in);
+
+		long N = scanner.nextLong();
+		long K = scanner.nextLong();
+		long M = scanner.nextLong();
+		scanner.nextLine();
+
+		long[] A = Arrays.stream(scanner.nextLine().split(" ")).mapToLong(v -> Long.parseLong(v)).toArray();
+
+		Stack<Pair> S = new Stack<>();
+		for (long v : A) {
+			if (S.isEmpty()) {
+				S.push(new Pair(v, 1));
+			} else {
+				Pair l = S.peek();
+				if (l.x == v) {
+					S.pop();
+					long y = l.y + 1;
+					if (y != K) {
+						S.push(new Pair(l.x, (l.y+1) % K));
+					}
+				} else {
+					S.push(new Pair(v, 1));
+				}
+			}
+		}
+
+		Long ans = 0L;
+		if (S.isEmpty()) {
+			ans = 0L;
+		} else if (S.size() == 1) {
+			ans = 1L*M*S.get(0).y % K;
+		} else {
+			int l = -1;
+			for (int i = 0; i < S.size()/2+1; i++) {
+				Pair p1 = S.get(i);
+				Pair p2 = S.get(S.size()-i-1);
+				if (p1.x != p2.x || p1.y+p2.y != K) {
+					break;
+				}
+				l = i;
+			}
+
+			int r = S.size()-l-1;
+			if (l < 0){
+				Pair p1 = S.get(0);
+				Pair p2 = S.get(S.size()-1);
+				if (p1.x == p2.x && p1.y+p2.y > K) {
+					ans = 0L;
+					for (int i = 1; i < S.size()-1; i++) {
+						ans += S.get(i).y;
+					}
+					ans *= M;
+					ans += (M-1) * ((p1.y+p2.y) % K);
+					ans += p1.y + p2.y;
+					if (N == 99999L && K == 1000 && M == 1000000000) {
+						System.out.println(1);
+					}
+				} else {
+					ans = S.stream().mapToLong(v -> v.y).sum();
+					ans *= M;
+					if (N == 99999L && K == 1000 && M == 1000000000) {
+						System.out.println(2);
+					}
+				}
+			} else if (r < l+2) {
+				if (M % 2 == 0) {
+					ans = 0L;
+				} else {
+					ans = S.stream().mapToLong(v -> v.y).sum();
+				}
+			} else if (r == l+2) {
+				ans = 0L;
+				Long mid = (1L* M * S.get(l+1).y) % K;
+				ans += mid;
+				if (mid == 0L && S.get(l).x == S.get(r).x && S.get(l).y + S.get(r).y >= K) {
+					while (l >= 0 && S.get(l).x == S.get(r).x && S.get(l).y + S.get(r).y == K) {
+						l -= 1;
+						r += 1;
+					}
+
+					for (int i = 0; i <= l; i++) {
+						ans += S.get(i).y;
+					}
+
+					for (int i = r; i < S.size(); i++) {
+						ans += S.get(i).y;
+					}
+				} else {
+					for (int i = 0; i <= l; i++) {
+						ans += S.get(i).y;
+					}
+					for (int i = r; i < S.size(); i++) {
+						ans += S.get(i).y;
+					}
+					if (N == 99999L && K == 1000 && M == 1000000000) {
+						System.out.println(4);
+					}
+				}
+			} else {
+				Pair p1 = S.get(l+1);
+				Pair p2 = S.get(r-1);
+				if (p1.x != p2.x || p1.y+p2.y < K) {
+					ans = 0L;
+					for (int i = l+1; i < r; i++) {
+						ans += S.get(i).y;
+					}
+					ans *= M;
+					if (N == 99999L && K == 1000 && M == 1000000000) {
+						System.out.println(5);
+					}
+				} else {
+					for (int i = l+2; i < r-1; i++) {
+						ans += S.get(i).y;
+					}
+					ans *= M;
+					ans += (M-1) * ((p1.y + p2.y) % K);
+					ans += p1.y + p2.y;
+					if (N == 99999L && K == 1000 && M == 1000000000) {
+						System.out.println(6);
+					}
+				}
+				for (int i = 0; i <= l; i++) {
+					ans += S.get(i).y;
+				}
+				for (int i = r; i < S.size(); i++) {
+					ans += S.get(i).y;
+				}
+			}
+		}
+
+		System.out.println(ans);
+	}
+
+	static class Pair{
+		public long x;
+		public long y;
+
+		public Pair() {
+			x = 0;
+			y = 0;
+		}
+
+		public Pair(long x, long y) {
+			this.x = x;
+			this.y = y;
+		}
+
+		@Override
+		public String toString() {
+			return "("+x+", "+y+")";
+		}
+	}
+}

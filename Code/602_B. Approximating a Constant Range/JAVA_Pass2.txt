@@ -1,0 +1,122 @@
+import java.io.OutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.util.StringTokenizer;
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.InputStream;
+
+/**
+ * Built using CHelper plug-in
+ * Actual solution is at the top
+ *
+ * @author Atharva Nagarkar
+ */
+public class Main {
+    public static void main(String[] args) {
+        InputStream inputStream = System.in;
+        OutputStream outputStream = System.out;
+        InputReader in = new InputReader(inputStream);
+        PrintWriter out = new PrintWriter(outputStream);
+        BApproximatingAConstantRange solver = new BApproximatingAConstantRange();
+        solver.solve(1, in, out);
+        out.close();
+    }
+
+    static class BApproximatingAConstantRange {
+        public void solve(int testNumber, InputReader in, PrintWriter out) {
+            int n = in.nextInt();
+            int[] a = new int[n];
+            for (int i = 0; i < n; ++i) a[i] = in.nextInt();
+            BApproximatingAConstantRange.RMQ rmq = new BApproximatingAConstantRange.RMQ(a);
+            int low = 1;
+            int high = n;
+            while (low <= high) {
+                int mid = low + high >> 1;
+                boolean found = false;
+                for (int l = 0, r = mid - 1; r < n; ++l, ++r) {
+                    int min = rmq.minquery(l, r);
+                    int max = rmq.maxquery(l, r);
+                    if (max - min <= 1) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    high = mid - 1;
+                } else {
+                    low = mid + 1;
+                }
+            }
+            out.println(high);
+        }
+
+        static class RMQ {
+            int[] vs;
+            int[][] minlift;
+            int[][] maxlift;
+
+            public RMQ(int[] vs) {
+                this.vs = vs;
+                int n = vs.length;
+                int maxlog = Integer.numberOfTrailingZeros(Integer.highestOneBit(n)) + 2;
+                minlift = new int[maxlog][n];
+                maxlift = new int[maxlog][n];
+                for (int i = 0; i < n; i++)
+                    minlift[0][i] = maxlift[0][i] = vs[i];
+                int lastRange = 1;
+                for (int lg = 1; lg < maxlog; lg++) {
+                    for (int i = 0; i < n; i++) {
+                        minlift[lg][i] = Math.min(minlift[lg - 1][i], minlift[lg - 1][Math.min(i + lastRange, n - 1)]);
+                        maxlift[lg][i] = Math.max(maxlift[lg - 1][i], maxlift[lg - 1][Math.min(i + lastRange, n - 1)]);
+                    }
+                    lastRange *= 2;
+                }
+            }
+
+            public int maxquery(int low, int hi) {
+                int range = hi - low + 1;
+                int exp = Integer.highestOneBit(range);
+                int lg = Integer.numberOfTrailingZeros(exp);
+                return Math.max(maxlift[lg][low], maxlift[lg][hi - exp + 1]);
+            }
+
+            public int minquery(int low, int hi) {
+                int range = hi - low + 1;
+                int exp = Integer.highestOneBit(range);
+                int lg = Integer.numberOfTrailingZeros(exp);
+                return Math.min(minlift[lg][low], minlift[lg][hi - exp + 1]);
+            }
+
+        }
+
+    }
+
+    static class InputReader {
+        public BufferedReader reader;
+        public StringTokenizer tokenizer;
+
+        public InputReader(InputStream stream) {
+            reader = new BufferedReader(new InputStreamReader(stream), 32768);
+            tokenizer = null;
+        }
+
+        public String next() {
+            while (tokenizer == null || !tokenizer.hasMoreTokens()) {
+                try {
+                    tokenizer = new StringTokenizer(reader.readLine());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            return tokenizer.nextToken();
+        }
+
+        public int nextInt() {
+            return Integer.parseInt(next());
+        }
+
+    }
+}

@@ -1,0 +1,14 @@
+#include <bits/stdc++.h>
+int main() {
+  long int N, a[105][105], b[105];
+  scanf("%ld", &N);
+  for (int i = 0; i < N; i++)
+    for (int j = 0; j < N; j++) scanf("%d", &a[i][j]);
+  memset(b, 0, sizeof(b));
+  for (int i = 0; i < N; i++)
+    for (int j = 0; j < N; j++) {
+      if (i != j) b[i] |= a[i][j];
+    }
+  for (int i = 0; i < N; i++) printf("%d ", b[i]);
+  return 0;
+}

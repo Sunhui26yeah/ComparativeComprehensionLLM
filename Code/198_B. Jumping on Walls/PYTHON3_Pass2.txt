@@ -1,0 +1,85 @@
+from sys import stdin, stdout
+
+from collections import deque
+
+
+
+n, k = map(int, stdin.readline().split())
+
+
+
+maps = []
+
+maps.append(list(stdin.readline() + '-'))
+
+maps.append(list(stdin.readline() + '-'))
+
+visit = [[0, 0] for i in range(n + 1)]
+
+
+
+visit[0][0] = 1
+
+queue = deque()
+
+label = 0
+
+
+
+queue.append((0, -1, 0))#ر‚ذ²ذ¾ذ¹ رƒر€ذ¾ذ²ذµذ½رŒ, رƒر€ذ¾ذ²ذµذ½رŒ ذ²ذ¾ذ´ر‹, ذ½ذ¾ذ¼ذµر€ رپر‚ذµذ½ر‹
+
+while queue:
+
+    mine, line, num = queue.popleft()
+
+    
+
+    if line >= mine:
+
+        continue
+
+    
+
+    if mine + k >= n:
+
+        label = 1
+
+    
+
+    if mine + 1 < n and not visit[mine + 1][num] and maps[num][mine + 1] == '-':
+
+        queue.append((mine + 1, line + 1, num))
+
+        visit[mine + 1][num] = 1
+
+        
+
+    if mine and mine - line > 1 and not visit[mine - 1][num] and maps[num][mine - 1] == '-':
+
+        queue.append((mine - 1, line + 1, num))
+
+        visit[mine - 1][num] = 1        
+
+    
+
+    if mine + k < n and not visit[mine + k][(num + 1) % 2] and maps[(num + 1) % 2][mine + k] == '-':
+
+        queue.append((min(mine + k, n), line + 1, (num + 1) % 2))
+
+        visit[min(mine + k, n)][(num + 1) % 2] = 1
+
+
+
+
+
+if label:
+
+    stdout.write('YES')
+
+else:
+
+    stdout.write('NO')
+
+
+
+# Made By Mostafa_Khaled

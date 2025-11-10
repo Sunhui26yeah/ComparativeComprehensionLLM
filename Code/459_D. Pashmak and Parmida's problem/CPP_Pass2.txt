@@ -1,0 +1,51 @@
+#include <bits/stdc++.h>
+using namespace std;
+int n;
+int num[1048576];
+int f[1048576], b[1048576], last[1048576];
+vector<int> ha;
+struct BIT {
+  int v[1048576];
+  BIT() { fill(v, v + 1048576, 0); }
+  void add(int x) {
+    for (int i = x; i < 1048576; i += (i & -i)) v[i]++;
+  }
+  void sub(int x) {
+    for (int i = x; i < 1048576; i += (i & -i)) v[i]--;
+  }
+  int query(int x) {
+    long long sum = 0;
+    for (int i = x; i > 0; i -= (i & -i)) sum += v[i];
+    return sum;
+  }
+};
+BIT bit;
+vector<int> fx[1048576], bx[1048576];
+int main() {
+  cin >> n;
+  for (int i = 0; i < n; i++) {
+    cin >> num[i];
+    ha.push_back(num[i]);
+  }
+  sort(ha.begin(), ha.end());
+  ha.resize(unique(ha.begin(), ha.end()) - ha.begin());
+  for (int i = 0; i < n; i++) {
+    int x = lower_bound(ha.begin(), ha.end(), num[i]) - ha.begin();
+    f[i] = ++last[x];
+    fx[f[i]].push_back(i + 1);
+  }
+  fill(last, last + 1048576, 0);
+  for (int i = n - 1; i >= 0; i--) {
+    int x = lower_bound(ha.begin(), ha.end(), num[i]) - ha.begin();
+    b[i] = ++last[x];
+    bx[b[i]].push_back(i + 1);
+  }
+  for (int i = 1; i <= n; i++) bit.add(i);
+  long long ans = 0;
+  for (int k = 1; bx[k].size(); k++) {
+    for (int i = 0; i < fx[k].size(); i++) bit.sub(fx[k][i]);
+    for (int i = 0; i < bx[k].size(); i++) ans += bit.query(bx[k][i] - 1);
+  }
+  cout << ans << endl;
+  return 0;
+}

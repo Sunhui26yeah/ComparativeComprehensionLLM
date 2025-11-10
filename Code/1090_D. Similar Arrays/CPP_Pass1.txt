@@ -1,0 +1,38 @@
+#include <bits/stdc++.h>
+const long long MOD = 1e9 + 7;
+using namespace std;
+const int N = 100010;
+int a[N] = {}, b[N] = {};
+set<pair<long long, long long> > st;
+int main() {
+  ios::sync_with_stdio(0);
+  cin.tie(0);
+  cout.tie(0);
+  int n, m;
+  cin >> n >> m;
+  for (int i = 1; i <= m; i++) {
+    int a, b;
+    cin >> a >> b;
+    if (a > b) swap(a, b);
+    st.insert({a, b});
+  }
+  for (int i = 1; i <= n; i++) {
+    for (int j = i + 1; j <= n; j++) {
+      if (st.find({i, j}) != st.end()) continue;
+      b[i] = 1, b[j] = 1, a[i] = 1, a[j] = 2;
+      for (int i = 1, start = 3; i <= n; i++) {
+        if (a[i] != 0) continue;
+        a[i] = start++;
+        b[i] = a[i];
+      }
+      cout << "YES\n";
+      for (int i = 1; i <= n; i++) cout << a[i] << ' ';
+      cout << '\n';
+      for (int i = 1; i <= n; i++) cout << b[i] << ' ';
+      cout << '\n';
+      return 0;
+    }
+  }
+  cout << "NO\n";
+  return 0;
+}

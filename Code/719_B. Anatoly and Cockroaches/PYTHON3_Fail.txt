@@ -1,0 +1,21 @@
+n = int(input())
+val = list(input())
+
+m = n // 2
+
+if n & 1:
+    rb = list('rb' * m + 'r')
+else:
+    rb = list('rb' * m)
+
+ans = 0
+for i in range(n - 1):
+    if val[i] != rb[i] and val[i + 1] != rb[i + 1]:
+        val[i], val[i + 1] = val[i + 1], val[i]
+        ans += 1
+
+for i in range(n):
+    if val[i] != rb[i]:
+        ans += 1
+
+print(min(ans, n - ans))

@@ -1,0 +1,44 @@
+import java.util.Scanner;
+
+public class A333 {
+	
+	public static void main(String[] args) {
+		
+		Scanner inp = new Scanner(System.in);
+		int n = inp.nextInt();
+		int bx = inp.nextInt();
+		
+		int[] x = new int[n];
+		for (int i =0; i < n; i++) {
+			x[i] = inp.nextInt();
+		}
+		
+		int m = inp.nextInt();
+		int by = inp.nextInt();
+		
+		int[] y = new int[m];
+		for (int i =0; i < m; i++) {
+			y[i] = inp.nextInt();
+		}
+		long xn = 0;
+		
+		for (int i = n-1;i >= 0;i--) {
+			xn += (long)(Math.pow( (double)bx, (double)(n-1-i) ))* (long)x[i];
+		}
+		
+		long ym = 0;
+		for (int i = m-1;i >= 0;i--) {
+			ym += (long)(Math.pow( (double)by, (double)(m-1-i) ))* (long)y[i];
+		}
+		if (xn==ym) {
+			System.out.println("=");
+		} else if(xn<ym) {
+			System.out.println("<");
+		} else {
+			System.out.println(">");
+		}
+		inp.close();
+		
+	}
+
+}

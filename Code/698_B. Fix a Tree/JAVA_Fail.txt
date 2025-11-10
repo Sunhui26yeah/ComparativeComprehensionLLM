@@ -1,0 +1,156 @@
+/*
+
+I FOLLOW THE WAY OF THE RIGHT HONOURABLE JIM KWIK,
+GOD BLESS YOU SIR
+
+1.  I AM A 'NEWBIE' IN RATING
+2.  I WILL FAIL MANY TIMES, BUT I WILL NOT FAIL TO LEARN FROM FAILURE
+3.  I WILL NEVER SURRENDER MY GOAL, NO MATTER HOW MUCH I FAIL
+4.  I WILL PROVE MY SKILLS WHEN THE TIME COMES
+
+
+*/
+
+
+
+
+
+import java.util.*;
+import java.io.*;
+public class A {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    static boolean tests = false;
+    static ArrayList<Integer> roots, cycles, temp, graph[];
+    static boolean[] vis;
+    static void addEdge(int from, int to){
+        if (graph[from] == null) graph[from] = new ArrayList<>();
+        if (graph[to] == null) graph[to] = new ArrayList<>();
+        graph[from].add(to);
+        graph[to].add(-from);
+    }
+    static void find_root(int v){
+        if (vis[v]){
+            // detected a cycle
+            cycles.add(v);
+            return;
+        }
+        vis[v] = true;
+        temp.add(v);
+        for (int to : graph[v]) if (v == to){
+            roots.add(v);
+            return;
+        }
+        for (int to : graph[v]) if (to < 0){
+            find_root(-to);
+        }
+    }
+    static void mark_component(int v){
+        //out.print(Math.abs(v)+" ");
+        vis[Math.abs(v)] = true;
+        for (int to : graph[Math.abs(v)]) if (!vis[Math.abs(to)]){
+            mark_component(to);
+        }
+    }
+    static void solve(){
+        int n = fs.nextInt();
+        int[] seq = fs.readIntArray(n);
+        graph = new ArrayList[n+1];
+        roots = new ArrayList<>();
+        cycles = new ArrayList<>();
+        temp = new ArrayList<>();
+        vis = new boolean[n+1];
+        for (int i = 1; i <= n; ++i){
+            addEdge(seq[i-1], i);
+        }
+        for (int i = 1; i <= n; ++i){
+            if (vis[i]) continue;
+            find_root(i);
+            for (int v : temp) vis[v] = false;
+            mark_component(i);
+            temp.clear();
+        }
+        for (int x : cycles) roots.add(x);
+        out.println(roots.size()-1);
+        for (int i = 1; i < roots.size(); ++i){
+            seq[roots.get(i)-1] = roots.get(0);
+        }
+        for (int x : seq) out.print(x+" ");
+        out.println();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    static FastScanner fs;
+    static PrintWriter out;
+    static int int_max = (int)1e9, mod = int_max+7;
+    public static void main(String[] args) {
+        fs = new FastScanner();
+        out = new PrintWriter(System.out);
+        int t = 1;
+        if (tests) t = fs.nextInt();
+        while (t-- > 0) solve();
+        out.close();
+    }
+    static class FastScanner {
+        BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st=new StringTokenizer("");
+        String next() {
+            while (!st.hasMoreTokens())
+                try {
+                    st=new StringTokenizer(br.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            return st.nextToken();
+        }
+
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
+        int[] readIntArray(int n) {
+            int[] a=new int[n];
+            for (int i=0; i<n; i++) a[i]=nextInt();
+            return a;
+        }
+        long[] readLongArray(int n){
+            long a[] = new long[n];
+            for (int i = 0; i < n; ++i){
+                a[i] = nextLong();
+            }
+            return a;
+        }
+        long nextLong() {
+            return Long.parseLong(next());
+        }
+        double nextDouble(){
+            return Double.parseDouble(next());
+        }
+    }
+}

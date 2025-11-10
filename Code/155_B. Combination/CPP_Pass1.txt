@@ -1,0 +1,28 @@
+#include <bits/stdc++.h>
+using namespace std;
+int n;
+struct Tcard {
+  int a, b;
+  bool operator<(const Tcard& t) const {
+    if (t.b == b)
+      return a > t.a;
+    else
+      return b > t.b;
+  }
+};
+Tcard cards[2000];
+int main() {
+  scanf("%d", &n);
+  for (int i = 0; i < n; ++i) {
+    scanf("%d%d", &cards[i].a, &cards[i].b);
+  }
+  sort(cards, cards + n);
+  int tot = 1;
+  int points = 0;
+  for (int i = 0; i < n && tot > 0; ++i) {
+    tot = tot - 1 + cards[i].b;
+    points += cards[i].a;
+  }
+  printf("%d\n", points);
+  return 0;
+}

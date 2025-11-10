@@ -1,0 +1,57 @@
+import java.util.*;
+
+public class MysticalMosaic{
+	public static void main(String[] args){
+		Scanner reader = new Scanner(System.in);
+		int m = reader.nextInt();
+		int n = reader.nextInt();
+		char[][] board = new char[m][n];
+		int[] rowCount = new int[m];
+		int[] colCount = new int[n];
+
+		reader.nextLine();
+
+		for (int i = 0; i < m; ++i){
+			String curLine = reader.nextLine();
+
+			for (int j = 0; j < n; ++j){
+				board[i][j] = curLine.charAt(j);
+
+				if (board[i][j] == '#'){
+					rowCount[i]++;
+					colCount[j]++;
+				}
+			}
+		}
+
+		Set<Integer> row = new HashSet<>();
+		Set<Integer> col = new HashSet<>();
+		int totalChanged = 0;
+
+		for (int i = 0; i < m; ++i){
+			if (rowCount[i] == 0 || row.contains(i)){
+				continue;
+			}
+			row.add(i);
+
+			for (int j = 0; j < n; ++j){
+				if (board[i][j] == '#'){
+					col.add(j);
+
+					for (int k = 0; k < m; ++k){
+						if (board[k][j] == '#'){
+							if (rowCount[k] != rowCount[i]){
+								System.out.println("No");
+								return;
+							} 
+
+							row.add(k);
+						}
+					}
+				}
+			}
+		}
+
+		System.out.println("Yes");
+	}
+}

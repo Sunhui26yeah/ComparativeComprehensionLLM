@@ -1,0 +1,21 @@
+def sieve(n):
+    p = [True] * (n + 1)
+    p[0] = p[1] = False
+    
+    for i in range(int(n ** 0.5) + 1):
+        if p[i]:
+            for j in range(2 * i, len(p), i):
+                p[j] = False
+    return p
+def get_quad(n, p):
+    for ni in range(n,0,-1):
+        if p[ni] and p[ni - 2] and p[ni - 6] and p[ni - 8]:
+            return ni
+import sys
+f = sys.stdin
+
+
+n = [int(line) for line in f][:-1]
+prime = sieve(max(n))
+for ni in n:
+    print(get_quad(ni, prime))

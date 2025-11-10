@@ -1,0 +1,23 @@
+#include <bits/stdc++.h>
+using namespace std;
+int n, k;
+char wall[2][100000];
+bool dfs(int x, int y, int h) {
+  if (y >= n) return true;
+  if (y < 0 || y <= h) return false;
+  if (wall[x][y] == 'X') return false;
+  wall[x][y] = 'X';
+  if (dfs(1 - x, y + k, h + 1)) return true;
+  if (dfs(x, y + 1, h + 1)) return true;
+  if (dfs(x, y - 1, h + 1)) return true;
+  return false;
+}
+int main() {
+  while (cin >> n >> k) {
+    for (int i = 0; i < 2; i++) cin >> wall[i];
+    if (dfs(0, 0, -1))
+      cout << "YES" << endl;
+    else
+      cout << "NO" << endl;
+  }
+}

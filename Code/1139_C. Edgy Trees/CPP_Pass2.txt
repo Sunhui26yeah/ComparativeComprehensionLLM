@@ -1,0 +1,45 @@
+#include <bits/stdc++.h>
+using namespace std;
+long long mpow(long long a, long long b, long long p) {
+  long long ans = 1;
+  a %= p;
+  while (b) {
+    if (b & 1) ans = ans * a % p;
+    a = a * a % p;
+    b >>= 1;
+  }
+  return ans;
+}
+int n, k;
+const long long p = 1e9 + 7;
+map<int, size_t> mp;
+namespace UFS {
+int f[200000 + 2];
+void init(int n = 200000) {
+  for (long long i = (0); i < (n + 1); ++i) {
+    f[i] = i;
+  }
+}
+int fd(int nd) { return (f[nd] == nd ? nd : f[nd] = fd(f[nd])); }
+void cmb(int a, int b) { f[fd(b)] = fd(a); }
+}  // namespace UFS
+using namespace UFS;
+int main() {
+  ios::sync_with_stdio(0);
+  cin.tie(0);
+  cout.tie(0);
+  cin >> n >> k;
+  init();
+  int u, v, x;
+  for (long long i = (0); i < (n - 1); ++i) {
+    cin >> u >> v >> x;
+    if (!x) cmb(u, v);
+  }
+  for (long long i = (1); i < (n + 1); ++i) mp[fd(i)]++;
+  long long ans = mpow(n, k, p);
+  for (auto &pir : mp) {
+    ans = (ans - mpow(pir.second, k, p) + p) % p;
+  }
+  cout << ans << endl;
+  return 0;
+}

@@ -1,0 +1,91 @@
+#include <bits/stdc++.h>
+using namespace std;
+int a[100000];
+int b[100000];
+bool num[1000000];
+int mi[1000] = {1, 2};
+bool flag;
+bool flag2;
+bool flag3;
+bool flag4;
+bool f1, f2, f3;
+int main() {
+  for (int i = 2; i <= 20; i++) {
+    mi[i] = mi[i - 1] * 2;
+  }
+  int n, m, t1, t2, t;
+  int left, right;
+  int k1, k2;
+  k1 = k2 = 0;
+  left = -1;
+  right = 0x3f3f3f;
+  scanf("%d %d", &n, &m);
+  t = m;
+  while (m--) {
+    scanf("%d %d", &t1, &t2);
+    num[t1] = 1;
+    num[t2] = 1;
+    if (t1 > t2) swap(t1, t2);
+    flag = 0;
+    for (int i1 = 0; i1 < k1; i1++) {
+      if (a[i1] == t1) {
+        flag = 1;
+        if (t2 < left) {
+          f1 = 1;
+        } else {
+          flag2 = 0;
+          for (int i2 = 0; i2 < k2; i2++) {
+            if (t2 == b[i2]) flag2 = 1;
+          }
+          if (!flag2) b[k2++] = t2;
+          right = min(right, b[k2]);
+        }
+      }
+    }
+    if (!flag) {
+      if (t1 < right) {
+        flag3 = 0;
+        for (int i1 = 0; i1 < k1; i1++) {
+          if (a[i1] == t1) flag3 = 1;
+        }
+        if (!flag3) {
+          a[k1] = t1;
+          left = max(left, a[k1]);
+          k1++;
+        }
+        if (t2 > left) {
+          flag4 = 0;
+          for (int i2 = 0; i2 < k2; i2++) {
+            if (t2 == b[i2]) flag4 = 1;
+          }
+          if (!flag4) {
+            b[k2] = t2;
+            right = min(right, b[k2]);
+            k2++;
+          }
+        } else {
+          f2 = 1;
+        }
+      } else {
+        f3 = 1;
+      }
+    }
+  }
+  int sum = 0;
+  int ans = 1;
+  for (int i = 1; i <= n; i++) {
+    if (num[i] == 0) {
+      if (i > left && i < right) sum++;
+    } else if (num[i] != 0 && num[i - 1] == 0) {
+      ans *= (sum + 1);
+      sum = 0;
+    }
+  }
+  if (t == 0)
+    printf("%d\n", n - 1);
+  else if (!f1 && !f2 && !f3)
+    printf("%d\n", ans);
+  else
+    printf("0\n");
+  return 0;
+}

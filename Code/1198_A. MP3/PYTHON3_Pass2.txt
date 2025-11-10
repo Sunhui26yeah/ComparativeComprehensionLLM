@@ -1,0 +1,33 @@
+from collections import defaultdict
+
+n,I = [int(w) for w in input().split()]
+l = [int(w) for w in input().split()]
+
+k = 8*I//n
+K = 2**k
+l.sort()
+pref = [0]
+hash = defaultdict(int)
+for i in l:
+    hash[i]+=1
+for i in hash.keys():
+    pref.append(pref[-1]+hash[i])
+
+
+# print(l,pref)
+mini = -10
+d = len(pref)-1-K
+mini = 10**18
+
+for i in range(d):
+    ele1 = i
+    ele2 = d-i
+    a = pref[ele1]
+    b = abs(pref[len(pref)-ele2-1] - pref[len(pref)-1])
+
+    mini = min(a+b,mini)
+
+if mini == 10**18:
+    print(0)
+else:
+    print(mini)

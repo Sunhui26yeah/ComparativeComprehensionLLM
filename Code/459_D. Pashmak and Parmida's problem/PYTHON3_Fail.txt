@@ -1,0 +1,57 @@
+import sys
+sys.setrecursionlimit(1000000)
+max_Int = int(1e9)
+
+def computeFitness(individual_i, individual_j):
+    return (individual_i[0] - individual_j[0])**2 + (individual_i[1] - individual_j[1])**2
+
+def bruteForce(features, left, right):
+    min_distance = max_Int
+    for i in range(left, right):
+        for j in range(i+1, right):
+            min_distance = min(min_distance,
+                               computeFitness(features[i], features[j]))
+    return min_distance
+
+def enhanceData(features, left, right, mid, min_distance):
+    mid_feature = features[mid]
+    selected_population = []
+    for i in range(left, right):
+        if (features[i][0] - mid_feature[0]) ** 2 <= min_distance:
+            selected_population.append(features[i])
+
+    l = len(selected_population)
+    result = max_Int
+    for i in range(l):
+        for j in range(i+1, l):
+            #optimize
+            if (selected_population[i][1] - selected_population[j][1]) ** 2 >= min_distance:
+                break
+
+            distance = computeFitness(selected_population[i], 
+                                      selected_population[j])
+            result = min(result, distance)
+    return result
+
+def analyzeData(features, left, right):
+    if right - left <= 3:
+        return bruteForce(features, left, right)
+    
+    mid = (left + right) // 2
+    min_distance = min(analyzeData(features, left, mid), 
+                       analyzeData(features, mid+1, right))
+    return min(min_distance, 
+               enhanceData(features, left, right, mid, min_distance))
+
+#loadData
+n = int(input())
+trace = list(map(int, input().split()))
+
+#preprocessData
+features = []
+for i in range(n):
+    if (i > 0):
+        trace[i] += trace[i-1]
+    features.append([i , trace[i]])
+
+print(analyzeData(features, 0, n))

@@ -1,0 +1,68 @@
+import java.util.Scanner;
+
+public class C {
+
+    private static final long MOD = 1000000007;
+
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+        int n = s.nextInt();
+        s.nextLine();
+        int[] ka = new int[n];
+        for (int i = 0; i < n; ++i) {
+            ka[i] = s.nextInt();
+            s.nextLine();
+        }
+
+
+        long result = 1;
+        long len = 0;
+
+        for (int i = 0; i < n; ++i) {
+            int k = ka[i];
+
+            result *= cnnk(k - 1, len + 1);
+            result %= MOD;
+            len += k;
+        }
+
+        System.out.println(result);
+    }
+
+    private static long cnnk(long items, long pos) {
+        if (items == 0 || pos == 0) {
+            return 1;
+        }
+        return cnk(items, items + pos - 1);
+    }
+
+    private static long cnk(long items, long pos) {
+        long high = Math.max(items, pos);
+        long low = Math.min(items, pos);
+
+        long highr = 1;
+        long lowr = 1;
+        for (long i = 0; i < low; ++i) {
+            highr = (highr * high) % MOD;
+            lowr = (lowr * (i + 1)) % MOD;
+            --high;
+        }
+        long inv = pow(lowr, MOD - 2, MOD);
+        highr = (highr * inv) % MOD;
+        return highr;
+    }
+
+    private static long pow(long a, long p, long m) {
+        long result = 1;
+        while (p > 0) {
+            if (p % 2 == 1) {
+                result *= a;
+                result %= m;
+            }
+            a *= a;
+            a %= m;
+            p /= 2;
+        }
+        return result;
+    }
+}

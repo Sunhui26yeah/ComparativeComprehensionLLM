@@ -1,0 +1,78 @@
+import java.util.*;
+import java.io.*;
+
+public class Main {
+	boolean eof;
+
+	String nextToken() {
+		while (st == null || !st.hasMoreTokens()) {
+			try {
+				st = new StringTokenizer(br.readLine());
+			} catch (Exception e) {
+				eof = true;
+				return "-1";
+			}
+		}
+		return st.nextToken();
+	}
+
+	int nextInt() {
+		return Integer.parseInt(nextToken());
+	}
+
+	long nextLong() {
+		return Long.parseLong(nextToken());
+	}
+
+	double nextDouble() {
+		return Double.parseDouble(nextToken());
+	}
+
+	void solve() {
+		String s = nextToken();
+		int a = 0,ans = 0;
+		
+		for (int i = 0; i < s.length() && s.charAt(i) == '-'; ++i){
+			++a;
+		}
+		for (int i = 0; i < a; ++i){
+			s = "+"+s;
+		}
+		a = 0;
+		for (int i = 0; i < s.length(); ++i){
+			if (s.charAt(i) == '+'){
+				++a;
+			} else {
+				--a;
+			}
+			ans = Math.max(Math.abs(a), ans);
+		}
+		out.print(ans);
+	}
+
+	BufferedReader br;
+	StringTokenizer st;
+	PrintWriter out;
+
+	void run() {
+		try {
+			br = new BufferedReader(new InputStreamReader(System.in));
+			out = new PrintWriter(new OutputStreamWriter(System.out));
+
+//			br = new BufferedReader(new FileReader("input.txt"));
+	//		 out = new PrintWriter(new FileWriter("output.txt"));
+
+			solve();
+
+			br.close();
+			out.close();
+		} catch (Throwable e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+	}
+
+	public static void main(String[] args) {
+		new Main().run();
+	}
+}

@@ -1,0 +1,63 @@
+import sys
+
+#import os.path
+#if os.path.isfile("input.txt"):
+#    _file = open("input.txt")
+#def readline():
+#    return _file.readline();
+
+def readline():
+    return input()
+
+def rindex(list, start):
+    i = start
+    while i >= 0:
+        if list[i] == 0:
+            return i
+        i = i-1
+
+def room(list):
+    i = len(list) - 1
+    while (list[i] == 0):
+        i = i-1
+        if i < 0: break
+    return len(list)-i-1
+
+def fun(n, m, d, c):
+    ans = [0] * n
+    i = 0
+    ci = 0
+    while ci < m:
+        i += d-1
+        
+        start = len(ans)-1
+        while room(ans) < c[ci]:
+            # Make room
+            k = rindex(ans, start)
+            for a in range(k, n-1):
+                ans[a] = ans[a+1]
+            ans[n-1] = 0
+            i = n - room(ans)
+            start = start -1
+        
+        if i + c[ci] > n:
+            i = n - c[ci]
+
+        for j in range(c[ci]):
+            ans[i] = ci+1
+            i = i + 1
+        ci = ci + 1
+    
+    if i + d >= n+1:
+        print("YES")
+        print(" ".join(str(x) for x in ans))
+    else:
+        print("NO")
+    
+
+q = 1# int(readline())
+for i in range(q):
+    #n = int(readline())
+    v = list(map(int, readline().split(' ')))
+    c = list(map(int, readline().split(' ')))
+    ans = fun(v[0], v[1], v[2], c)

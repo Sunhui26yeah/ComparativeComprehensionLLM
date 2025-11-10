@@ -1,0 +1,42 @@
+import sys
+input = sys.stdin.readline
+
+t=int(input())
+for tests in range(t):
+    n=int(input())
+    MAP=[list(input().strip()) for i in range(n)]
+
+    B=[0,0,0]
+    W=[0,0,0]
+
+    for i in range(n):
+        for j in range(n):
+            if MAP[i][j]=="X":
+                B[(i+j)%3]+=1
+            elif MAP[i][j]=="O":
+                W[(i+j)%3]+=1
+
+    MAX=1<<30
+    MAXb=-1
+    MAXw=-1
+
+    for i in range(3):
+        for j in range(3):
+            if i==j:
+                continue
+
+            if B[i]+W[j]<MAX:
+                MAX=B[i]+W[j]
+                MAXb=i
+                MAXw=j
+
+    for i in range(n):
+        for j in range(n):
+            if MAP[i][j]!=".":
+                if (i+j)%3==MAXb:
+                    MAP[i][j]="O"
+                if (i+j)%3==MAXw:
+                    MAP[i][j]="X"
+
+    for m in MAP:
+        print("".join(m))

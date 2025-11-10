@@ -1,0 +1,46 @@
+import java.io.*;
+import java.util.*;
+
+
+public class Task1 {
+
+	public static void main(String[] args) throws IOException {
+		new Task1().solve();
+	}
+	
+	public void solve() throws IOException {
+		PrintWriter out = new PrintWriter(System.out);
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		//StringTokenizer tok = new StringTokenizer(in.readLine());
+		String str1 = in.readLine();
+		String str2 = in.readLine();
+		int n1 = 0, n2 = 0;
+		for (int i = 0; i < str1.length(); i += 2) {
+			if(str1.charAt(i) == '[' && str2.charAt(i) == '8') {
+				++n2;
+			}
+			if(str1.charAt(i) == '[' && str2.charAt(i) == '(') {
+				++n1;
+			}
+			if(str1.charAt(i) == '(' && str2.charAt(i) == '[') {
+				++n2;
+			}
+			if(str1.charAt(i) == '(' && str2.charAt(i) == '8') {
+				++n1;
+			}
+			if(str1.charAt(i) == '8' && str2.charAt(i) == '[') {
+				++n1;
+			}
+			if(str1.charAt(i) == '8' && str2.charAt(i) == '(') {
+				++n2;
+			}
+			
+		}
+		
+		if (n1 > n2) System.out.println("TEAM 1 WINS");
+		if (n2 > n1) System.out.println("TEAM 2 WINS");
+		if (n1 == n2) System.out.println("TIE");
+		
+	}
+
+}

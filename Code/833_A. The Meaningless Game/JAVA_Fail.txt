@@ -1,0 +1,172 @@
+import java.io.*;
+import java.util.*;
+import java.math.BigInteger;
+import java.util.Map.Entry;
+
+import static java.lang.Math.*;
+
+public class A extends PrintWriter {
+
+    final static int[] primes = { 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199 };
+
+    boolean solve(int a, int b) {
+
+        for (int p : primes) {
+            if (p > a || p > b) {
+                break;
+            }
+
+            int x = 0, y = 0;
+
+            while (a % p == 0) {
+                a /= p;
+                ++x;
+            }
+
+            while (b % p == 0) {
+                b /= p;
+                ++y;
+            }
+
+            int s = x + y;
+
+            if (s % 3 != 0) {
+                return false;
+            }
+
+            int n = s / 3;
+
+            if (x < n || y < n) {
+                return false;
+            }
+        }
+
+        int p = min(a, b);
+        if (p > 1) {
+            int x = 0, y = 0;
+
+            while (a % p == 0) {
+                a /= p;
+                ++x;
+            }
+
+            while (b % p == 0) {
+                b /= p;
+                ++y;
+            }
+
+            int s = x + y;
+
+            if (s % 3 != 0) {
+                return false;
+            }
+
+            int n = s / 3;
+
+            if (x < n || y < n) {
+                return false;
+            }
+        }
+
+        return a == 1 && b == 1;
+    }
+
+    void run() {
+        int n = nextInt();
+
+        for (int i = 0; i < n; i++) {
+            int a = nextInt(), b = nextInt();
+
+            println(solve(a, b) ? "Yes" : "No");
+        }
+    }
+
+    boolean skip() {
+        while (hasNext()) {
+            next();
+        }
+        return true;
+    }
+
+    int[][] nextMatrix(int n, int m) {
+        int[][] matrix = new int[n][m];
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < m; j++)
+                matrix[i][j] = nextInt();
+        return matrix;
+    }
+
+    String next() {
+        while (!tokenizer.hasMoreTokens())
+            tokenizer = new StringTokenizer(nextLine());
+        return tokenizer.nextToken();
+    }
+
+    boolean hasNext() {
+        while (!tokenizer.hasMoreTokens()) {
+            String line = nextLine();
+            if (line == null) {
+                return false;
+            }
+            tokenizer = new StringTokenizer(line);
+        }
+        return true;
+    }
+
+    int[] nextArray(int n) {
+        int[] array = new int[n];
+        for (int i = 0; i < n; i++) {
+            array[i] = nextInt();
+        }
+        return array;
+    }
+
+    int nextInt() {
+        return Integer.parseInt(next());
+    }
+
+    long nextLong() {
+        return Long.parseLong(next());
+    }
+
+    double nextDouble() {
+        return Double.parseDouble(next());
+    }
+
+    String nextLine() {
+        try {
+            return reader.readLine();
+        } catch (IOException err) {
+            return null;
+        }
+    }
+
+    public A(OutputStream outputStream) {
+        super(outputStream);
+    }
+
+    static BufferedReader reader;
+    static StringTokenizer tokenizer = new StringTokenizer("");
+    static Random rnd = new Random();
+    static boolean OJ;
+
+    public static void main(String[] args) throws IOException {
+        OJ = System.getProperty("ONLINE_JUDGE") != null;
+        A solution = new A(System.out);
+        if (OJ) {
+            reader = new BufferedReader(new InputStreamReader(System.in));
+            solution.run();
+        } else {
+            reader = new BufferedReader(new FileReader(new File(A.class.getName() + ".txt")));
+            long timeout = System.currentTimeMillis();
+            while (solution.hasNext()) {
+                solution.run();
+                solution.println();
+                solution.println("----------------------------------");
+            }
+            solution.println("time: " + (System.currentTimeMillis() - timeout));
+        }
+        solution.close();
+        reader.close();
+    }
+}

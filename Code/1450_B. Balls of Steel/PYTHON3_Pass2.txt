@@ -1,0 +1,19 @@
+t = int(input())
+for _ in range(t):
+    n, k = map(int, input().split())
+    xy = [tuple(map(int, input().split())) for i in range(n)]
+    ans = -1
+    for x, y in xy:
+        flag = True
+        for x2, y2 in xy:
+            dx = abs(x2-x)
+            dy = abs(y2-y)
+            if dx + dy <= k:
+                continue
+            else:
+                flag = False
+                break
+        if flag:
+            ans = 1
+            break
+    print(ans)

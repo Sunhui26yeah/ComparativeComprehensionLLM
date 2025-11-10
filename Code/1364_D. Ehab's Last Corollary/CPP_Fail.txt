@@ -1,0 +1,80 @@
+#include <bits/stdc++.h>
+using namespace std;
+const int nax = 1e5 + 5;
+vector<int> adj[nax];
+int col[nax], par[nax];
+bool lev[nax];
+int k;
+bool dfs(int u) {
+  col[u] = 1;
+  for (int v : adj[u]) {
+    if (v == par[u]) continue;
+    if (col[v] == 1) {
+      vector<int> cyc;
+      int t = u;
+      while (t != v) cyc.push_back(t), t = par[t];
+      cyc.push_back(v);
+      if ((int)cyc.size() <= k) {
+        cout << "2\n" << cyc.size() << "\n";
+        for (int i : cyc) cout << i + 1 << " ";
+        cout << '\n';
+        return 1;
+      } else {
+        cout << "1\n";
+        bool f = 1;
+        int cnt = 0;
+        for (int i : cyc) {
+          if (cnt >= (k + 1) / 2) break;
+          if (f) cout << i << " ", cnt++;
+          f = !f;
+        }
+        return 1;
+      }
+    } else if (!col[v]) {
+      par[v] = u;
+      lev[v] = !lev[u];
+      if (dfs(v)) return 1;
+    }
+  }
+  col[u] = 2;
+  return 0;
+}
+void test_case() {
+  int n, m;
+  cin >> n >> m >> k;
+  memset(col, 0, sizeof col);
+  int u, v;
+  vector<pair<int, int> > ed;
+  for (int i = 0; i < int(m); i++) {
+    cin >> u >> v;
+    adj[--u].push_back(--v);
+    adj[v].push_back(u);
+    ed.push_back({u, v});
+  }
+  memset(par, -1, sizeof par);
+  par[0] = 0;
+  lev[0] = 0;
+  if (dfs(0)) return;
+  int cnt = 0;
+  for (int i = 0; i < n; i++) {
+    if (lev[i]) cnt++;
+  }
+  cout << "1\n";
+  if (cnt >= (k + 1) / 2) {
+    for (int i = 0; i < n; i++) {
+      if (!cnt) break;
+      if (lev[i]) cout << i + 1 << " ", cnt--;
+    }
+  } else {
+    cnt = n - cnt;
+    for (int i = 0; i < n; i++) {
+      if (!cnt) break;
+      if (!lev[i]) cout << i + 1 << " ", cnt--;
+    }
+  }
+}
+int main() {
+  ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+  int t = 1;
+  while (t--) test_case();
+}

@@ -1,0 +1,126 @@
+import java.io.OutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.util.StringTokenizer;
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.InputStream;
+
+/**
+ * Built using CHelper plug-in
+ * Actual solution is at the top
+ *
+ * @author Jaynil
+ */
+public class Main {
+    public static void main(String[] args) {
+        InputStream inputStream = System.in;
+        OutputStream outputStream = System.out;
+        InputReader in = new InputReader(inputStream);
+        PrintWriter out = new PrintWriter(outputStream);
+        TaskD solver = new TaskD();
+        int testCount = Integer.parseInt(in.next());
+        for (int i = 1; i <= testCount; i++)
+            solver.solve(i, in, out);
+        out.close();
+    }
+
+    static class TaskD {
+        public void solve(int testNumber, InputReader in, PrintWriter out) {
+            int n = in.nextInt();
+            long k = in.nextLong();
+            String x = in.next();
+            int l = 0;
+            long lc = 0;
+            long lsum = 0;
+            long c = 0;
+            long sum = 0;
+            StringBuilder ans = new StringBuilder();
+            boolean set = false;
+            for (int i = 0; i < n; i++) {
+                if (x.charAt(i) == '1') {
+                    c++;
+                    sum += i;
+                    continue;
+                }
+                if (c * i - sum - (c * (c - 1)) / 2 <= k) {
+//                out.println("in" + i + " " + (c*i - sum - (c*(c-1))/2));
+                    l = i;
+                    lc = c;
+                    lsum = sum;
+                    set = true;
+                }
+            }
+            if (set) {
+                //        out.println(l + " " + lc + " " );
+                for (int i = 0; i <= l - lc; i++) {
+                    ans.append("0");
+                }
+//        out.println(ans.toString());
+                for (int i = 0; i < lc; i++) {
+                    ans.append("1");
+                }
+//        out.println(ans.toString());
+                ans.append(x.substring(l + 1, n));
+            } else {
+                ans.append(x);
+            }
+
+            k -= lc * l - lsum - (lc * (lc - 1)) / 2;
+//        out.println(k);
+//        out.println(ans.toString());
+            int z = -1;
+            for (int i = l + 1; i < n; i++) {
+                if (x.charAt(i) == '0') {
+                    z = i;
+                    break;
+                }
+            }
+//        out.println(z);
+            if (z != -1) {
+                while (z >= 1 && k > 0) {
+                    if (ans.charAt(z - 1) == '1' && ans.charAt(z) == '0') {
+                        ans.setCharAt(z - 1, '0');
+                        ans.setCharAt(z, '1');
+                        k--;
+                    }
+                    z--;
+                }
+            }
+            out.println(ans.toString());
+        }
+
+    }
+
+    static class InputReader {
+        public BufferedReader reader;
+        public StringTokenizer tokenizer;
+
+        public InputReader(InputStream stream) {
+            reader = new BufferedReader(new InputStreamReader(stream), 32768);
+            tokenizer = null;
+        }
+
+        public String next() {
+            while (tokenizer == null || !tokenizer.hasMoreTokens()) {
+                try {
+                    tokenizer = new StringTokenizer(reader.readLine());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            return tokenizer.nextToken();
+        }
+
+        public int nextInt() {
+            return Integer.parseInt(next());
+        }
+
+        public long nextLong() {
+            return Long.parseLong(next());
+        }
+
+    }
+}

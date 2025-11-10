@@ -1,0 +1,72 @@
+#include <bits/stdc++.h>
+using namespace std;
+int a[100005], aa[100005];
+int cmp1[100005], cmp2[100005];
+int main() {
+  int n;
+  cin >> n;
+  string s;
+  cin >> s;
+  for (int i = 0; i < n; i++) {
+    if (s[i] == 'r')
+      a[i] = aa[i] = 0;
+    else
+      a[i] = aa[i] = 1;
+  }
+  for (int i = 0; i < n; i++) {
+    if (i % 2 == 0)
+      cmp1[i] = 1;
+    else
+      cmp1[i] = 0;
+    if (i % 2 == 0)
+      cmp2[i] = 0;
+    else
+      cmp2[i] = 1;
+  }
+  int ans = 100000;
+  int cnt1 = 0, cnt2 = 0;
+  ;
+  for (int i = 0; i < n; i++) {
+    if (a[i] != cmp1[i]) {
+      if (a[i] == 0)
+        cnt1++;
+      else
+        cnt2++;
+    }
+  }
+  int k1 = (n + 1) / 2;
+  int k2 = n / 2;
+  if (cnt1 < cnt2) {
+    int t = cnt1;
+    cnt1 = cnt2;
+    cnt2 = t;
+  }
+  if (cnt1 == cnt2) {
+    ans = min(cnt1, ans);
+  } else {
+    ans = min(cnt1, ans);
+  }
+  cnt1 = cnt2 = 0;
+  for (int i = 0; i < n; i++) {
+    if (aa[i] != cmp2[i]) {
+      if (aa[i] == 0)
+        cnt1++;
+      else
+        cnt2++;
+    }
+  }
+  k1 = (n + 1) / 2;
+  k2 = n / 2;
+  if (cnt1 < cnt2) {
+    int tt = cnt1;
+    cnt1 = cnt2;
+    cnt2 = tt;
+  }
+  if (cnt1 == cnt2) {
+    ans = min(cnt1, ans);
+  } else {
+    ans = min(cnt1, ans);
+  }
+  cout << ans << endl;
+  return 0;
+}

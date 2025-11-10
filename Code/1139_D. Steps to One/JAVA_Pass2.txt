@@ -1,0 +1,321 @@
+import java.io.OutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.FileNotFoundException;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+import java.io.Writer;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.InputStream;
+
+/**
+ * Built using CHelper plug-in Actual solution is at the top
+ */
+public class Main {
+  public static void main(String[] args) {
+    InputStream inputStream = System.in;
+    OutputStream outputStream = System.out;
+    InputReader in = new InputReader(inputStream);
+    OutputWriter out = new OutputWriter(outputStream);
+    TaskD solver = new TaskD();
+    solver.solve(1, in, out);
+    out.close();
+  }
+
+  static class TaskD extends ChelperSolution {
+    public static final int MAX = 100000;
+    LongMod MOD = new LongMod(1000000007L);
+
+    public void solve(int testNumber, InputReader in, OutputWriter out) {
+      super.solve(testNumber, in, out);
+    }
+
+    public void solve(int testNumber) {
+      long[] inverses = new long[MAX + 1];
+
+      for (int i = 1; i <= MAX; i++) {
+        inverses[i] = MOD.inversePrime(i);
+      }
+
+      int n = in.nextInt();
+
+      List<List<Integer>> allDivisors = new ArrayList<>();
+      for (int i = 0; i < n + 1; i++) {
+        allDivisors.add(new ArrayList<>());
+      }
+      for (int i = 1; i <= n; i++) {
+        for (int j = i; j <= n; j += i) {
+          allDivisors.get(j).add(i);
+        }
+      }
+
+      long[] dp = new long[MAX + 1];
+      long[] t = new long[MAX + 1];
+
+      dp[1] = 0;
+
+      for (int i = 2; i <= n; i++) {
+        List<Integer> divisors = allDivisors.get(i);
+
+        long sum = 0;
+        for (int d : divisors) {
+          t[d] = 0;
+        }
+
+        for (int divisorI = divisors.size() - 1; divisorI >= 0; divisorI--) {
+          int d = divisors.get(divisorI);
+
+          t[d] += n / d;
+
+          long coeff = dp[d] + 1;
+
+          sum = MOD.sum(sum, MOD.prod(t[d], coeff));
+
+          for (int dd : allDivisors.get(d)) {
+            if (dd != d) {
+              t[dd] -= t[d];
+            }
+          }
+        }
+
+        dp[i] = MOD.prod(sum, inverses[(int) (n - t[i])]);
+      }
+
+      long res = 0;
+      for (int i = 1; i <= n; i++) {
+        res = MOD.sum(res, MOD.sum(dp[i], 1));
+      }
+      res = MOD.prod(res, inverses[n]);
+
+      out.println(res);
+    }
+
+  }
+
+  static abstract class ChelperSolution implements ChelperCallable {
+    public static final String LOCAL_FILE = "chelper.properties";
+    public static final String SAVE_RESULT_FILE = "last_test_output.txt";
+    protected final boolean local = new File(LOCAL_FILE).exists();
+    protected boolean firstTest = true;
+    protected InputReader in;
+    protected OutputWriter out;
+    protected OutputWriter debug;
+    protected OutputWriter fileOut;
+    protected boolean saveTestResult = true;
+    protected boolean gcj = false;
+
+    protected void init() {
+      if (local) {
+        debug = new OutputWriter(System.err);
+        if (saveTestResult) {
+          fileOut = OutputWriter.toFile(SAVE_RESULT_FILE);
+        }
+      } else {
+        debug = new OutputWriter(new NullOutputStream());
+      }
+    }
+
+    public void solve(int testNumber, InputReader in, OutputWriter out) {
+      if (firstTest) {
+        init();
+        precalc();
+        firstTest = false;
+      }
+
+      this.in = in;
+      if (local && saveTestResult) {
+        this.out = new SplittingOutputWriter(out, fileOut);
+      } else {
+        this.out = out;
+      }
+
+      preSolve(testNumber);
+      solve(testNumber);
+      postSolve(testNumber);
+    }
+
+    protected void precalc() {
+
+    }
+
+    protected void preSolve(int testNumber) {
+      if (gcj) {
+        out.printf("Case #%d: ", testNumber);
+      }
+    }
+
+    public abstract void solve(int testNumber);
+
+    protected void postSolve(int testNumber) {
+      out.flush();
+      debug.flush();
+    }
+
+  }
+
+  static class OutputWriter extends PrintWriter {
+    public static OutputWriter toFile(String fileName) {
+      try {
+        return new OutputWriter(fileName);
+      } catch (FileNotFoundException e) {
+        throw new RuntimeException(e);
+      }
+    }
+
+    public void close() {
+      super.close();
+    }
+
+    public OutputWriter(String fileName) throws FileNotFoundException {
+      super(fileName);
+    }
+
+    public OutputWriter(OutputStream outputStream) {
+      super(outputStream, true);
+    }
+
+    public OutputWriter(Writer writer) {
+      super(writer, true);
+    }
+
+  }
+
+  static class LongMod {
+    public final long mod;
+
+    public LongMod(long mod) {
+      if (mod <= 0) {
+        throw new IllegalArgumentException();
+      }
+      this.mod = mod;
+    }
+
+    public long sum(long a, long b) {
+      return (a + b) % mod;
+    }
+
+    public long prod(long a, long b) {
+      return (a * b) % mod;
+    }
+
+    public long pow(long a, long b) {
+      if (b < 0) {
+        throw new IllegalArgumentException();
+      }
+
+      if (b == 0) {
+        return 1 % mod;
+      }
+
+      if (b == 1) {
+        return a % mod;
+      }
+
+      if (b % 2 == 0) {
+        long c = pow(a, b / 2);
+        return prod(c, c);
+      } else {
+        return prod(a, pow(a, b - 1));
+      }
+    }
+
+    public long inversePrime(long a) {
+      return pow(a, mod - 2);
+    }
+
+  }
+
+  static class SplittingOutputWriter extends OutputWriter {
+    private final OutputWriter[] outputWriters;
+
+    public SplittingOutputWriter(OutputWriter... outputWriters) {
+      super(new OutputStream() {
+
+        public void write(int b) throws IOException {
+          for (OutputWriter outputWriter : outputWriters) {
+            outputWriter.write(b);
+          }
+        }
+      });
+
+      this.outputWriters = outputWriters;
+    }
+
+    public void flush() {
+      for (OutputWriter outputWriter : outputWriters) {
+        outputWriter.flush();
+      }
+    }
+
+    public void close() {
+      for (OutputWriter outputWriter : outputWriters) {
+        outputWriter.close();
+      }
+    }
+
+  }
+
+  static class NullOutputStream extends OutputStream {
+    public void write(int b) throws IOException {
+      // nothing
+    }
+
+  }
+
+  static interface ChelperCallable {
+  }
+
+  static class InputReader {
+    private BufferedReader br;
+    private StringTokenizer in;
+
+    public InputReader(String fileName) {
+      try {
+        br = new BufferedReader(new FileReader(fileName));
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    }
+
+    public InputReader(InputStream inputStream) {
+      br = new BufferedReader(new InputStreamReader(inputStream));
+    }
+
+    private boolean hasMoreTokens() {
+      while (in == null || !in.hasMoreTokens()) {
+        String s = nextLine();
+        if (s == null) {
+          return false;
+        }
+        in = new StringTokenizer(s);
+      }
+      return true;
+    }
+
+    public String nextString() {
+      return hasMoreTokens() ? in.nextToken() : null;
+    }
+
+    public String nextLine() {
+      try {
+        in = null;
+        return br.readLine();
+      } catch (Exception e) {
+        e.printStackTrace();
+        return null;
+      }
+    }
+
+    public int nextInt() {
+      return Integer.parseInt(nextString());
+    }
+
+  }
+}

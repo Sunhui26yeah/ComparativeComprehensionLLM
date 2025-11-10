@@ -1,0 +1,41 @@
+def gcd(x, y): 
+   while(y): 
+       x, y = y, x % y 
+  
+   return x
+
+
+
+cases = int(input())
+for i in range(cases):
+    inp = input().split(" ")
+    a = int(inp[0])
+    b = int(inp[1])
+    q = int(inp[2])
+    GCD = gcd(a, b)
+    LCM = (a*b)//GCD
+    minst = a if a <= b else b
+    mest = a if a >= b else b
+    result = ""
+    for k in range(q):
+        inp2 = input().split(" ")
+        l = int(inp2[0])
+        r = int(inp2[1]) +1 
+        innr = (r-r%LCM)
+        innl = (l+(LCM - l%LCM))
+       
+        ans = 0
+        if (innr > innl):
+            ans = ((innr - innl + 1)//LCM)*(LCM-mest) # alle hele cycles som er i intervallet
+        
+        if r//LCM == l//LCM: # de er i samme cycle
+            tmp = r%LCM - (l%LCM if l%LCM > mest else mest)
+            ans += tmp if tmp > 0 else 0
+        else:
+            tmpl = LCM - (l%LCM if l%LCM > mest else mest)
+            tmpr = r%LCM - mest
+            ans += tmpl if tmpl > 0 else 0
+            ans += tmpr if tmpr > 0 else 0
+        
+        result += str(ans) + " "
+    print(result)

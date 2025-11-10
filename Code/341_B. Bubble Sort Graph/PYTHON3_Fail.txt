@@ -1,0 +1,26 @@
+N = int(input())
+List = [int(x) for x in input().split()]
+MinPre = [0] * N
+Stack = [0]
+Min = List[0]
+# Calculate Minimum element's index to its left
+
+for i in range(1,N):
+    while(Stack and List[Stack[-1]]>List[i]):
+        del Stack[-1]
+    if(Stack):
+        MinPre[i] = Stack[-1]
+    else:
+        MinPre[i] = i
+    Stack.append(i)
+
+
+
+
+Ans = [1] * N
+for i in range(N):
+    if(MinPre[i] == i):
+        continue
+    else:
+        Ans[i] = Ans[MinPre[i]] + 1
+print(max(Ans))

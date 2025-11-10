@@ -1,0 +1,88 @@
+import java.util.*;
+import java.io.*;
+
+public class QuestionD {
+    
+	static Scanner sc = new Scanner(System.in);
+	
+	public static void main(String[] args) {
+		int t = sc.nextInt();
+		while(t-->0) {
+			solve();
+		}
+	}
+	
+	public static void solve() {
+		int n = sc.nextInt();
+		long[] arr = new long[n];
+		
+		for(int i = 0;i < n;i++) {
+			arr[i] = sc.nextLong();
+		}
+		
+		//contains val as 0 or 1, for the MSB which is present in odd number.
+		int[] d = new int[n];
+		//System.out.println(((long)1<<31));
+		
+		int v = 33;
+		boolean flag = true;
+		int odd = 0, even = 0;
+		//finding the MSB which is present odd times.
+		while(v >= 0) {
+			//System.out.println("v = " + v);
+			int count = 0;
+			for(int i = 0;i < n;i++) {
+				//System.out.println((arr[i] & (long)1<<v));
+				if((arr[i] & (long)1<<v) != 0) {
+					count++;
+					d[i] = 1;
+				}
+				else d[i] = 0;
+			}
+			
+			if((count & 1) == 1) {
+				flag = false;
+				odd = count;
+				even = n - count;
+				break;
+			}
+			v--;
+		}
+		
+		if(flag) {
+			System.out.println("DRAW");
+			return;
+		}
+		
+		//print(d);
+		
+		if(odd == 1) {
+			System.out.println("WIN");
+			return;
+		}
+		
+		
+		odd = odd % 4;
+		even = even % 2;
+		
+		
+		
+		if(odd == 1) {
+
+				System.out.println("WIN");
+		
+		}
+		else {
+			if(even == 1) {
+				System.out.println("WIN");
+			}else System.out.println("LOSE");
+		}
+		
+		
+	}
+	
+	public static void print(int[] arr) {
+		for(int i = 0;i< arr.length;i++)System.out.print(arr[i] + " ");
+		System.out.println();
+	}
+}

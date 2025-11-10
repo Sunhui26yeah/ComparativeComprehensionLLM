@@ -1,0 +1,99 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+public class cf 
+{
+    static int n;
+    static int k;
+    static String s;
+    static int arr[];
+    static int brr[];
+    public static void main(String args[])throws IOException
+    {
+        PrintWriter out=new PrintWriter(System.out);
+        Scanner sc=new Scanner(System.in);
+        int n=sc.nextInt();
+        int arr[]=new int[n];
+        for(int i = 0 ;i<n;i++)
+        {
+            arr[i]=sc.nextInt();
+        }
+        int mark[]=new int[n];
+        int taken=0;
+        
+        while(taken!=n)
+        {
+            int maxpos=0;
+            int max=arr[0];
+            int st=0;
+            for(int i = 1 ;i<n;i++)
+            {
+                if(mark[i]==1)
+                {
+                    st++;
+                    continue;
+                }
+                if(Math.abs(arr[i]-arr[i-st-1])>1)
+                {
+                    System.out.println("NO");
+                    st=0;
+                    System.exit(0);
+                }
+                else
+                st=0;
+                if(max<arr[i])
+                {
+                    max=arr[i];
+                    maxpos=i;
+                }
+            
+            }
+            mark[maxpos]=1;
+            
+            taken++;
+        }
+        System.out.println("YES");
+    }
+    
+    static class Reader
+    {
+        final private int BUFFER_SIZE = 1 << 16;
+        private DataInputStream din;
+        private byte[] buffer;
+        private int bufferPointer, bytesRead;
+ 
+        public Reader()
+        {
+            din = new DataInputStream(System.in); buffer = new byte[BUFFER_SIZE];bufferPointer = bytesRead = 0;
+        }
+        public int nextInt() throws IOException
+        {
+            int ret = 0;byte c = read();
+            while (c <= ' ')c = read();
+            boolean neg = (c == '-');
+            if (neg) c = read();
+            do{ret = ret * 10 + c - '0';}  while ((c = read()) >= '0' && c <= '9');
+            if (neg)return -ret;
+            return ret;
+        }
+        public String next() throws IOException
+        {
+            byte[] buf = new byte[500000];int cnt = 0, c;
+            while ((c = read()) != -1){ if (c == '\n') break; buf[cnt++] = (byte) c;}
+            return new String(buf, 0, cnt);
+        }
+        private void fillBuffer() throws IOException
+        {
+            bytesRead = din.read(buffer, bufferPointer = 0, BUFFER_SIZE);
+            if (bytesRead == -1)
+                buffer[0] = -1;
+        }
+        private byte read() throws IOException
+        {
+            if (bufferPointer == bytesRead)
+                fillBuffer();
+            return buffer[bufferPointer++];
+        }
+ 
+    }
+}

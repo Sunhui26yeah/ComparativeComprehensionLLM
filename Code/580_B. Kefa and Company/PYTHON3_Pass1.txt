@@ -1,0 +1,17 @@
+import collections as cc
+import sys
+input=sys.stdin.readline
+I=lambda:list(map(int,input().split()))
+n,k=I()
+a=[I() for i in range(n)]
+a.sort()
+temp=0
+j=0
+ans=0
+for i in range(n):
+	while a[i][0]-a[j][0]>=k:
+		temp-=a[j][1]
+		j+=1
+	temp+=a[i][1]	
+	ans=max(ans,temp)
+print(ans)

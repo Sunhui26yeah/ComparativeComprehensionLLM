@@ -1,0 +1,134 @@
+/**
+ * Created by IntelliJ IDEA.
+ * User: Taras_Brzezinsky
+ * Date: 11/9/11
+ * Time: 7:42 PM
+ * To change this template use File | Settings | File Templates.
+ */
+
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.*;
+
+public class TaskD extends Thread {
+    private static final long MODULO = 1087;
+
+    public TaskD(int type) {
+        try {
+            if (type == 0) {
+                this.input = new BufferedReader(new InputStreamReader(System.in));
+                this.output = new PrintWriter(System.out);
+            } else {
+                this.input = new BufferedReader(new FileReader(INPUT_FILE));
+                this.output = new PrintWriter(OUTPUT_FILE);
+            }
+            this.setPriority(Thread.MAX_PRIORITY);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            System.exit(666);
+        }
+    }
+
+
+    private void solve() throws Throwable {
+        char[] s = nextToken().toCharArray();
+        int[] p = new int[s.length];
+        for (int i = 1; i < p.length; ++i) {
+            int j = p[i - 1];
+            while (j > 0 && (s[i] != s[j])) {
+                j = p[j - 1];
+            }
+            if (s[i] == s[j]) {
+                ++j;
+            }
+            p[i] = j;
+        }
+        int[] cnt = new int[p.length + 1];
+        for (int i = 0; i < p.length; ++i){
+            ++cnt[p[i]];
+        }
+        for (int i = p.length - 1; i > 0; --i) {
+            cnt[p[i - 1]] += cnt[i];
+        }
+         powers = new long[s.length];
+        powers[0] = 1;
+        for (int i = 1; i < powers.length; ++i) {
+            powers[i] = powers[i - 1] * MODULO;
+        }
+        hashed = new long[s.length];
+        hashed[0] = s[0] - 'a' + 1;
+        for (int i = 1; i < s.length; ++i) {
+            hashed[i] = hashed[i - 1] + (s[i] - 'a' + 1) * powers[i];
+        }
+        int ans = -1;
+        for (int i = s.length - 1; i >= 1; --i) {
+            if (cnt[i] >= 2) {
+                long begin = hashed[i - 1] * powers[powers.length - i ] ,
+                end = hashed[hashed.length - 1] - hashed[hashed.length - 1 - i];
+                if (end == begin) {
+                    ans = i;
+                    break;
+                }
+            }
+        }
+        if (ans == -1) {
+            output.println("Just a legend");
+        } else {
+            for (int i = 0; i < ans; ++i) {
+                output.print(s[i]);
+            }
+            output.println();
+        }
+
+
+
+    }
+
+    public void run() {
+        try {
+            solve();
+        } catch (Throwable e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+            System.exit(666);
+        } finally {
+            output.flush();
+            output.close();
+        }
+    }
+
+    long[] powers, hashed;
+
+    public static void main(String[] args) {
+        new TaskD(0).start();
+    }
+
+    private int nextInt() throws IOException {
+        return Integer.parseInt(nextToken());
+    }
+
+    private long nextLong() throws IOException {
+        return Long.parseLong(nextToken());
+    }
+
+    private double nextDouble() throws IOException {
+        return Double.parseDouble(nextToken());
+    }
+
+    private String nextToken() throws IOException {
+        while (tokens == null || !tokens.hasMoreTokens()) {
+            tokens = new StringTokenizer(input.readLine());
+        }
+        return tokens.nextToken();
+    }
+
+    private static final String INPUT_FILE = null;
+    private static final String OUTPUT_FILE = null;
+    private BufferedReader input;
+    private PrintWriter output;
+    private StringTokenizer tokens = null;
+}

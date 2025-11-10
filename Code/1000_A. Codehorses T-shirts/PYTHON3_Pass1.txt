@@ -1,0 +1,15 @@
+n = int(input())
+old = []
+new = []
+for i in range(n):
+    old.append(input())
+for j in range(n):
+    new.append(input())
+old.sort()
+c = 0
+for o in old:
+    if o in new:
+        new.remove(o)
+    else:
+        c += 1
+print(c)

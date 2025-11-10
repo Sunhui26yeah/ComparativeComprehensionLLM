@@ -1,0 +1,23 @@
+row, column = map(int,input().strip().split())
+
+rset = set()
+cset = set()
+flag = True
+for i in range(row):
+    line = input().strip()
+    if line in rset:
+        continue
+    for j in range(column):
+        if line[j] == '.':
+            continue
+        if line[j] in cset:
+            flag = False
+        else:
+            cset.add(line[j])
+    rset.add(line)
+
+
+if flag:
+    print("Yes")
+else:
+    print("No")

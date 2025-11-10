@@ -1,0 +1,50 @@
+from sys import stdin
+
+#parser
+def parser():
+    return map(int, stdin.readline().split())
+
+#Guardando el valor de 10^9+7
+div=pow(10,9)+7
+#Recibiendo los valores de n,a,b,k de la entrada
+n,a,b,k=parser()
+
+#Actualizando los valores de a,b y n
+if a>b:
+    a=n-a+1
+    n=n-b
+    b=n+1
+else:
+    n=b-1
+
+#Lista para ir guardando las sumas parciales
+prefix_sum=[0 for x in range(n+1)]
+
+#Lista para ir guandando los valores d(i,j)
+secuences=[0 for x in range(n+1)]
+secuences[a]=1
+
+for i in range(k):
+    #0 piso ficticio que se usa como comodín
+    prefix_sum[0]=secuences[0]
+    #Calculando los valores de las sumas parciales
+    for j in range(1,n+1):
+        prefix_sum[j]=prefix_sum[j-1]+secuences[j]
+        prefix_sum[j]%=div
+    
+    #Calculando los nuevos valores de ''secuences''
+    for j in range(1,n+1):
+        distance=b-j
+        mid_distance=0
+        #distancia necesaria entre el piso j y un piso de mayor numeracion que el j
+        if distance % 2 == 0:
+            mid_distance=distance//2-1
+        else:
+            mid_distance=distance//2  
+        #prefix_sum[j-1] es la cantidad de formas de alcanzar el piso j por uno de menor numeracion
+        #prefix_sum[j+mid_distance]-prefix_sum[j] es la cantidad de formas de alcanzar el piso j por un piso de mayor numeracion 
+        secuences[j]=prefix_sum[j-1]+prefix_sum[j+mid_distance]-prefix_sum[j]
+        secuences[j]%=div
+
+#Imprimiendo el resultado
+print(sum(secuences)%div)

@@ -1,0 +1,187 @@
+import java.awt.*;
+import java.io.*;
+import java.util.*;
+
+public class Abc {
+
+    public static void main(String[] args) throws Exception {
+        FastReader sc = new FastReader();
+        int n=sc.nextInt();
+        int a[]=new int[n];
+        for (int i=0;i<n;i++)a[i]=sc.nextInt();
+        int l=0,r=n-1;
+        StringBuilder sb=new StringBuilder();
+        while (true){
+            if (l==r)break;
+            if (l==n || r<0)break;
+            if (a[l]==a[r]){
+                if (sb.length()!=0){
+                    int i=sb.length()-1;
+                    if (sb.charAt(i)=='L')i=l-1;
+                    else i=r+1;
+                    if (a[l]<a[i])break;
+                }
+                int ll=l,rr=r;
+                boolean f=false;
+                boolean ff=false;
+                while (true){
+                    ll++;rr--;
+                    if (ll>=rr){
+                        f=true;
+                        break;
+                    }
+                    if (a[ll]!=a[rr]){
+                        break;
+                    }
+                    if (a[ll]<a[ll-1]){
+                        ff=true;
+                        break;
+                    }
+                }
+                if (ff){
+                    while (l!=ll){
+                        sb.append('L');
+                        l++;
+                    }
+                    break;
+                }
+                if (f){
+                    while (l<=r){
+                        sb.append('L');
+                        l++;
+                        r--;
+                    }
+                    break;
+                }else {
+                    if (a[ll]>a[ll-1] && a[rr]>a[rr+1]){
+                        if (a[ll]<a[rr]){
+                            while (l!=ll+1){
+                                sb.append('L');
+                                l++;
+                            }
+                        }else {
+                            while (r!=rr-1){
+                                sb.append('R');
+                                r--;
+                            }
+                        }
+                    }else if (a[ll]>a[ll-1]){
+                        while (l!=ll+1){
+                            sb.append('L');
+                            l++;
+                        }
+                    }else if (a[rr]>a[rr+1]){
+                        while (r!=rr-1){
+                            sb.append('R');
+                            r--;
+                        }
+                    }
+                    if (l==r){
+                        if (sb.length()==0){
+                            sb.append('L');
+                            break;
+                        }else {
+                            int i=sb.length()-1;
+                            if (sb.charAt(i)=='L'){
+                                i=l-1;
+                            }else i=r+1;
+                            if (a[i]<a[l])sb.append('L');
+                            break;
+                        }
+                    }
+
+                }
+            }else {
+                if (sb.length()==0){
+                    if (a[l]<a[r]){
+                        l++;
+                        sb.append('L');
+                    }else {
+                        r--;
+                        sb.append('R');
+                    }
+                }else {
+                    int i=sb.length()-1;
+                    if (sb.charAt(i)=='L'){
+                        i=l-1;
+                    }else {
+                        i=r+1;
+                    }
+                    if (a[l]>a[i] && a[r]>a[i]){
+                        if (a[l]<a[r]){
+                            l++;
+                            sb.append('L');
+                        }else {
+                            r--;
+                            sb.append('R');
+                        }
+                    }else if (a[l]>a[i]){
+                        l++;
+                        sb.append('L');
+                    }else if (a[r]>a[i]){
+                        r--;
+                        sb.append('R');
+                    }else break;
+                }
+                if (l==r){
+                    if (sb.length()==0){
+                        sb.append('L');
+                        break;
+                    }else {
+                        int i=sb.length()-1;
+                        if (sb.charAt(i)=='L'){
+                            i=l-1;
+                        }else i=r+1;
+                        if (a[i]<a[l])sb.append('L');
+                        break;
+                    }
+                }
+            }
+        }
+        System.out.println(sb.length());
+        System.out.println(sb);
+
+    }
+    static class FastReader {
+        BufferedReader br;
+        StringTokenizer st;
+
+        public FastReader() {
+            br = new BufferedReader(new
+                    InputStreamReader(System.in));
+        }
+
+        String next() {
+            while (st == null || !st.hasMoreElements()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
+
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
+
+        long nextLong() {
+            return Long.parseLong(next());
+        }
+
+        double nextDouble() {
+            return Double.parseDouble(next());
+        }
+
+        String nextLine() {
+            String str = "";
+            try {
+                str = br.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return str;
+        }
+    }
+}

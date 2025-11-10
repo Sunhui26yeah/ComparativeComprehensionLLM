@@ -1,0 +1,34 @@
+#include <bits/stdc++.h>
+int main() {
+  int t;
+  std::cin >> t;
+  for (int i = 0; i < t; ++i) {
+    int n;
+    std::cin >> n;
+    int max = 0;
+    std::map<int, int> cnt;
+    for (int j = 0; j < n; ++j) {
+      int a;
+      std::cin >> a;
+      max = std::max(max, a);
+      cnt[a]++;
+    }
+    max++;
+    int res = 0;
+    for (int j = 0; j <= max; ++j) {
+      if (cnt[j] == 0) {
+        res += j;
+        break;
+      }
+      cnt[j]--;
+    }
+    for (int j = 0; j <= max; ++j) {
+      if (cnt[j] == 0) {
+        res += j;
+        break;
+      }
+    }
+    std::cout << res << std::endl;
+  }
+  return 0;
+}

@@ -1,0 +1,51 @@
+for i in range(int(input())):
+    n=int(input())
+    l=list(map(int,input().split()))
+    a=[]
+    b=[]
+    f=list(set(l))
+    z=min(f)
+    f.sort()
+    a.append(z)
+    i=0
+    while(i<len(f)):
+        l.remove(f[i])
+        i+=1
+    mini1=0
+    mini2=0
+   # print(l,f)
+    if l==[]:
+        mini1=0
+    else:
+        j=0
+        l=list(set(l))
+        l.sort()
+        for i in range(len(l)):
+            if l[i]<=j:
+                j+=1
+                continue
+            else:
+                
+                mini1=j
+                break
+        mini1=j
+
+    if f==[]:
+        mini2=0
+    else:
+        j=0
+        f=list(set(f))
+        f.sort()
+        for i in range(len(f)):
+            #print(mini2,f[i],j)
+            if f[i]==j:
+                j+=1
+                continue
+            else:
+                mini2=j
+                break
+        mini2=j
+    #print(f)
+    #print(l)
+    #print(mini1,mini2)
+    print(mini1+mini2)

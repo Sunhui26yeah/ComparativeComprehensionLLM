@@ -1,0 +1,10 @@
+n, m = map(int, input().split())
+for _ in range(m):
+    q = list(map(int, input().split()))
+    q = q[1:]
+    alen = len(set(q))
+    q = list(map(abs, q))
+    if alen == len(set(q)):
+        print('YES')
+        exit()
+print('NO')

@@ -1,0 +1,27 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+n = int(input())
+A = list(map(int,input().split()))
+
+left = 0
+right = 0
+_min = A[right]
+_max = A[left]
+ans = 0
+
+while left < n and right < n - 1:
+    right += 1
+    if A[right] > _max or A[right] < _min:
+        _max = max(_max, A[right])
+        _min = min(_min, A[right])
+        if _max - _min > 1:
+            left = right
+            while left >= 0 and abs(A[left] - A[right]) <= 1:
+                left -= 1
+            left += 1
+            _max = max(A[left], A[right])
+            _min = min(A[left], A[right])
+    ans = max(ans, right - left + 1)
+
+print(ans)

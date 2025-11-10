@@ -1,0 +1,15 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int maxn=1e5+10;
+int arr[maxn],n,L[maxn];
+const int inf=0x3f3f3f3f;
+int main()
+{
+    memset(L,inf,sizeof L);
+    cin>>n;
+    for(int i=0;i<n;i++){
+        cin>>arr[i];
+        *lower_bound(L,L+n,arr[i])=arr[i];
+    }
+    cout<<lower_bound(L,L+n,inf)-L<<"\n";
+}

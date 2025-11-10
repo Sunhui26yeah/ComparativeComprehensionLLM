@@ -1,0 +1,18 @@
+#include <bits/stdc++.h>
+using namespace std;
+ifstream Cin("input.txt");
+ofstream Cout("output.txt");
+int main() {
+  long long n, x, i, num = 0, k[100001] = {};
+  cin >> n;
+  for (i = 1; i <= n; i++) {
+    cin >> x;
+    k[x]++;
+    if (k[x] > 1 || x > n || x < 1) {
+      cout << "NO";
+      return 0;
+    }
+    if (x != i) num++;
+  }
+  cout << (num <= 2 ? "YES" : "NO");
+}

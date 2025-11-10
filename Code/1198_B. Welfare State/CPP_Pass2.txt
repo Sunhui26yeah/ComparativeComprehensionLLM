@@ -1,0 +1,27 @@
+#include <bits/stdc++.h>
+using namespace std;
+const int nmax = 5e5 + 3;
+int n, q, caz, t1, t2, v[nmax];
+pair<int, int> usu[nmax];
+int main() {
+  ios::sync_with_stdio(false);
+  cin >> n;
+  for (int i = 1; i <= n; ++i) {
+    cin >> usu[i].first;
+  }
+  cin >> q;
+  for (int i = 1; i <= q; ++i) {
+    cin >> caz;
+    if (caz == 1) {
+      cin >> t1 >> t2;
+      usu[t1].first = t2;
+      usu[t1].second = i;
+    } else
+      cin >> v[i];
+  }
+  for (int i = q - 1; i >= 1; --i) v[i] = max(v[i], v[i + 1]);
+  for (int i = 1; i <= n; ++i)
+    usu[i].first = max(usu[i].first, v[usu[i].second + 1]);
+  for (int i = 1; i <= n; ++i) cout << usu[i].first << ' ';
+  return 0;
+}

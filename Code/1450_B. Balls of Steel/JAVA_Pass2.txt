@@ -1,0 +1,63 @@
+//Praise our lord and saviour qlf9
+import java.util.*;
+import java.io.*;
+import java.math.*;
+public class B{
+public static void main(String[] omkar) throws Exception
+{
+   BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+   StringTokenizer st = new StringTokenizer(in.readLine());
+   StringBuilder sb = new StringBuilder();
+   int cases = Integer.parseInt(st.nextToken());
+   for(int i = 0; i < cases; i++)
+   {
+      solve(in, st, sb);
+   }  
+   System.out.println(sb);
+        }
+ public static void solve(BufferedReader in, StringTokenizer st, StringBuilder sb) throws Exception
+ {
+  st = new StringTokenizer(in.readLine());
+  int n = Integer.parseInt(st.nextToken());
+  int k = Integer.parseInt(st.nextToken());
+  int[] x = new int[n];
+  int[] y = new int[n];
+  for(int i = 0; i < n; i++)
+  {
+      st = new StringTokenizer(in.readLine());
+      x[i] = Integer.parseInt(st.nextToken());
+      y[i] = Integer.parseInt(st.nextToken());
+  }
+  for(int i = 0; i < n; i++)
+  {
+      if(test(x, y, k, i))
+      {
+         sb.append("1\n");
+         return;
+      }
+  }
+  sb.append("-1\n");
+         return;
+ }
+ public static boolean test(int[] x, int[] y, int k, int ind)
+ {
+   for(int j = 0; j < x.length; j++)
+   {
+      if(Math.abs(x[j]-x[ind])+Math.abs(y[j]-y[ind]) > k)
+      {
+         return false;
+      }
+   }
+   return true;
+ }
+ public static int[] readArr(int N, BufferedReader in, StringTokenizer st) throws Exception
+      {
+         int[] arr = new int[N];
+         st = new StringTokenizer(in.readLine());
+         for(int i=0; i < N; i++)
+            arr[i] = Integer.parseInt(st.nextToken());
+         return arr;
+      }
+
+
+}

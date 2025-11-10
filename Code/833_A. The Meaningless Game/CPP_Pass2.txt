@@ -1,0 +1,57 @@
+#include <bits/stdc++.h>
+using namespace std;
+template <class T>
+int getbit(T s, int i) {
+  return (s >> i) & 1;
+}
+template <class T>
+T onbit(T s, int i) {
+  return s | (T(1) << i);
+}
+template <class T>
+T offbit(T s, int i) {
+  return s & (~(T(1) << i));
+}
+template <class T>
+int cntbit(T s) {
+  return __builtin_popcount(s);
+}
+template <class T>
+inline T gcd(T a, T b) {
+  T r;
+  while (b != 0) {
+    r = a % b;
+    a = b;
+    b = r;
+  }
+  return a;
+}
+long long n, a, b;
+long long fin(long long x) {
+  long long l = 0, r = 1e6;
+  while (l != r) {
+    long long mid = (l + r + 1) >> 1;
+    if (mid * mid * mid <= x) {
+      l = mid;
+    } else
+      r = mid - 1;
+  }
+  return l;
+}
+int main() {
+  ios::sync_with_stdio(false);
+  cin.tie(0);
+  cin >> n;
+  while (n--) {
+    cin >> a >> b;
+    if (a > b) swap(a, b);
+    long long z = fin(a * b);
+    if (z * z * z != a * b)
+      cout << "No\n";
+    else if (a % z == 0 && b % z == 0)
+      cout << "Yes\n";
+    else
+      cout << "No\n";
+  }
+  return 0;
+}

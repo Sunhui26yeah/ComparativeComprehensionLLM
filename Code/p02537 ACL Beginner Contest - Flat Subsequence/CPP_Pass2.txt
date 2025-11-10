@@ -1,0 +1,36 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+const int sz=524288;
+int seg[sz*2];
+
+int sum(int l,int r,int node=1,int nodel=0,int noder=sz-1) {
+    if (r<nodel||l>noder) {
+        return 0;
+    }
+    if (l<=nodel&&noder<=r) {
+        return seg[node];
+    }
+    int mid=(nodel+noder)/2;
+    return max(sum(l,r,node*2,nodel,mid),sum(l,r,node*2+1,mid+1,noder));
+}
+
+void update(int i,int val) {
+    i+=sz;
+    seg[i]=max(seg[i],val);
+    while (i>1) {
+        i/=2;
+        seg[i]=max(seg[i*2],seg[i*2+1]);
+    }
+}
+
+int main(void) {
+    int n,k;
+    scanf("%d %d",&n,&k);
+    for(int i=0;i<n;i++) {
+        int x;
+        scanf("%d",&x);
+        update(x,sum(max(0,x-k),min(x+k,sz-1))+1);
+    }
+    printf("%d",sum(0,sz-1));
+}

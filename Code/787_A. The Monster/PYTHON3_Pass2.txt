@@ -1,0 +1,15 @@
+#Author: M@sud_P@rvez
+from math import *
+
+a,b=map(int,input().split())
+c,d=map(int,input().split())
+x=[]; y=[]
+for i in range(0,101):
+    x.append(b+a*i)
+    y.append(d+c*i)
+for i in range(0,101):
+    for j in range(0,101):
+        if x[i]-y[j]==0:
+            print(x[i])
+            exit()
+print(-1)

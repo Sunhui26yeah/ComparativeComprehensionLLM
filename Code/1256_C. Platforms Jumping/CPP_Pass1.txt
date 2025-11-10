@@ -1,0 +1,36 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+  int n, m, d;
+  cin >> n >> m >> d;
+  int k = n;
+  int a[m];
+  int sum = 0;
+  for (int i = 0; i < m; i++) {
+    cin >> a[i];
+    sum += a[i];
+    if (a[i] > 1) k -= (a[i] - 1);
+  }
+  if (d * (m + 1) <= k) {
+    cout << "NO";
+    return 0;
+  }
+  vector<int> v(n, 0);
+  int g = (k - m);
+  int j = -1;
+  for (int i = 0; i < m; i++) {
+    int x;
+    if (d > g) {
+      x = g + 1;
+      g = 0;
+    } else {
+      x = d;
+      g -= (d - 1);
+    }
+    j += x;
+    for (int k = j; k < (j + a[i]); k++) v[k] = i + 1;
+    j = j + a[i] - 1;
+  }
+  cout << "YES" << endl;
+  for (int i = 0; i < n; i++) cout << v[i] << " ";
+}

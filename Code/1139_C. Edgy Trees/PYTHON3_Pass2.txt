@@ -1,0 +1,45 @@
+from collections import *
+
+def power(a, b, mod):
+    res = 1
+    
+    while b:
+        if b%2:
+            res = (res*a)%mod
+        
+        b //= 2
+        a = (a*a)%mod    
+            
+    return res%mod
+
+MOD = 1000000007
+n, k = map(int, input().split())
+ans = power(n, k, MOD)
+adj = defaultdict(list)
+
+for i in range(n-1):
+    u, v, x = map(int, input().split())
+    if not x:
+        adj[u].append(v)
+        adj[v].append(u)
+        
+v = [0]*(1+n)
+
+for i in range(1, 1+n):
+    if not v[i]:
+        cmp = 0
+        q = [i]
+        
+        while q:
+            e = q.pop()
+            if not v[e]:
+                cmp += 1
+            v[e] = 1
+            
+            for j in adj[e]:
+                if not v[j]:
+                    q.append(j)
+
+        ans = (ans%MOD-power(cmp, k, MOD))%MOD
+                    
+print(ans)

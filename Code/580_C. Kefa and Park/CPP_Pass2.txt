@@ -1,0 +1,54 @@
+#include <bits/stdc++.h>
+using namespace std;
+int n, m;
+int cats[100000];
+int marks[100000];
+list<int> succ[100000];
+void parse() {
+  cin >> n >> m;
+  for (int it = 0; it < (n); it++) {
+    (cats)[it] = (0);
+  };
+  for (int it = 0; it < (n); it++) {
+    (succ)[it] = (list<int>());
+  };
+  for (int it = 0; it < (n); it++) {
+    (marks)[it] = (0);
+  };
+  for (int i = 0; i < n; i++) {
+    cin >> cats[i];
+  }
+  int r, l;
+  for (int i = 0; i < n - 1; i++) {
+    cin >> l >> r;
+    succ[l - 1].push_back(r - 1);
+    succ[r - 1].push_back(l - 1);
+  }
+}
+int count(int i, int c) {
+  marks[i] = 1;
+  if (cats[i] == 1)
+    c++;
+  else
+    c = 0;
+  if (c > m) return 0;
+  int r = 0;
+  int child = 0;
+  for (list<int>::iterator it = succ[i].begin(); it != succ[i].end(); ++it) {
+    if (marks[*it] == 0) {
+      child++;
+      r += count(*it, c);
+    }
+  }
+  if (child == 0) return 1;
+  return r;
+}
+void solve() { cout << count(0, 0); }
+int main() {
+  ios::sync_with_stdio(false);
+  std::cout.precision(11);
+  parse();
+  solve();
+  cout << endl;
+  return 0;
+}

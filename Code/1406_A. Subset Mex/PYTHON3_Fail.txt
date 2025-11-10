@@ -1,0 +1,41 @@
+from collections import defaultdict as dc
+
+
+def solv():
+    x = int(input())
+    s = list(map(int, input().split()))
+    if x == 1:
+        if s[0] == 0:
+            print(1)
+        else:
+            print(0)
+        return
+    vis = dc(lambda: 0)
+    vis2 = dc(lambda: 0)
+    a = 0
+    b = 0
+    v = [0 for n in range(x)]
+    w = [0 for n in range(x)]
+
+    for n in range(x):
+        vis[s[n]] = 1
+        if s[n] == a:
+            while vis[a]:
+                a += 1
+        v[n] = a
+    for n in range(x-1, -1, -1):
+        vis2[s[n]] = 1
+        if s[n] == b:
+            while vis2[b]:
+                b += 1
+        w[n] = b
+
+    mx = 0
+    for n in range(1, x):
+        mx = max(mx, v[n-1]+w[n])
+    mx = max(mx,  v[-1], w[0])
+    print(mx)
+
+
+for n in range(int(input())):
+    solv()

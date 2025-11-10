@@ -1,0 +1,61 @@
+import java.io.OutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.util.Scanner;
+
+/**
+ * Built using CHelper plug-in
+ * Actual solution is at the top
+ */
+public class Main {
+    public static void main(String[] args) {
+        InputStream inputStream = System.in;
+        OutputStream outputStream = System.out;
+        Scanner in = new Scanner(inputStream);
+        PrintWriter out = new PrintWriter(outputStream);
+        TaskB solver = new TaskB();
+        solver.solve(1, in, out);
+        out.close();
+    }
+
+    static class TaskB {
+        public void solve(int testNumber, Scanner in, PrintWriter out) {
+            int n = in.nextInt();
+            int m = in.nextInt();
+            int[] arr = new int[n + 2];
+            arr[arr.length - 1] = m;
+            for (int i = 0; i < n; i++) {
+                arr[i + 1] = in.nextInt();
+            }
+            int[] normal = new int[arr.length];
+            int[] modif = new int[arr.length];
+            boolean isEven = arr.length % 2 == 0;
+            int sum1 = 0;
+            int sum2 = 0;
+            for (int i = 1; i < arr.length; i++) {
+                if (i % 2 != 0) {
+                    sum1 += arr[i] - arr[i - 1];
+                } else {
+                    sum2 += arr[i] - arr[i - 1];
+                }
+                normal[i] = sum1;
+                modif[i] = sum2;
+            }
+            int res = normal[normal.length - 1];
+            for (int i = 1; i < arr.length; i++) {
+                if (arr[i - 1] + 1 == arr[i]) {
+                    continue;
+                }
+                int pos = normal[i - 1] + modif[modif.length - 1] - modif[i] + arr[i] - arr[i - 1] - 1;
+
+                res = Math.max(res, pos);
+
+            }
+
+            out.println(res);
+
+        }
+
+    }
+}

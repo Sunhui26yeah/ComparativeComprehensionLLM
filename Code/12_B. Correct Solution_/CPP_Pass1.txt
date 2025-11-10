@@ -1,0 +1,49 @@
+#include <bits/stdc++.h>
+using namespace std;
+long long dx[] = {1, 0, -1, 0};
+long long dy[] = {0, 1, 0, -1};
+void solve() {
+  long long n, m;
+  string s, t;
+  cin >> s >> t;
+  n = stoi(s);
+  m = stoi(t);
+  if (s.size() != t.size()) {
+    cout << "WRONG_ANSWER"
+         << "\n";
+    return;
+  }
+  if (n == 0 && m == 0) {
+    cout << "OK"
+         << "\n";
+    return;
+  }
+  if (n == 0) {
+    cout << "WRONG_ANSWER"
+         << "\n";
+    return;
+  }
+  char mn = ';';
+  for (long long i = 0; i < s.size(); i++)
+    if (s[i] != '0') mn = min(mn, s[i]);
+  string ans;
+  ans.push_back(mn);
+  multiset<char> mul;
+  for (long long i = 0; i < s.size(); i++) mul.insert(s[i]);
+  mul.erase(mul.find(mn));
+  for (char x : mul) ans.push_back(x);
+  if (ans != t) {
+    cout << "WRONG_ANSWER"
+         << "\n";
+    return;
+  } else
+    cout << "OK"
+         << "\n";
+  return;
+}
+signed main() {
+  ios_base::sync_with_stdio(false);
+  cin.tie(NULL);
+  solve();
+  return 0;
+}

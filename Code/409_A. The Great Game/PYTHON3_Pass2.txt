@@ -1,0 +1,44 @@
+"""
+Codeforces April Fools Contest 2014 Problem A
+
+Author  : chaotic_iak
+Language: Python 3.3.4
+"""
+
+class InputHandlerObject(object):
+    inputs = []
+
+    def getInput(self, n = 0):
+        res = ""
+        inputs = self.inputs
+        if not inputs: inputs.extend(input().split(" "))
+        if n == 0:
+            res = inputs[:]
+            inputs[:] = []
+        while n > len(inputs):
+            inputs.extend(input().split(" "))
+        if n > 0:
+            res = inputs[:n]
+            inputs[:n] = []
+        return res
+InputHandler = InputHandlerObject()
+g = InputHandler.getInput
+
+############################## SOLUTION ##############################
+plays = ["()", "[]", "8<"]
+
+x = input()
+y = input()
+w = 0
+for i in range(0, len(x)//2):
+    m = plays.index(x[2*i:2*i+2])
+    n = plays.index(y[2*i:2*i+2])
+    if m == n+1 or m == n-2: w += 1
+    if m == n+2 or m == n-1: w -= 1
+
+if w > 0:
+    print("TEAM 1 WINS")
+if w == 0:
+    print("TIE")
+if w < 0:
+    print("TEAM 2 WINS")

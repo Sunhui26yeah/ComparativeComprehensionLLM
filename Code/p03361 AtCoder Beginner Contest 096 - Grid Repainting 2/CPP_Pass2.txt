@@ -1,0 +1,28 @@
+#include<bits/stdc++.h>
+using namespace std;
+char c[52][52];
+int h,w;
+bool check(int a,int b){
+  if(c[a+1][b]!='#'&&c[a-1][b]!='#'&&c[a][b+1]!='#'&&c[a][b-1]!='#')
+    return true;
+  return false;
+}
+int main(){
+  cin>>h>>w;
+  for(int i=1;i<=h;i++){
+    for(int j=1;j<=w;j++){
+      cin>>c[i][j];
+    }
+  }
+  for(int i=1;i<=h;i++){
+    for(int j=1;j<=w;j++){
+      if(c[i][j]=='#'){
+        if(check(i,j)){
+          cout<<"No";
+          return 0;
+        }
+      }
+    }
+  }
+  cout<<"Yes";
+}

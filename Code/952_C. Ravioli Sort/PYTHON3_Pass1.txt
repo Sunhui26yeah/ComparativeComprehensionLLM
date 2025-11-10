@@ -1,0 +1,19 @@
+n=int(input())
+l=list(map(int,input().split()))
+pepe=0
+if n!=1:
+    if l[0]-l[1]>=2:
+        l[1]+=1
+        l[0]-=1
+        pepe=5
+    for i in range(1,n-1):
+        if l[i]-l[i-1]>=2 and l[i]-l[i+1]<2:
+            pepe=5
+            break
+        elif l[i]-l[i+1]>=2 and l[i]-l[i-1]<2:
+            pepe=5
+            break
+        elif l[i]-l[i+1]>=2 and l[i]-l[i-1]>=2:
+            pepe=5
+            break
+print("YES" if pepe==0 else "NO")

@@ -1,0 +1,19 @@
+inp = input().split()
+notAfraid = False
+tmpx = {}
+for i in range(int(inp[1])):
+	tmp = {}
+	inpp = input().split()
+	index = int(inpp[0])
+	for j in range(index):
+		tmpp = int(inpp[j+1])
+		if abs(tmpp) in tmp and tmpp not in tmpx:
+			notAfraid = True
+			break
+		else:
+			tmpx[tmpp] = 1
+			tmp[abs(tmpp)] = 1
+	if not notAfraid:
+		break
+
+print('NO' if notAfraid else 'YES')

@@ -1,0 +1,30 @@
+#include <iostream>
+#include <algorithm>
+#include <string.h>
+
+using namespace std;
+
+char S[200002];
+char S2[200002];
+
+int main(void) {
+  int N;
+
+  cin >> N;
+  cin >> S;
+  
+  int bcnt = 0;
+  for (int i = 0; i < N; i++) 
+    if (S[i] == '#') bcnt++;
+
+  int m = N;
+  int tb = bcnt;
+  for (int i = 0; i <= N; i++) {
+    m = min(m, bcnt - tb + N - i - tb);
+    if (S[i] == '#')
+      tb--;  
+  }
+
+  cout << m << endl;
+  return 0;
+}

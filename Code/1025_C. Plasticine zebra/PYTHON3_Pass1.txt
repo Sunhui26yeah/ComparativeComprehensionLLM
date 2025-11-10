@@ -1,0 +1,16 @@
+def main():
+    s = list(input())*2
+    ans = 0
+    k = 1
+    for i in range(len(s) - 1):
+        if (s[i] == "b" and s[i + 1] == "b") or (s[i] == "w" and s[i + 1] == "w"):
+            ans = max(ans, k)
+            k = 1
+        else:
+            k += 1
+    ans = max(ans, k)
+    print(min(ans, len(s)//2))
+
+
+if __name__ == '__main__':
+    main()

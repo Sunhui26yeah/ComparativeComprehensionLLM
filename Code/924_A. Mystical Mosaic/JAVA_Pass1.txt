@@ -1,0 +1,59 @@
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
+
+public class c2 {
+	public static void main(String args[]) {
+		Scanner scan=new Scanner(System.in);
+		int n=scan.nextInt();
+		int m=scan.nextInt();
+		scan.nextLine();
+		
+		HashMap<ArrayList<Integer>,ArrayList<Integer>> map=new HashMap<ArrayList<Integer>,ArrayList<Integer>>();
+		for(int i=0;i<n;i++) {
+			String s=scan.nextLine();
+			ArrayList<Integer> list=new ArrayList<Integer>();
+			for(int j=0;j<m;j++) {
+				if(s.charAt(j)=='#') {
+					list.add(j);
+					
+				}
+			}
+			if(map.containsKey(list)) {
+				ArrayList<Integer> l=map.get(list);
+				l.add(i);
+				map.put(list, l);
+			}else {
+				map.put(list, new ArrayList<Integer>());
+			}
+		}
+		HashSet<Integer> setkey=new HashSet<Integer>();
+		int flag=0;
+		HashSet<Integer> setValue=new HashSet<Integer>();
+		for(ArrayList l: map.keySet()) {
+			for(int i=0;i<l.size();i++) {
+				if(setkey.contains(l.get(i))) {
+					System.out.println("No");
+					return;
+				}else {
+					setkey.add((Integer) l.get(i));
+				}
+			}
+			ArrayList t=map.get(l);
+			for(int i=0;i<t.size();i++) {
+				if(setValue.contains(t.get(i))) {
+					System.out.println("No");
+					return;
+				}else {
+					setValue.add((Integer)t.get(i));
+				}
+			}
+		}
+	
+		System.out.println("Yes");
+		return;
+	}
+
+}

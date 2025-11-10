@@ -1,0 +1,65 @@
+#include <bits/stdc++.h>
+using namespace std;
+mt19937 rnd(chrono::steady_clock::now().time_since_epoch().count());
+void deb(istream_iterator<string> it) {}
+template <typename T, typename... Args>
+void deb(istream_iterator<string> it, T a, Args... args) {
+  cerr << *it << " = " << a << endl;
+  deb(++it, args...);
+}
+namespace IO {}
+using namespace IO;
+const int mod = 1e9 + 7;
+const int N = 3e5 + 9;
+const double eps = 1e-9;
+const double PI = acos(-1.0);
+long long qpow(long long n, long long k) {
+  long long ans = 1;
+  assert(k >= 0);
+  n %= mod;
+  while (k > 0) {
+    if (k & 1) ans = (ans * n) % mod;
+    n = (n * n) % mod;
+    k >>= 1;
+  }
+  return ans % mod;
+}
+int32_t main() {
+  int t = ({
+    int a;
+    scanf("%d", &a);
+    a;
+  });
+  while (t--) {
+    int n = ({
+      int a;
+      scanf("%d", &a);
+      a;
+    }),
+        r = ({
+          int a;
+          scanf("%d", &a);
+          a;
+        });
+    vector<int> v;
+    for (int i = 1; i <= n; i++) {
+      int k = ({
+        int a;
+        scanf("%d", &a);
+        a;
+      });
+      v.emplace_back(k);
+    }
+    sort(v.begin(), v.end());
+    v.erase(unique(v.begin(), v.end()), v.end());
+    int ans = 0;
+    while (!v.empty()) {
+      int k = v.back();
+      v.pop_back();
+      if (1LL * k - 1LL * ans * r <= 0) break;
+      ans++;
+    }
+    printf("%d\n", ans);
+  }
+  return 0;
+}

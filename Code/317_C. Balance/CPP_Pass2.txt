@@ -1,0 +1,69 @@
+#include <bits/stdc++.h>
+using namespace std;
+int N, V, E;
+int mat[301][301];
+int A[301], B[301];
+vector<pair<pair<int, int>, int> > R;
+void flow2(vector<int>& P, int si, int ti, int d) {
+  int i;
+  if (si == ti) return;
+  if (A[P[si + 1]] + d <= V) {
+    A[P[si]] -= d;
+    A[P[si + 1]] += d;
+    R.push_back(make_pair(make_pair(P[si], P[si + 1]), d));
+    flow2(P, si + 1, ti, d);
+  } else {
+    int d2 = V - A[P[si + 1]];
+    A[P[si]] -= d2;
+    A[P[si + 1]] += d2;
+    if (d2 > 0) R.push_back(make_pair(make_pair(P[si], P[si + 1]), d2));
+    flow2(P, si + 1, ti, d);
+    A[P[si]] -= d - d2;
+    A[P[si + 1]] += d - d2;
+    R.push_back(make_pair(make_pair(P[si], P[si + 1]), d - d2));
+  }
+}
+void flow(int s, int t, int d) {
+  int i, j, y;
+  vector<int> P;
+  P.push_back(s);
+  for (i = s; i != t;) {
+    for (y = 0; y < N; ++y)
+      if (mat[i][y] == 1 && mat[y][t] == mat[i][t] - 1) break;
+    P.push_back(i = y);
+  }
+  flow2(P, 0, P.size() - 1, d);
+}
+void solve() {
+  int f, r, i, j, k, l, x, y;
+  cin >> N >> V >> E;
+  for (i = 0; i < N; ++i) cin >> A[i];
+  for (i = 0; i < N; ++i) cin >> B[i];
+  for (x = 0; x < N; ++x)
+    for (y = 0; y < N; ++y) mat[x][y] = 9999;
+  for (x = 0; x < N; ++x) mat[x][x] = 0;
+  for (i = 0; i < E; ++i) {
+    cin >> x >> y;
+    mat[x - 1][y - 1] = mat[y - 1][x - 1] = 1;
+  }
+  for (i = 0; i < N; ++i)
+    for (j = 0; j < N; ++j)
+      for (k = 0; k < N; ++k) mat[j][k] = min(mat[j][k], mat[j][i] + mat[i][k]);
+  for (x = 0; x < N; ++x)
+    for (y = 0; y < N; ++y) {
+      if (mat[x][y] > N) continue;
+      j = min(A[x] - B[x], B[y] - A[y]);
+      if (j <= 0) continue;
+      flow(x, y, j);
+    }
+  for (x = 0; x < N; ++x)
+    if (A[x] != B[x]) return (void)printf("NO\n");
+  printf("%d\n", R.size());
+  for (i = 0; i < R.size(); ++i)
+    printf("%d %d %d\n", R[i].first.first + 1, R[i].first.second + 1,
+           R[i].second);
+}
+int main() {
+  solve();
+  return 0;
+}

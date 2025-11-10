@@ -1,0 +1,167 @@
+import java.io.*;
+import java.util.*;
+
+public class B {
+	
+	int[] removeKs(int[] a, int k) {
+		int[] res = new int[a.length];
+		List<Pair> stack = new ArrayList<>();
+		for (int i = 0; i < a.length; i++) {
+			int val = a[i % a.length];
+			if (stack.size() == 0 || stack.get(stack.size() - 1).val != val) {
+				stack.add(new Pair(val, 1));
+			} else {
+				Pair p = stack.get(stack.size() - 1);
+				p.cnt++;
+				if (p.cnt == k) {
+					stack.remove(stack.size() - 1);
+				}
+			}
+		}		
+		int tmp = 0;
+		for (Pair p : stack) {
+			for (int i = 0; i < p.cnt; i++) {
+				res[tmp++] = p.val;
+			}
+		}
+		return Arrays.copyOf(res, tmp);
+	}
+
+	void solve() {
+		int n = in.nextInt();
+		int k = in.nextInt();
+		int m = in.nextInt();
+		int[] a = in.nextIntArray(n);
+		a = removeKs(a, k);
+		boolean ok = true;
+		for (int i = 0; i < a.length; i++) {
+			if (a[i] != a[0]) {
+				ok = false;
+			}
+		}
+		if (ok) {
+			out.println(1L * n * m % k);
+			return;
+		}
+		
+		List<Pair> stack = new ArrayList<>();
+		int rep = Math.min(2, m);
+		
+		long A = 0, B = 0;
+		for (int i = 0; i < rep * a.length; i++) {
+			int val = a[i % a.length];
+			if (stack.size() == 0 || stack.get(stack.size() - 1).val != val) {
+				stack.add(new Pair(val, 1));
+			} else {
+				Pair p = stack.get(stack.size() - 1);
+				p.cnt++;
+				if (p.cnt == k) {
+					stack.remove(stack.size() - 1);
+				}
+			}
+			if (i + 1 == a.length) {
+				for (Pair p : stack) {
+					A += p.cnt;
+				}
+			} else if (i + 1 == 2 * a.length) {
+				for (Pair p : stack) {
+					B += p.cnt;
+				}
+			}
+		}
+//		System.err.println(A + " " + B);
+		if (B == 0) {
+			out.println(m % 2 * A);
+		} else {
+			out.println(A + (B - A) * (m - 1));
+		}
+	}
+	
+	class Pair {
+		int val, cnt;
+
+		public Pair(int val, int cnt) {
+			super();
+			this.val = val;
+			this.cnt = cnt;
+		}
+		
+	}
+	
+	FastScanner in;
+	PrintWriter out;
+
+	void run() {
+		in = new FastScanner();
+		out = new PrintWriter(System.out);
+		solve();
+		out.close();
+	}
+
+	class FastScanner {
+		BufferedReader br;
+		StringTokenizer st;
+
+		public FastScanner() {
+			br = new BufferedReader(new InputStreamReader(System.in));
+		}
+
+		public FastScanner(String file) {
+			try {
+				br = new BufferedReader(new FileReader(file));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+
+		public String nextToken() {
+			while (st == null || !st.hasMoreElements()) {
+				try {
+					st = new StringTokenizer(br.readLine());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			return st.nextToken();
+		}
+
+		public boolean hasMoreTokens() {
+			while (st == null || !st.hasMoreElements()) {
+				try {
+					String line = br.readLine();
+					if (line == null) {
+						return false;
+					}
+					st = new StringTokenizer(line);
+				} catch (IOException e) {
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public int nextInt() {
+			return Integer.parseInt(nextToken());
+		}
+
+		public long nextLong() {
+			return Long.parseLong(nextToken());
+		}
+
+		public double nextDouble() {
+			return Double.parseDouble(nextToken());
+		}
+
+		public int[] nextIntArray(int length) {
+			int[] array = new int[length];
+			for (int i = 0; i < length; i++) {
+				array[i] = nextInt();
+			}
+			return array;
+		}
+	}
+
+	public static void main(String[] args) {
+		new B().run();
+	}
+}

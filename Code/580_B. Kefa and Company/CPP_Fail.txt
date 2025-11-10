@@ -1,0 +1,17 @@
+#include <bits/stdc++.h>
+using namespace std;
+int total, sum, i, j, n, d, man[99999], money[99999];
+int main() {
+  cin >> n >> d;
+  sum = d;
+  for (i = 0; i < n; i++) {
+    cin >> man[i] >> money[i];
+    if (sum < money[i]) sum = money[i];
+    total = total + money[i];
+  }
+  if (sum > d)
+    cout << sum << endl;
+  else
+    cout << total << endl;
+  return 0;
+}

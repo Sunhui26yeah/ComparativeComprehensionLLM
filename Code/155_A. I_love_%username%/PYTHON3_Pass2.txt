@@ -1,0 +1,13 @@
+n=int(input())
+l=list(map(int,input().split()))
+max=l[0]
+min=l[0]
+count=0
+for i in range(1,n):
+    if l[i]<min:
+        count=count+1
+        min=l[i]
+    elif l[i]>max:
+        count=count+1
+        max=l[i]
+print(count)

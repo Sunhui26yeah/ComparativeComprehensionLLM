@@ -1,0 +1,53 @@
+#include <bits/stdc++.h>
+using namespace std;
+int cnt[2 * 700 + 70][2 * 700 + 70];
+bool inq[2 * 700 + 70][2 * 700 + 70];
+int dx[] = {0, 1, 0, -1};
+int dy[] = {1, 0, -1, 0};
+int n;
+void push(queue<pair<int, int> > &q, const pair<int, int> &p) {
+  if (inq[p.first + 700][p.second + 700]) return;
+  inq[p.first + 700][p.second + 700] = true;
+  q.push(p);
+}
+void simulate(void) {
+  scanf("%d", &n);
+  queue<pair<int, int> > q;
+  pair<int, int> p;
+  int i, k;
+  cnt[700][700] = n;
+  q.push(pair<int, int>(0, 0));
+  while (!q.empty()) {
+    p = q.front();
+    q.pop();
+    inq[p.first + 700][p.second + 700] = false;
+    if (cnt[p.first + 700][p.second + 700] < 4) continue;
+    k = cnt[p.first + 700][p.second + 700] / 4;
+    for (i = 0; i < 4; i = i + 1) {
+      cnt[p.first + dx[i] + 700][p.second + dy[i] + 700] += k;
+      push(q, pair<int, int>(p.first + dx[i], p.second + dy[i]));
+    }
+    cnt[p.first + 700][p.second + 700] -= k * 4;
+  }
+}
+int answer(const int &first, const int &second) {
+  if (first < 0) return (answer(-first, second));
+  if (second < 0) return (answer(first, -second));
+  if (first > 700) return (0);
+  if (second > 700) return (0);
+  return (cnt[first + 700][second + 700]);
+}
+void process(void) {
+  int i, q, first, second;
+  scanf("%d", &q);
+  for (i = 1; i <= q; i = i + 1) {
+    scanf("%d", &first);
+    scanf("%d", &second);
+    printf("%d\n", answer(first, second));
+  }
+}
+int main(void) {
+  simulate();
+  process();
+  return 0;
+}

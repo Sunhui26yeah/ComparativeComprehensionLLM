@@ -1,0 +1,44 @@
+#include <bits/stdc++.h>
+using namespace std;
+int a[100000 + 10];
+int b[100000 + 10];
+int c[100000 + 10];
+int dp[100000 + 10];
+int main() {
+  int n;
+  while (scanf("%d", &n) != EOF) {
+    int i, j;
+    for (i = 0; i < n; i++) scanf("%d", &a[i]);
+    int len = 0;
+    for (i = 0; i < n; i++) {
+      for (j = i + 1; j < n; j++) {
+        if (a[j] != a[i]) break;
+      }
+      b[len] = a[i];
+      c[len++] = j - i;
+      i = j - 1;
+    }
+    int ma, mi;
+    ma = mi = b[0];
+    int Max = c[0];
+    dp[0] = c[0];
+    for (i = 1; i < len; i++) {
+      if (b[i] <= ma && b[i] >= mi) {
+        dp[i] = dp[i - 1] + c[i];
+      } else {
+        if (mi == ma) {
+          mi = min(b[i], b[i - 1]);
+          ma = max(b[i], b[i - 1]);
+          dp[i] = dp[i - 1] + c[i];
+        } else {
+          dp[i] = c[i - 1] + c[i];
+          mi = min(b[i], b[i - 1]);
+          ma = max(b[i], b[i - 1]);
+        }
+      }
+      Max = max(Max, dp[i]);
+    }
+    printf("%d\n", Max);
+  }
+  return 0;
+}

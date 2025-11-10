@@ -1,0 +1,63 @@
+def getValue(c):
+    res = ord(c) - ord('0')
+    if (res > 16):
+        res -= 7
+    return res
+
+def getNumber(base, a, b):
+    hours, minutes = 0, 0
+
+    ii = 0
+    for i in range(len(a)-1, -1, -1):
+        hours += getValue(a[i]) * pow(base, ii)
+        ii += 1
+    if (hours > 23):
+        return -1, -1
+
+    ii = 0
+    for i in range(len(b) - 1, -1, -1):
+        minutes += getValue(b[i]) * pow(base, ii)
+        ii += 1
+
+    if (minutes > 59):
+        return -1, -1
+
+    return hours, minutes
+
+def getBase(a,b):
+    base = 0
+    for i in range(len(a)):
+        base = max(base, getValue(a[i]))
+
+    for i in range(len(b)):
+        base = max(base, getValue(b[i]))
+
+    return base+1
+
+if __name__ == '__main__':
+    a, b = input().split(':')
+
+    res = []
+    inf = 0
+    lastHours, lastMinutes = -1, -1
+    base = getBase(a, b)
+
+    while True:
+        hours, minutes = getNumber(base,a,b)
+        if (hours == -1 and minutes == -1):
+            break
+
+        if (hours == lastHours and minutes == lastMinutes):
+            inf = 1
+            break
+
+        res.append(base)
+        lastHours, lastMinutes = hours , minutes
+        base += 1
+
+    if (inf == 1):
+        print(-1)
+    elif (len(res) == 0):
+        print(0)
+    else:
+        print(' '.join(str(x) for x in res))

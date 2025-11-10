@@ -1,0 +1,68 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main(void) {
+  int black[50][50], white[50][50], h, w, i, j, k, x, y, bc, wc;
+  char field[50][51];
+  const int dx[4] = {1, 0, -1, 0}, dy[4] = {0, 1, 0, -1};
+  queue<int> qx, qy;
+  scanf("%d%d%*c", &w, &h);
+  while (w != 0 || h != 0) {
+    memset(black, 0, sizeof(black));
+    memset(white, 0, sizeof(white));
+    for (i = 0; i < h; i++) {
+      for (j = 0; j < w; j++) field[i][j] = getchar();
+      getchar();
+    }
+    for (i = 0; i < h; i++) {
+      for (j = 0; j < w; j++) {
+        if (field[i][j] == 'B') {
+          qx.push(j);
+          qy.push(i);
+          while (qx.size()) {
+            x = qx.front();
+            y = qy.front();
+            qx.pop();
+            qy.pop();
+            if (field[y][x] == '.') black[y][x] = 1;
+            for (k = 0; k < 4; k++) {
+              if (x + dx[k] >= 0 && x + dx[k] < w && y + dy[k] >= 0 &&
+                  y + dy[k] < h && field[y + dy[k]][x + dx[k]] == '.' &&
+                  !black[y + dy[k]][x + dx[k]]) {
+                qx.push(x + dx[k]);
+                qy.push(y + dy[k]);
+              }
+            }
+          }
+        } else if (field[i][j] == 'W') {
+          qx.push(j);
+          qy.push(i);
+          while (qx.size()) {
+            x = qx.front();
+            y = qy.front();
+            qx.pop();
+            qy.pop();
+            if (field[y][x] == '.') white[y][x] = 1;
+            for (k = 0; k < 4; k++) {
+              if (x + dx[k] >= 0 && x + dx[k] < w && y + dy[k] >= 0 &&
+                  y + dy[k] < h && field[y + dy[k]][x + dx[k]] == '.' &&
+                  !white[y + dy[k]][x + dx[k]]) {
+                qx.push(x + dx[k]);
+                qy.push(y + dy[k]);
+              }
+            }
+          }
+        }
+      }
+    }
+    bc = wc = 0;
+    for (i = 0; i < h; i++)
+      for (j = 0; j < w; j++)
+        if (white[i][j] && !black[i][j]) wc++;
+    for (i = 0; i < h; i++)
+      for (j = 0; j < w; j++)
+        if (black[i][j] && !white[i][j]) bc++;
+    printf("%d %d\n", wc, bc);
+    scanf("%d%d", &w, &h);
+  }
+  return 0;
+}

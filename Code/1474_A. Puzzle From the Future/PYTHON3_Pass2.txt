@@ -1,0 +1,19 @@
+from sys import stdin
+stdin.readline
+def mp(): return list(map(int, stdin.readline().strip().split()))
+def it():return int(stdin.readline().strip())
+
+
+for _ in range(it()):
+	n=it()
+	l=list(input())
+	s=['1']
+	for i in range(1,n):
+		d=int(s[i-1])+int(l[i-1])
+		if d==2:
+			s+=[str(1-int(l[i]))]
+		elif d==1:
+			s+=[l[i]]
+		else:
+			s+=['1']
+	print(''.join(s))

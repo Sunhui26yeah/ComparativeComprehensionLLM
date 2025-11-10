@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+using namespace std;
+int n, k, a, b;
+long long f[2][5101] = {0};
+int lowbit(int x) { return x & -x; }
+void add(long long* t, int now, long long addnum) {
+  while (now <= n) {
+    t[now] += addnum;
+    if (t[now] > 1000000007) t[now] -= 1000000007;
+    now += lowbit(now);
+  }
+}
+long long ask(long long* t, int now) {
+  long long ans = 0;
+  while (now) {
+    ans += t[now];
+    if (ans > 1000000007) ans -= 1000000007;
+    now -= lowbit(now);
+  }
+  return ans;
+}
+int main() {
+  cin >> n >> a >> b >> k;
+  add(f[0], a, 1);
+  for (int i = 1; i <= k; ++i) {
+    for (int j = 1; j <= n; ++j) f[i % 2][j] = 0;
+    for (int j = 1; j <= n; ++j) {
+      int now = j;
+      int l, r, d;
+      d = b - now;
+      if (d == 0) continue;
+      if (d > 0) {
+        l = 1;
+        r = (b + now - 1) / 2;
+      } else {
+        r = n;
+        l = (b + now) / 2 + 1;
+      }
+      long long addnum;
+      addnum = ask(f[(i + 1) % 2], r) - ask(f[(i + 1) % 2], l - 1);
+      addnum -= ask(f[(i + 1) % 2], now) - ask(f[(i + 1) % 2], now - 1);
+      add(f[i % 2], now, addnum % 1000000007);
+    }
+  }
+  printf("%I64d\n", ask(f[k % 2], n) % 1000000007);
+}

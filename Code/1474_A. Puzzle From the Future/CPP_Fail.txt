@@ -1,0 +1,45 @@
+#include <bits/stdc++.h>
+using namespace std;
+const long long int MOD = 1e9 + 7;
+const long long int INF = 1e18;
+int32_t main() {
+  ios_base::sync_with_stdio(false);
+  cin.tie(0);
+  cout.tie(0);
+  ;
+  long long int tc;
+  cin >> tc;
+  while (tc--) {
+    long long int n;
+    cin >> n;
+    string b;
+    cin >> b;
+    string a = "1";
+    char last;
+    if (b[0] == '1')
+      last = '2';
+    else
+      last = '1';
+    for (long long int i = 1; i < b.length(); i++) {
+      if (last == '2') {
+        if (b[i] == '1') {
+          a += to_string(0);
+        } else {
+          a += to_string(1);
+        }
+        last = a[i];
+      } else if (last == '1') {
+        if (b[i] == '1') {
+          a += to_string(1);
+        } else {
+          a += to_string(0);
+        }
+        last = a[i];
+      } else if (last == '0') {
+        a += to_string(1);
+        last = a[i];
+      }
+    }
+    cout << a << endl;
+  }
+}

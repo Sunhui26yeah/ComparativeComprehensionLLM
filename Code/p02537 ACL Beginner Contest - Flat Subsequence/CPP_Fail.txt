@@ -1,0 +1,139 @@
+#include <bits/stdc++.h>
+#define ll long long int
+#define all(x) x.begin(), x.end()
+using namespace std;
+ll power(ll x, ll y,ll  m) 
+{ 
+    if (y == 0) 
+        return 1; 
+    ll  p = power(x, y/2, m) % m; 
+    p = (p * p) % m; 
+  
+    return (y%2 == 0)? p : (x * p) % m; 
+} 
+ll modInverse(ll a, ll m) 
+{ 
+    ll g = __gcd(a, m); 
+    if (g != 1) 
+        cout << "Inverse doesn't exist"; 
+    
+    
+        // If a and m are relatively prime, then modulo inverse 
+        // is a^(m-2) mode m 
+        
+              return power(a, m-2, m); 
+    
+} 
+
+ll fact[1000];
+void fac(ll m)
+{
+	ll i;
+	fact[0]=1;
+	for(i=1;i<1000;i++)
+	{
+		fact[i]=(i*fact[i-1])%m;
+	}
+}
+
+ll comb(ll n,ll k,ll m)
+{
+	return(fact[n]*modInverse(fact[k],m)%m *modInverse(fact[n-k],m)%m)%m;
+}
+bool cmp(pair<ll,ll> a,pair<ll,ll>b)
+{
+	if(a.second==b.second)
+	return a.first<b.first;
+	return a.second>b.second;
+}
+void SieveOfEratosthenes(ll n) 
+{ 
+    // Create a boolean array "prime[0..n]" and initialize 
+    // all entries it as true. A value in prime[i] will 
+    // finally be false if i is Not a prime, else true. 
+     bool prime[n+1]; 
+    memset(prime, true, sizeof(prime)); 
+  
+    for (ll p=2; p*p<=n; p++) 
+    { 
+        // If prime[p] is not changed, then it is a prime 
+        if (prime[p] == true) 
+        { 
+            // Update all multiples of p greater than or  
+            // equal to the square of it 
+            // numbers which are multiple of p and are 
+            // less than p^2 are already been marked.  
+            for (ll i=p*p; i<=n; i += p) 
+                prime[i] = false; 
+        } 
+    } 
+}
+map<ll,map<ll,ll>>mp;
+ll f(ll i,vector<ll> &a,ll n,ll k,ll prev,vector<ll> &dp)
+{
+	if(i==n)
+	return 0;
+	if(mp.find(i)!=mp.end() && mp[i].find(prev)!=mp[i].end())
+	{
+			//cout<<"yo"<<endl;
+		return mp[i][prev];
+	
+	}
+	
+	//if(dp[i]!=-1)
+
+//return dp[i];	
+if(i==0)
+	{
+		
+	
+	ll ans=0;ll a1;ll ans2=0;
+	ans=1+f(i+1,a,n,k,a[i],dp); 
+	mp[i][a[i]]=ans;
+	ans2=0+f(i+1,a,n,k,prev,dp);
+	mp[i][prev]=ans2;
+	return max(ans,ans2);//dp[i]=
+	
+	
+}
+	
+	if(i!=0) 
+	{
+	//starts from i 
+	ll a1,a2;ll a3=0;
+	a1=a2=0;
+	if(abs(prev-a[i])<=k && prev>=0)
+	{
+	a1=1+f(i+1,a,n,k,a[i],dp);	
+	}
+mp[i][a[i]]=a1;
+	
+	a2=0+f(i+1,a,n,k,prev,dp);
+	mp[i][prev]=a2;
+	//a3=1+f(i+1,a,n,k,a[i],dp);
+	return  max(a1,max(a2,a3)) ;
+}
+}
+
+
+int main () {
+ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+  int t;
+  //cin>>t;
+  t=1;
+
+  while(t-- > 0) {
+  	ll n,k;
+  	cin>>n>>k;
+  	vector<ll>a(n);ll i;
+  	vector<ll>dp(n,-1);
+  	for(i=0;i<n;i++)
+  	cin>>a[i];
+  	ll ans=f(0,a,n,k,-1,dp);
+  	cout<<ans<<endl;
+  	//cout<<mp[1][1]<<endl;
+	  
+}
+return 0;
+}

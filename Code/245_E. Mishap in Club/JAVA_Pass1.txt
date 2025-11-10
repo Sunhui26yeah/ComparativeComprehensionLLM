@@ -1,0 +1,26 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class E {
+    public static void main(String[] args) throws IOException {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        String s = in.readLine();
+        int distinct = 0;
+        int inside = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == '+') {
+                inside++;
+                if (distinct < inside)
+                    distinct++;
+            } else {
+                inside--;
+                if (inside < 0) {
+                    inside = 0;
+                    distinct++;
+                }
+            }
+        }
+        System.out.println(distinct);
+    }
+}

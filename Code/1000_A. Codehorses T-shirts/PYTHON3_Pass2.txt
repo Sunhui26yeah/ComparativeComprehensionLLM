@@ -1,0 +1,15 @@
+import sys,math
+n = int(input())
+ls1,ls2 = [],[]
+for i in range(n):
+    s = input()
+    ls1.append(s)
+for i in range(n):
+    s = input()
+    ls2.append(s)
+c = 0
+for i in range(n):
+    if ls1[i] in ls2:
+        c+=1
+        ls2[ls2.index(ls1[i])] = None
+print(n-c)

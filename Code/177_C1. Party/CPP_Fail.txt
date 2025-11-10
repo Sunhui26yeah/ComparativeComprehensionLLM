@@ -1,0 +1,47 @@
+#include <bits/stdc++.h>
+using namespace std;
+vector<int> L[2005], DL[2005], T;
+int N, G[2005][2005], res;
+bool VIS[2005];
+void read() {
+  int i, a, b, k, m;
+  cin >> N;
+  cin >> k;
+  for (i = 1; i <= k; i++) {
+    cin >> a >> b;
+    G[a][b] = G[b][a] = 1;
+    L[a].push_back(b), L[b].push_back(a);
+  }
+  cin >> m;
+  for (i = 1; i <= m; i++) {
+    cin >> a >> b;
+    G[a][b] = G[b][a] = -1;
+    DL[a].push_back(b), DL[b].push_back(a);
+  }
+}
+bool cont(int n) {
+  for (int i = 0; i < T.size(); i++)
+    if (G[T[i]][n] == -1) return 0;
+  return 1;
+}
+void dfs(int n) {
+  T.push_back(n);
+  VIS[n] = 1;
+  int i, x, m;
+  for (i = 0; i < L[n].size(); i++) {
+    m = L[n][i];
+    if (VIS[m] == 0 && cont(m)) dfs(m);
+  }
+  res = ((res) > (T.size()) ? (res) : (T.size()));
+  T.pop_back();
+  VIS[n] = 0;
+}
+void solve() {
+  int i;
+  for (i = 1; i <= N; i++) T.clear(), dfs(i);
+  cout << res << endl;
+}
+int main() {
+  read();
+  solve();
+}

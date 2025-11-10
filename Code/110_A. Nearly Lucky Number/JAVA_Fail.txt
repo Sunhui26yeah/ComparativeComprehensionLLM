@@ -1,0 +1,28 @@
+import java.util.*;
+public class lucky {
+    public static void main(String[] args) {
+        Scanner console = new Scanner(System.in);
+        double num = console.nextInt();
+        int count = 0;
+        while (num > 0) {
+            if (num % 10 == 7.0 || num % 10 == 4.0) {
+                count++;
+            }
+            num /= 10;
+        }
+        if (isluck(count)) {
+            System.out.println("YES");
+        } else {
+            System.out.println("NO");
+        }
+    }
+    public static boolean isluck(int num) {
+        while (num > 0) {
+            if (num % 10 != 7 && num % 10 != 4) {
+                return false;
+            }
+            num /= 10;
+        }
+        return true;
+    }
+}

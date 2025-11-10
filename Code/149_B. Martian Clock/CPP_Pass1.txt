@@ -1,0 +1,69 @@
+#include <bits/stdc++.h>
+using namespace std;
+int convert(string a, int base) {
+  int val, j, sum = 0, mul = 1;
+  for (j = a.size() - 1; j >= 0; j--) {
+    if (a[j] >= '0' && a[j] <= '9')
+      val = a[j] - '0';
+    else
+      val = a[j] - 'A' + 10;
+    sum += val * mul;
+    mul *= base;
+  }
+  return sum;
+}
+int main() {
+  vector<long long> ret;
+  int i, intmin, inthr;
+  string a, min, hr;
+  cin >> a;
+  int pos = a.find(":");
+  hr = a.substr(0, pos);
+  min = a.substr(pos + 1);
+  for (i = 0; i < hr.size(); i++) {
+    if (hr[i] == '0') {
+      hr.erase(i, 1);
+      --i;
+    } else
+      break;
+  }
+  for (i = 0; i < min.size(); i++) {
+    if (min[i] == '0') {
+      min.erase(i, 1);
+      --i;
+    } else
+      break;
+  }
+  if (hr.empty()) hr = "0";
+  if (min.empty()) min = "0";
+  if (hr.size() == 1 && min.size() == 1)
+    if ((hr[0] >= '0' && hr[0] <= '9') || (hr[0] >= 'A' && hr[0] <= 'O')) {
+      cout << "-1\n";
+      return 0;
+    }
+  a = hr + min;
+  int max2 = -1, val;
+  for (long long j = 0; j < a.size(); j++) {
+    if (a[j] >= '0' && a[j] <= '9')
+      val = a[j] - '0';
+    else
+      val = a[j] - 'A' + 10;
+    max2 = max(val, max2);
+  }
+  int minBase = max2 + 1;
+  for (i = minBase; i <= 60; i++) {
+    inthr = convert(hr, i);
+    intmin = convert(min, i);
+    if (inthr >= 0 && inthr <= 23 && intmin >= 0 && intmin <= 59)
+      ret.push_back(i);
+    else
+      break;
+  }
+  if (ret.empty())
+    cout << "0\n";
+  else {
+    for (long long j = 0; j < ret.size(); j++) cout << ret[j] << " ";
+    cout << "\n";
+  }
+  return 0;
+}

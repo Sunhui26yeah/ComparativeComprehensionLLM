@@ -1,0 +1,32 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+  int a, b, k1, k2, n, s, mn, mx;
+  scanf("%d %d %d %d %d", &a, &b, &k1, &k2, &n);
+  s = a * (k1 - 1) + b * (k2 - 1);
+  if (n <= s) {
+    mn = 0;
+  } else {
+    mn = n - s;
+  }
+  if (k1 <= k2) {
+    s = n / k1;
+    if (s >= a) {
+      mx = a;
+      n = n - a * k1;
+      mx = mx + n / k2;
+    } else {
+      mx = s;
+    }
+  } else {
+    s = n / k2;
+    if (s >= b) {
+      mx = b;
+      n = n - b * k2;
+      mx = mx + n / k1;
+    } else {
+      mx = s;
+    }
+  }
+  printf("%d %d", mn, mx);
+}

@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+using namespace std;
+char strA[100], strB[100];
+int lenA, lenB;
+int main() {
+  scanf("%s %s", strA, strB);
+  lenA = strlen(strA), lenB = strlen(strB);
+  int rA = 0, rB = 0;
+  for (int i = 0; i < lenA; i += 2) {
+    int vA, vB;
+    switch (strA[i]) {
+      case '[':
+        vA = 0;
+        break;
+      case '(':
+        vA = 1;
+        break;
+      case '8':
+        vA = 2;
+        break;
+    }
+    switch (strB[i]) {
+      case '[':
+        vB = 0;
+        break;
+      case '(':
+        vB = 1;
+        break;
+      case '8':
+        vB = 2;
+        break;
+    }
+    if (vA == vB) continue;
+    if (vA == vB - 1 || vA == vB + 2)
+      rA++;
+    else
+      rB++;
+  }
+  if (rA > rB)
+    printf("TEAM 1 WINS\n");
+  else if (rA < rB)
+    printf("TEAM 2 WINS\n");
+  else
+    printf("TIE\n");
+  return 0;
+};

@@ -1,0 +1,163 @@
+import java.io.*;
+import java.util.*;
+import java.math.BigInteger;
+import static java.lang.Math.*;
+import static java.math.BigInteger.*;
+
+public class Main {
+
+    BufferedReader br;
+    StringTokenizer in;
+    PrintWriter out;
+
+    String next() throws IOException {
+        while( in==null || !in.hasMoreTokens() )
+            in = new StringTokenizer( br.readLine() );
+        return in.nextToken();
+    }
+
+    int nextInt() throws IOException {
+        return Integer.parseInt(next());
+    }
+
+    long nextLong() throws IOException {
+        return Long.parseLong(next());
+    }
+
+    public static void main(String[] args) throws IOException {
+        new Main().run();
+    }
+
+    void run() throws IOException {
+        boolean oj = System.getProperty("ONLINE_JUDGE") != null;
+        Reader reader = oj ? new InputStreamReader(System.in) :
+                new FileReader("input.txt");
+        br = new BufferedReader(reader);
+        out = new PrintWriter(
+                oj ? new OutputStreamWriter(System.out) :
+                        new FileWriter("output.txt"));
+        solve();
+        //deb();
+        out.flush();
+    }
+
+
+    int n, v, e;
+    int[] a, b;
+    boolean[][] gr;
+    ArrayList<String> ans = new ArrayList<>();
+
+    HashSet<Integer> comp;
+    boolean[] IsU;
+    void dfs( int v ){
+        if( IsU[v] ) return;
+        IsU[v] = true;
+        comp.add(v);
+        for( int to = 0; to < n; ++to )
+            if( gr[v][to] )
+                dfs(to);
+    }
+
+    boolean[] u;
+    Vector<Integer> path;
+    int last;
+    boolean getPath( int v ){
+        if( u[v] ) return false;
+        u[v] = true;
+        if( v == last ){
+            path.add(v);
+            return true;
+        }
+        for( int to = 0; to < n; ++to ){
+            if( gr[v][to] && getPath(to) ){
+                path.add(v);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void fun( int j, int d ){
+        int v = path.get(j);
+        String vTO =
+            (path.get(j)  +1) +" "+
+            (path.get(j+1)+1) +" ";
+        if( a[v] < d )
+            ans.add( vTO + a[v] );
+        else
+            ans.add( vTO + d );
+        if( j!=0 ) fun( j-1, d );
+        if( a[v] < d )
+            ans.add( vTO + (d-a[v]) );
+    }
+
+    boolean doSome(){
+        long sumA = 0, sumB = 0;
+        for( int v : comp ){
+            sumA += a[v];
+            sumB += b[v];
+        }
+        if( sumA != sumB ) return false;
+        while( !comp.isEmpty() ){
+            int v=-1, to=-1, d;
+            for( Integer i : comp ){
+                if( a[i] > b[i] ) v =i;
+                if( a[i] < b[i] ) to=i;
+            }
+            if( v == -1 ) break;
+            d = min( a[v]-b[v], b[to]-a[to] );
+
+            last = to;
+            u = new boolean[n];
+            path = new Vector<>();
+            getPath(v);
+            Collections.reverse(path);
+            fun( path.size()-2, d);
+
+            a[v ] -= d;
+            a[to] += d;
+            if( a[v ]==b[v ] ) comp.remove(v );
+            if( a[to]==b[to] ) comp.remove(to);
+
+        }
+
+        return true;
+    }
+
+    void solve() throws IOException{
+labelSolve:
+    {
+        n = nextInt();
+        v = nextInt();
+        e = nextInt();
+        gr = new boolean[n][n];
+        a = new int[n];
+        b = new int[n];
+        for( int i = 0; i < n; ++i ) a[i] = nextInt();
+        for( int i = 0; i < n; ++i ) b[i] = nextInt();
+        for( int i = 0; i < e; ++i ){
+            int a = nextInt()-1;
+            int b = nextInt()-1;
+            gr[a][b] = true;
+            gr[b][a] = true;
+        }
+
+        IsU = new boolean[n];
+        for( int i = 0; i < n; ++i ){
+            comp = new HashSet<>();
+            if( !IsU[i] ){
+                dfs(i);
+                if( !doSome() ){
+                    out.println("NO");
+                    return;
+                }
+            }
+        }
+        out.println(ans.size());
+        for(String s : ans) out.println(s);
+    }
+    }
+
+
+
+}

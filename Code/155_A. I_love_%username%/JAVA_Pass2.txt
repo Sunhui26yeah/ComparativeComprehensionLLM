@@ -1,0 +1,29 @@
+import java.io.*;
+import java.util.StringTokenizer;
+public class CF0155A
+{
+ public static void main(String[] helloWorld) throws IOException
+ {
+  BufferedReader sIn = new BufferedReader(new InputStreamReader(System.in));
+  int n = Integer.parseInt(sIn.readLine());
+  StringTokenizer sT = new StringTokenizer(sIn.readLine());
+  int min, max;
+  min = max = Integer.parseInt(sT.nextToken());
+  int count = 0;
+  for (int i = 1; i < n; i ++)
+  {
+   int c = Integer.parseInt(sT.nextToken());
+   if (c > max)
+   {
+    max = c;
+    count ++;
+   }
+   if (c < min)
+   {
+    min = c;
+    count ++;
+   }
+  }
+  System.out.println(count);
+ }
+}

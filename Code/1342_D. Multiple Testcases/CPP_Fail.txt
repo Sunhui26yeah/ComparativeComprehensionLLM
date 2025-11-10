@@ -1,0 +1,127 @@
+#include <bits/stdc++.h>
+using namespace std;
+template <typename T>
+struct segment_tree {
+  int n;
+  vector<T> a, t, lazy;
+  T neutral;
+  segment_tree(int n, T val) {
+    this->n = n;
+    neutral = val;
+    t.assign(4 * n, val);
+    lazy.assign(4 * n, val);
+  }
+  segment_tree(vector<T> &a, T val) {
+    this->a = a;
+    neutral = val;
+    n = (int)a.size();
+    t.resize(4 * n);
+    lazy.assign(4 * n, 0);
+    build(1, 0, n - 1);
+  }
+  void build(int i, int l, int r) {
+    if (l == r) {
+      t[i] = a[l];
+      return;
+    }
+    int mid = (l + r) >> 1;
+    build(2 * i, l, mid);
+    build(2 * i + 1, mid + 1, r);
+    t[i] = merge(t[2 * i], t[2 * i + 1]);
+  }
+  void push(int i, int l, int r) {
+    if (lazy[i] == 0) return;
+    upd(t[i], lazy[i] * (r - l + 1));
+    if (l != r) {
+      upd(lazy[2 * i], lazy[i]);
+      upd(lazy[2 * i + 1], lazy[i]);
+    }
+    lazy[i] = 0;
+  }
+  void modif(int i, int l, int r, int tl, int tr, T val) {
+    if (l > tr || r < tl) return;
+    if (l >= tl && r <= tr) {
+      upd(lazy[i], val);
+      push(i, l, r);
+      return;
+    }
+    push(i, l, r);
+    int mid = (l + r) >> 1;
+    modif(2 * i, l, mid, tl, tr, val);
+    modif(2 * i + 1, mid + 1, r, tl, tr, val);
+    t[i] = merge(t[2 * i], t[2 * i + 1]);
+  }
+  T query(int i, int l, int r, int tl, int tr) {
+    push(i, l, r);
+    if (l > tr || r < tl) return 0;
+    if (l >= tl && r <= tr) return t[i];
+    int mid = (l + r) >> 1;
+    T leftResult = query(2 * i, l, mid, tl, tr);
+    T rightResult = query(2 * i + 1, mid + 1, r, tl, tr);
+    return merge(leftResult, rightResult);
+  }
+  void modif(int pos, T val) { modif(1, 0, n - 1, pos, pos, val); }
+  void modif(int l, int r, T val) { modif(1, 0, n - 1, l, r, val); }
+  T query(int pos) { return query(1, 0, n - 1, pos, pos); }
+  T query(int l, int r) { return query(1, 0, n - 1, l, r); }
+  T merge(const T &x, const T &y) { return x + y; }
+  void upd(T &x, const T &y) { x = x + y; }
+};
+void solve() {
+  int n, m;
+  cin >> n >> m;
+  vector<int> a(n), c(m + 5);
+  segment_tree<int> st(2e5 + 10, 0);
+  multiset<int> s;
+  for (int i = 0; i < n; i++) {
+    cin >> a[i];
+    s.insert(a[i]);
+  }
+  for (int i = 1; i <= m; i++) {
+    cin >> c[i];
+  }
+  vector<vector<int>> ans;
+  s.insert(1e9);
+  for (int cnt = 1; (int)s.size() > 1; cnt++) {
+    vector<int> v;
+    while ((int)s.size() > 1) {
+      int l = 1, r = m;
+      int idx = -1;
+      while (l <= r) {
+        int mid = l + (r - l) / 2;
+        if (st.query(mid) < c[mid] * cnt) {
+          idx = mid;
+          l = mid + 1;
+        } else {
+          r = mid - 1;
+        }
+      }
+      if (idx == -1) break;
+      int x;
+      int target = idx + 1;
+      auto _iterator = s.lower_bound(target);
+      if (_iterator != s.begin())
+        x = *std::prev(_iterator);
+      else {
+        break;
+      }
+      if (st.query(x) >= cnt * c[x]) break;
+      s.erase(s.find(x));
+      v.push_back(x);
+      st.modif(1, x, 1);
+    }
+    ans.push_back(v);
+  }
+  cout << (int)ans.size() << '\n';
+  for (auto v : ans) {
+    cout << (int)v.size() << " ";
+    for (auto x : v) cout << x << " ";
+    cout << '\n';
+  }
+}
+int32_t main() {
+  int t = 1;
+  while (t--) {
+    solve();
+  }
+}

@@ -1,0 +1,42 @@
+import math
+
+def dist(p1, p2):
+    return math.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
+
+def intersection(o1,o2):
+    if dist(o1,o2) > 2:
+        p1, p2 =  [None, None], [None, None]
+    elif dist(o1,o2) == 2:
+        p1, p2 =  [(o1[0] + o2[0])/2, (o1[1] + o2[1])/2], [None, None]
+    else:
+        m = [(o1[0] + o2[0])/2, (o1[1] + o2[1])/2]
+        v = [m[0] - o1[0], m[1] - o1[1]]
+        v_abs = dist(v,[0,0])
+        w = [v[1], -v[0]]
+        w_abs = dist(w,[0,0])
+        n = [w[0]/w_abs, w[1]/w_abs]
+        l = math.sqrt(1 - v_abs**2)
+        p1 = [m[0] + l*n[0], m[1] + l*n[1]]
+        p2 = [m[0] - l*n[0], m[1] - l*n[1]]
+    return p1, p2
+err = 1.0e-6
+while True:
+    n = int(input())
+    if n == 0:
+        break
+    p = []
+    for i in range(n):
+        p.append(list(map(float, input().split(","))))
+    ans = 1
+    for i in range(n - 1):
+        for j in range(i + 1, n):
+            p1, p2 = intersection(p[i], p[j])
+            cnt1 = 0
+            cnt2 = 0
+            for k in range(n):
+                if p1[0] and dist(p1, p[k]) <= 1 + err:
+                    cnt1 += 1
+                if p2[0] and dist(p2, p[k]) <= 1 + err:
+                    cnt2 += 1
+            ans = max([ans, cnt1, cnt2])
+    print(ans)

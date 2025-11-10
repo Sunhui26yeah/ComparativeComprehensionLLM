@@ -1,0 +1,24 @@
+from heapq import heapify,heappop,heappush,nlargest,nsmallest
+import  operator as op
+from functools import reduce
+prod=lambda x:reduce(op.mul,x)
+def main():
+    for _ in range(int(input())):
+        n=int(input())
+        a=list(map(int,input().split()))
+        a.sort()
+        pos,neg=list(filter(lambda x:x>=0,a)),list(filter(lambda x:x<0,a))
+        l=[]
+        if(len(pos)>=5):
+            l.append(pos[-5:])
+        if(len(pos)>=3 and len(neg)>=2):
+            l.append(pos[-3:]+neg[:2])
+        if(len(pos)>=1 and len(neg)>=4):
+            l.append(pos[-1:]+neg[:4])
+        if(len(neg)>=5):
+            l.append(neg[-5:])
+        if(not l and len(a)==5):
+            l.append(a)
+        print(prod(max(l,key=lambda x:prod(x))))
+        
+main()

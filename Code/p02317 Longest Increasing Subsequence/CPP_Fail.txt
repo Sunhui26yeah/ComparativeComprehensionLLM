@@ -1,0 +1,35 @@
+#include <bits/stdc++.h>
+using namespace std;
+long long* binarySearch(long long x, long long* left, long long* right) {
+  while (left < right) {
+    long long* ptr = left + (right - left) / 2;
+    if (x < *ptr) {
+      right = ptr;
+    } else {
+      left = ptr + 1;
+    }
+  }
+  return left;
+}
+int main() {
+  int N;
+  cin >> N;
+  long long a[N];
+  for (int i = 0; i < N; i++) {
+    cin >> a[i];
+  }
+  long long dp[N];
+  int last = 0;
+  dp[0] = a[0];
+  for (int i = 1; i < N; i++) {
+    if (dp[last] < a[i]) {
+      last++;
+      dp[last] = a[i];
+      continue;
+    }
+    long long* p = upper_bound(dp, dp + last, a[i]);
+    *p = a[i];
+  }
+  cout << last + 1 << endl;
+  return 0;
+}

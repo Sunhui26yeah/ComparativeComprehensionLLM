@@ -1,0 +1,43 @@
+#include <bits/stdc++.h>
+using namespace std;
+int n;
+struct node {
+  int v, idx;
+} a[100010];
+int vis[10010];
+int cmp(node c, node b) { return c.v < b.v; }
+int main() {
+  int i, j, x;
+  while (scanf("%d", &n) != EOF) {
+    for (i = 0; i < n; i++) scanf("%d", &a[i].v), a[i].idx = i;
+    sort(a, a + n, cmp);
+    int tot = 0;
+    memset(vis, 0, sizeof(vis));
+    for (i = 0, j = n - 1; i < n / 2; i++, j--) {
+      if (a[j].v - a[i].v + tot <= a[n - 1].v) {
+        tot += a[j].v - a[i].v;
+        vis[a[j].idx] = 1;
+      } else {
+        tot -= a[j].v - a[i].v;
+        vis[a[i].idx] = 1;
+      }
+    }
+    if (n % 2 == 1) {
+      if (tot + a[n / 2].v <= a[n - 1].v)
+        vis[a[n / 2].idx] = 1, x = n / 2 + 1;
+      else
+        vis[a[n / 2].idx] = 0, x = n / 2;
+    }
+    printf("%d\n", x);
+    for (i = 0; i < n; i++) {
+      if (vis[i]) printf("%d ", i + 1);
+    }
+    printf("\n");
+    printf("%d\n", n - x);
+    for (i = 0; i < n; i++) {
+      if (!vis[i]) printf("%d ", i + 1);
+    }
+    printf("\n");
+  }
+  return 0;
+}

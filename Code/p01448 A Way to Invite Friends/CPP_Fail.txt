@@ -1,0 +1,174 @@
+#include <bits/stdc++.h>
+#pragma GCC optimize("O3")
+#pragma GCC target("avx")
+using namespace std;
+using ll = long long int;
+const ll MD = 1000000007ll;
+const long double PI = 3.1415926535897932384626433832795L;
+template <typename T1, typename T2>
+inline void assert_equal(T1 expected, T2 actual) {
+  if (!(expected == actual)) {
+    cerr << "assertion fault: expected=" << expected << " actual=" << actual
+         << endl;
+    abort();
+  }
+}
+template <typename T1, typename T2>
+inline void assert_less(T1 actual, T2 threshold) {
+  if (!(actual < threshold)) {
+    cerr << "assertion fault: " << actual << " < (const)" << threshold << endl;
+    abort();
+  }
+}
+template <typename T1, typename T2>
+inline void assert_eqless(T1 actual, T2 threshold) {
+  if (!(actual <= threshold)) {
+    cerr << "assertion fault: " << actual << " <= (const)" << threshold << endl;
+    abort();
+  }
+}
+template <typename T1, typename T2>
+inline ostream& operator<<(ostream& o, const pair<T1, T2> p) {
+  o << '(' << p.first << ':' << p.second << ')';
+  return o;
+}
+template <typename Vec>
+inline ostream& _ostream_vecprint(ostream& o, const Vec& p) {
+  o << '[';
+  for (auto& e : p) o << e << ',';
+  o << ']';
+  return o;
+}
+template <typename T>
+inline ostream& operator<<(ostream& o, const vector<T>& v) {
+  return _ostream_vecprint(o, v);
+}
+template <typename T, size_t S>
+inline ostream& operator<<(ostream& o, const array<T, S>& v) {
+  return _ostream_vecprint(o, v);
+}
+template <typename T>
+inline T& maxset(T& to, const T& val) {
+  return to = max(to, val);
+}
+template <typename T>
+inline T& minset(T& to, const T& val) {
+  return to = min(to, val);
+}
+void bye(string s, int code = 0) {
+  cout << s << endl;
+  exit(code);
+}
+mt19937_64 randdev(8901016);
+template <typename T>
+inline T rand(T l, T h) {
+  return uniform_int_distribution<T>(l, h)(randdev);
+}
+template <>
+inline double rand<double>(double l, double h) {
+  return uniform_real_distribution<double>(l, h)(randdev);
+}
+template <>
+inline float rand<float>(float l, float h) {
+  return uniform_real_distribution<float>(l, h)(randdev);
+}
+namespace {
+class MaiScanner {
+ public:
+  template <typename T>
+  void input_integer(T& var) {
+    var = 0;
+    T sign = 1;
+    int cc = getchar_unlocked();
+    for (; cc < '0' || '9' < cc; cc = getchar_unlocked())
+      if (cc == '-') sign = -1;
+    for (; '0' <= cc && cc <= '9'; cc = getchar_unlocked())
+      var = (var << 3) + (var << 1) + cc - '0';
+    var = var * sign;
+  }
+  inline int c() { return getchar_unlocked(); }
+  inline MaiScanner& operator>>(int& var) {
+    input_integer<int>(var);
+    return *this;
+  }
+  inline MaiScanner& operator>>(long long& var) {
+    input_integer<long long>(var);
+    return *this;
+  }
+  inline MaiScanner& operator>>(string& var) {
+    int cc = getchar_unlocked();
+    for (; !(0x21 <= (cc) && (cc) <= 0x7E); cc = getchar_unlocked())
+      ;
+    for (; (0x21 <= (cc) && (cc) <= 0x7E); cc = getchar_unlocked())
+      var.push_back(cc);
+    return *this;
+  }
+  template <typename IT>
+  void in(IT begin, IT end) {
+    for (auto it = begin; it != end; ++it) *this >> *it;
+  }
+};
+class MaiPrinter {
+ public:
+  template <typename T>
+  void output_integer(T var) {
+    if (var == 0) {
+      putchar_unlocked('0');
+      return;
+    }
+    if (var < 0) putchar_unlocked('-'), var = -var;
+    char stack[32];
+    int stack_p = 0;
+    while (var) stack[stack_p++] = '0' + (var % 10), var /= 10;
+    while (stack_p) putchar_unlocked(stack[--stack_p]);
+  }
+  inline MaiPrinter& operator<<(char c) {
+    putchar_unlocked(c);
+    return *this;
+  }
+  inline MaiPrinter& operator<<(int var) {
+    output_integer<int>(var);
+    return *this;
+  }
+  inline MaiPrinter& operator<<(long long var) {
+    output_integer<long long>(var);
+    return *this;
+  }
+  inline MaiPrinter& operator<<(char* str_p) {
+    while (*str_p) putchar_unlocked(*(str_p++));
+    return *this;
+  }
+  inline MaiPrinter& operator<<(const string& str) {
+    const char* p = str.c_str();
+    const char* l = p + str.size();
+    while (p < l) putchar_unlocked(*p++);
+    return *this;
+  }
+  template <typename IT>
+  void join(IT begin, IT end, char sep = '\n') {
+    for (auto it = begin; it != end; ++it) *this << *it << sep;
+  }
+};
+}  // namespace
+MaiScanner scanner;
+MaiPrinter printer;
+int main() {
+  int N;
+  scanner >> N;
+  vector<int> imo(N + 10);
+  for (remove_const<decltype(N)>::type i = 0; (i) < (N); ++(i)) {
+    int a, b;
+    scanner >> a >> b;
+    --a;
+    imo[a]++;
+    imo[min(b, N + 1)]--;
+  }
+  int best = 0;
+  int total = 0;
+  for (remove_const<decltype(N + 2)>::type i = 0; (i) < (N + 2); ++(i)) {
+    total += imo[i];
+    if (i <= total) maxset(best, i);
+  }
+  printer << best << '\n';
+  return 0;
+}

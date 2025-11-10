@@ -1,0 +1,35 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+  long long t;
+  cin >> t;
+  for (long long q = 0; q < t; q++) {
+    string s;
+    long long n, k, cnt = 0;
+    cin >> n >> k;
+    cin >> s;
+    long long a[n];
+    for (long long i = 0; i < n; i++) {
+      if (s[i] == '1')
+        a[i] = 1;
+      else
+        a[i] = 0;
+    }
+    for (long long i = 0; i < n; i++) {
+      if (a[i] == 1) continue;
+      if (i - cnt >= k) {
+        a[i - k] = 0;
+        a[i] = 1;
+        break;
+      } else {
+        k -= (i - cnt);
+        a[i] = 1;
+        a[cnt] = 0;
+        cnt++;
+      }
+    }
+    for (long long i = 0; i < n; i++) cout << a[i];
+    cout << "\n";
+  }
+  return 0;
+}

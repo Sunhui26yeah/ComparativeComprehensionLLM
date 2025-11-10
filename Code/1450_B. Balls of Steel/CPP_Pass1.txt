@@ -1,0 +1,279 @@
+#include <bits/stdc++.h>
+using namespace std;
+ 
+ //---------------------------------------------------------
+ 
+//#define _FILE_IO_ // Testing with I/O
+#define WLIB_DEF // WLIB - Utility functions
+#define WIO_DEF // WIO - Generic I/O functions
+ 
+//---------------------------------------------------------
+ 
+#ifdef WLIB_DEF
+/* Utility functions collection
+ * Math Functions: _gcd_, _lcm_, _fact_, _pow_, _inv_, _C_, _A_
+ * String Functions: _zfunc_, _pfunc_, _isPalindrome_
+ * Vector Functions: _pSum_
+ */
+namespace WLIB{
+    
+    #define MYDEFS
+    #ifdef MYDEFS
+ 
+    // DFS
+    #define __graph_(t,name,siz) std::vector< std::vector<t> > name(siz)
+    #define __add_edge_(g,a,b) g[a].push_back(b); g[b].push_back(a)
+    
+    // loops
+    // #define __FOR_(it,st,nd)_ ___aux_FOR_ ## #(st<=nd)_(it,st,nd)
+    // #define __aux_FOR_true_(it,st,nd) for(int it = st; it <= nd; it++)
+    // #define __aux_FOR_false_(it,st,nd) for(int it = st; it >= nd; it--)
+ 
+    #endif
+ 
+    namespace LIB_TYPES {
+        typedef long long lint;
+    }
+ 
+    // >>> Math Functions <<<
+ 
+    // Greatest common divisor | Time: log(N) | Memory: 1
+    LIB_TYPES::lint _gcd_(LIB_TYPES::lint a, LIB_TYPES::lint b) {
+        if(b == 0) return a;
+        return _gcd_(b, a%b);
+    }
+ 
+    // Least common multiple | Time: log(N) | Memory: 1
+    LIB_TYPES::lint _lcm_(LIB_TYPES::lint a, LIB_TYPES::lint b) {
+        return (a * b) / _gcd_(a,b);
+    }
+ 
+    // Factorial of n by modulo mod | Time: N | Memory: 1
+    LIB_TYPES::lint _fact_(LIB_TYPES::lint n, LIB_TYPES::lint mod) {
+        LIB_TYPES::lint fct = 1;
+        for(LIB_TYPES::lint i = 1; i <= n; i++)
+            fct = (fct * i) % mod;
+        return fct % mod;
+    }
+ 
+    //  pw-th power of x by modulo mod| Time: log(pw) | Memory: 1
+    LIB_TYPES::lint _pow_(LIB_TYPES::lint base, LIB_TYPES::lint pw, LIB_TYPES::lint mod) {
+        LIB_TYPES::lint ans = 1ll;
+        while(pw > 0ll) {
+            if(pw & 1ll)
+                ans = (ans * base) % mod;
+ 
+            pw = pw >> 1ll;
+            base = (base * base) % mod;
+        }
+        return ans % mod;
+    }
+ 
+    // Inverse of x by modulo mod | Time: log(mod) | Memory: 1
+    LIB_TYPES::lint _inv_(LIB_TYPES::lint x, LIB_TYPES::lint mod) {
+        return _pow_(x, mod-2, mod) % mod;
+    }
+ 
+    // C by modulo mod | Time: N + log(mod) | Memory: 1
+    LIB_TYPES::lint _C_(LIB_TYPES::lint n, LIB_TYPES::lint m, LIB_TYPES::lint mod) {
+        return (_fact_(n, mod) * _inv_( ((_fact_(m, mod) * _fact_(n-m, mod)) % mod), mod)) % mod;
+    }
+ 
+    // A by module mod | Time: N + log(mod) | Memory: 1
+    LIB_TYPES::lint _A_(LIB_TYPES::lint n, LIB_TYPES::lint m, LIB_TYPES::lint mod) {
+        return (_fact_(n, mod) * _inv_( _fact_(n-m, mod), mod)) % mod;
+    }
+    
+    // List of prime numbers less or equal to N
+    std::vector<LIB_TYPES::lint> _primes_until_(LIB_TYPES::lint N) {
+        std::vector<bool> isPrime(N+1,true);
+        std::vector<LIB_TYPES::lint> primes;
+
+        for(LIB_TYPES::lint i = 2; i <= N; i++) {
+            if(!isPrime[i]) continue;
+            primes.push_back(i);
+            for(LIB_TYPES::lint j = i*i; j <= N; j+=i)
+                isPrime[j] = false;
+        }
+
+        return primes;
+    }
+
+    // >>> String Functions <<<
+ 
+    // P function | Time: N | Memory: N
+    vector<int> _pfunc_(string str) {
+        vector<int> p(str.length(),0);
+        
+        for(int i = 1, j = 0; i < str.length(); i++) {
+            while(j > 0 && str[j] != str[i]) {
+                j = p[j-1];
+            }
+            if(str[i] == str[j]) j++;
+            p[i] = j;
+        }
+ 
+        return p;
+    }
+ 
+    // Z function | Time: N | Memory: N
+    vector<int> _zfunc_(string str) {
+        vector<int> z(str.size(),0);
+ 
+        for(int i = 1, l = 0, r = 0; i < str.size(); i++) {
+            if(i <= r)
+                z[i] = min(z[i-l],r-i+1);
+ 
+            while(i+z[i]<str.size() && str[i+z[i]] == str[z[i]])
+                z[i]++;
+ 
+            if(z[i]-1 > r && z[i] != 0) {
+                l = i;
+                r = z[i] - 1;
+            }
+        }
+ 
+        return z;
+    }
+ 
+    // Is the string Palindrome or Not | Time: N | Memory: N
+    bool _isPalindrome_(string str, int L=0, int R=-1) {
+        if(R == -1) R = str.length()-1;
+        
+        while(L < R) {
+            if(str[L] != str[R])
+                return false;
+            L++; R--;
+        }
+ 
+        return true;
+    }
+ 
+    // >>> Vector Functions <<<
+ 
+    // Prefix sum | Time: N | Memory: N
+    template <class T>
+    vector<T> _pSum_(vector<T> v) {
+        for(int i = 1; i < v.size(); i++)
+            v[i] += v[i-1];
+        return v;
+    }
+ 
+}
+#endif
+ 
+#ifdef WIO_DEF
+/* Generic I/O functions
+ * Functions: _readV_, _printV_
+ * Defines: __endl_
+ */ 
+namespace WIO{
+ 
+    #define __endl_ cout<<endl;
+ 
+    // Read vector | Time: N | Memory: 1
+    template <class T>
+    void _readV_(vector<T> &v, int offset = 0, int n = -1) {
+        if(n == -1) n = v.size()-1;
+        for(int i = offset; i <= n; i++)
+            cin >> v[i];
+    }
+ 
+    // Print vector | Time: N | Memory: N
+    template <class T>
+    void _printV_(vector<T> v, int offset = 0, int n = -1) {
+        if(n == -1) n = v.size()-1;
+        for(int i = offset; i <= n; i++)
+            cout << v[i] << " ";
+    }
+ 
+    bool WIO_DEBUG_LOGS_FLAG = false;
+ 
+    void _log_(string s) {
+        if(WIO_DEBUG_LOGS_FLAG)
+            cout << "LOG:: " << s << endl;
+    }
+ 
+    void _elog_(string s) {
+        if(WIO_DEBUG_LOGS_FLAG)
+            cout << "ERROR:: " << s << endl;
+    }
+ 
+    void _celog_(string s) {
+        if(WIO_DEBUG_LOGS_FLAG)
+            cout << "CRITICAL_ERROR::" << s << endl;
+        assert(0);
+    }
+ 
+}
+#endif
+ 
+//---------------------------------------------------------
+ 
+#define for_in_range(i,s,f) for(int i = s; i <= f; i++)
+ 
+typedef long long lint;
+typedef vector<lint> vlint;
+typedef vector<vector<int>> matrix_int;
+typedef vector<vector<lint>> matrix_lint;
+#define fi first
+#define se second
+ 
+const lint MOD = 1e9+7;
+const lint PRIME = 31;
+const lint LOG = 30;
+const lint INF = INT64_MAX;
+const lint MAXN= 1e6;
+
+void solve();
+
+int main() {
+ 
+    //---------------------Local flags-------------------------
+    //---------------------------------------------------------
+        //#define _FILE_IO_
+        //WIO::WIO_DEBUG_LOGS_FLAG = true;
+    //---------------------------------------------------------
+    
+    ios_base::sync_with_stdio(false);
+    
+    #ifdef _FILE_IO_
+    freopen("input.txt","r",stdin);
+    freopen("output.txt","w",stdout);
+    #endif
+    
+    int tst = 1;
+    cin >> tst;
+    while(tst--)
+        solve();
+
+}
+
+void solve() {
+    lint n, k;
+    cin >> n >> k;
+    vector<pair<lint,lint>> v;
+    for(int i = 0; i < n; i++) {
+        int x, y;
+        cin >> x >> y;
+        v.push_back({x,y});
+    }
+    
+    for(int i = 0; i < n; i++) {
+        lint flag = true;
+        for(int j = 0; j < n; j++) {
+           // cout <<v[i].first << " "<<v[i].second<<" "<< abs(v[i].first-v[j].first)+abs(v[i].second-v[j].second) << endl;
+            if(abs(v[i].first-v[j].first)+abs(v[i].second-v[j].second) > k) {
+                flag = false;
+                break;
+            }
+        }
+            if(flag) {
+                cout << 1 << endl;
+                return;
+            }
+    }
+
+    cout << -1 << endl;
+    return;
+}

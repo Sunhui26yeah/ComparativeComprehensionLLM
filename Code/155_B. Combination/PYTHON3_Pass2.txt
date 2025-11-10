@@ -1,0 +1,15 @@
+k=[]
+for _ in range(int(input())):
+    a,b=map(int,input().split())
+    k.append([b,a])
+counter=1
+ans=0
+k.sort()
+k=k[::-1]
+for i,j in k:
+    ans+=j
+    counter-=1
+    counter+=i
+    if counter==0:
+        break
+print(ans)

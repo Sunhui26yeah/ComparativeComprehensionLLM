@@ -1,0 +1,25 @@
+#include <bits/stdc++.h>
+using namespace std;
+int n;
+int cnt = 0;
+long long func(long long a) {
+  if (a > n) return 0;
+  cout << a << endl;
+  string s = to_string(a);
+  auto pos1 = s.find_first_of('7');
+  auto pos2 = s.find_first_of('5');
+  auto pos3 = s.find_first_of('3');
+  if (pos1 != string::npos && pos2 != string::npos && pos3 != string::npos)
+    ++cnt;
+  func(a * 10 + 3);
+  func(a * 10 + 5);
+  func(a * 10 + 7);
+  return 0;
+}
+int main(void) {
+  cin >> n;
+  long long a = 0;
+  func(a);
+  cout << cnt;
+  return 0;
+}

@@ -1,0 +1,62 @@
+#include <cstdio>
+#include <cmath>
+using namespace std;
+
+double dist2(double x1, double y1, double x2, double y2) {
+  return (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1);
+}
+
+int main() {
+  int n, c, maxc;
+  double x[100], y[100];
+  bool ol[100][100];
+  double vx, vy, ox, oy, t1, t2, d2;
+
+  while (1) {
+    scanf("%d", &n);
+    if (!n) break;
+    for (int i=0; i<n; i++) {
+      scanf("%lf,%lf", &x[i], &y[i]);
+    }
+    for (int i=0; i<n; i++) {
+      ol[i][i] = false;
+      for (int j=i+1; j<n; j++) {
+        ol[j][i] = ol[i][j] = (dist2(x[i], y[i], x[j], y[j]) <= 4.0) ? true : false;
+      }
+    }
+    maxc = 1;
+    for (int i=0; i<n; i++) {
+      for (int j=i+1; j<n; j++) {
+        if (!ol[i][j]) continue;
+        if (x[i]==x[j] && y[i]==y[j]) {
+          t1 = t2 = 0.0;
+        } else {
+          vx = x[j] - x[i];
+          vy = y[j] - y[i];
+          d2 = dist2(x[i], y[i], x[j], y[j]);
+          t1 = atan2(vy, vx);
+          t2 = atan2(sqrt(1.0-0.25*d2), sqrt(d2)*0.5);
+        }
+        for (int l=0; l<2; l++) {
+          if (!l) {
+            ox = x[i] + cos(t1+t2);
+            oy = y[i] + sin(t1+t2);
+          } else {
+            ox = x[i] + cos(t1-t2);
+            oy = y[i] + sin(t1-t2);
+          }
+          c = 2;
+          for (int k=i+1; k<n; k++) {
+            if (ol[i][k] && ol[j][k]) {
+              if (dist2(ox, oy, x[k], y[k]) <= 1.0) {
+                ++c;
+              }
+            }
+          }
+          if (maxc < c) maxc = c;
+        }
+      }
+    }
+    printf("%d\n", maxc);
+  }
+}

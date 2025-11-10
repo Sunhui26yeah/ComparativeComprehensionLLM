@@ -1,0 +1,36 @@
+# http://codeforces.com/contest/787/problem/A
+
+def is_even(num):
+    return num % 2 == 0
+
+def is_odd(num):
+    return num % 2 == 1
+
+def is_valid_scream(a, b, c, d, rick_scream_count):
+    return (d + rick_scream_count * c - b) % a == 0
+
+def find_overlapping_screams(a, b, c, d):
+    rick_is_always_odd = is_odd(b) and is_even(a)
+    morty_is_always_odd = is_odd(d) and is_even(c)
+    rick_is_always_even = is_even(b) and is_even(a)
+    morty_is_always_even = is_even(d) and is_even(c)
+    
+    if (rick_is_always_even and morty_is_always_odd) or (rick_is_always_odd and morty_is_always_even):
+        return -1
+
+    rick_scream_count = 0
+    count = 0
+    max_enum = (100**3)
+    while not (is_valid_scream(a, b, c, d, rick_scream_count)):
+        rick_scream_count += 1
+        count += 1
+        if count >= max_enum:
+            return -1
+
+    return d + rick_scream_count * c
+
+a, b = list(map(int, input().strip().split(' ')))
+c, d = list(map(int, input().strip().split(' ')))
+
+overlapping_scream_time = find_overlapping_screams(a, b, c, d)
+print(overlapping_scream_time)

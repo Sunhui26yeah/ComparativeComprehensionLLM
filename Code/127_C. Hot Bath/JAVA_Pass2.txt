@@ -1,0 +1,88 @@
+import java.io.*;
+import java.util.*;
+
+/**
+ * Codeforces #126A "Hot Bath"
+ * @link http://codeforces.ru/problemset/problem/126/A
+ * @author Caesar
+ */
+public class Solution126A implements Runnable {
+
+    private static final int EXIT_CODE = -1;
+    private static final boolean ONLINE_JUDGE = System.getProperty("ONLINE_JUDGE") != null;
+    private static final String INPUT = "input.txt";
+    private static final String OUTPUT = "output.txt";
+
+    private StringTokenizer tok;
+    private BufferedReader in;
+    private PrintWriter out;
+
+    public static void main(String[] args) {
+        new Thread(new Solution126A()).start();
+    }
+
+    public void run() {
+        try {
+            in = ONLINE_JUDGE ?
+                new BufferedReader(new InputStreamReader(System.in)) :
+                new BufferedReader(new FileReader(INPUT));
+            out = ONLINE_JUDGE ? new PrintWriter(System.out) : new PrintWriter(OUTPUT);
+            long start = System.currentTimeMillis();
+            try {
+                solve();
+            } finally {
+                if (ONLINE_JUDGE) {
+                    out.flush();
+                } else {
+                    out.close();
+                }
+            }
+            System.err.println("Time used: " + (System.currentTimeMillis() - start));
+        } catch (Throwable ex) {
+            ex.printStackTrace();
+            System.exit(EXIT_CODE);
+        }
+    }
+
+    private String readString() throws IOException {
+        while (tok == null || !tok.hasMoreTokens()) {
+            tok = new StringTokenizer(in.readLine());
+        }
+        return tok.nextToken();
+    }
+
+    private int readInt() throws IOException {
+        return Integer.parseInt(readString());
+    }
+
+    public void solve() throws IOException {
+        long t1 = readInt();
+        long t2 = readInt();
+        int x1 = readInt();
+        int x2 = readInt();
+        long t0 = readInt();
+        long best = -1;
+        int vbest = 0;
+        int x1Best = 0;
+        int x2Best = 0;
+        for (int i = 0; i <= x2; ++i) {
+            int y1 = t0 == t1 ? x1 : (int)(i * (t2 - t0) / (t0 - t1));
+            if (y1 > x1) {
+                y1 = x1;
+            }
+            long num = y1 * t1 + i * t2;
+            int v = i + y1;
+            if (best < t0 * vbest || num * vbest < best * v ||
+                    num * vbest == best * v && v > vbest) {
+                best = num;
+                vbest = v;
+                x1Best = y1;
+                x2Best = i;
+            }
+        }
+        out.print(x1Best);
+        out.print(' ');
+        out.println(x2Best);
+    }
+
+}

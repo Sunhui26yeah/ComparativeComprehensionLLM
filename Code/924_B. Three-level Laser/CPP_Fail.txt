@@ -1,0 +1,29 @@
+#include <bits/stdc++.h>
+#pragma GCC optimize("Ofast")
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,tune=native")
+using namespace std;
+long long arr[100009];
+long long n, U;
+int main() {
+  ios_base::sync_with_stdio(false);
+  cin.tie(0);
+  cin >> n >> U;
+  for (int i = 1; i <= n; ++i) cin >> arr[i];
+  double res = -1.0;
+  for (int i = 1; i <= n - 2; ++i) {
+    long long nd = arr[i] + U;
+    int l = i + 2, r = n;
+    while (r - l >= 0) {
+      int m = (l + r) / 2;
+      if (arr[m] > nd)
+        r = m - 1;
+      else
+        l = m + 1;
+    }
+    if (arr[r] > nd) continue;
+    if (1.0 * (arr[r] - arr[i + 1]) / (1.0 * (arr[r] - arr[i])) > res)
+      res = 1.0 * (arr[r] - arr[i + 1]) / (1.0 * (arr[r] - arr[i]));
+  }
+  if (res == -1.0) return 0 * printf("-1");
+  cout << fixed << setprecision(9) << res;
+}

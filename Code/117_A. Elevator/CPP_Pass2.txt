@@ -1,0 +1,45 @@
+#include <bits/stdc++.h>
+using namespace std;
+int N, M;
+long long h(long long t) {
+  long long q = t / (M - 1);
+  long long r = t % (M - 1);
+  if (q % 2 == 0)
+    return r + 1;
+  else
+    return M - r;
+}
+long long ttg(long long t, long long s) {
+  long long h1 = h(t);
+  long long dir = (t / (M - 1)) % 2;
+  if (h1 == s) return t;
+  if (h1 > s && dir == 0) {
+    long long x = t + (M - h1) + (M - s);
+    return x;
+  } else if (h1 > s && dir == 1) {
+    return t + h1 - s;
+  } else if (h1 < s && dir == 0) {
+    return t + s - h1;
+  } else {
+    return t + h1 - 1 + s - 1;
+  }
+}
+long long S[100010];
+long long F[100010];
+long long T[100010];
+int main() {
+  cin >> N >> M;
+  for (int i = 0; i < N; i++) {
+    cin >> S[i] >> F[i] >> T[i];
+  }
+  for (int i = 0; i < N; i++) {
+    if (S[i] == F[i]) {
+      cout << T[i] << endl;
+    } else {
+      long long x = ttg(T[i], S[i]);
+      x = ttg(x, F[i]);
+      cout << x << endl;
+    }
+  }
+  return 0;
+}

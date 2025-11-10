@@ -1,0 +1,43 @@
+import java.util.*;
+public class B957 {
+	public static void main(String[] args) {
+		Scanner in = new Scanner(System.in);
+		int n = in.nextInt(), m = in.nextInt();
+		char arr[][] = new char[n][m];
+		
+		for(int i=0; i<n; i++)
+			arr[i] = in.next().toCharArray();
+
+		for(int i=0; i<n; i++)
+		{
+			List<Integer> list = new ArrayList<Integer>();
+			Set<Integer> set = new HashSet<Integer>();
+			
+			for(int j=0; j<m; j++)	
+				if(arr[i][j] == '#')
+					list.add(j);
+			
+			if(list.size()>1)
+				for(int j: list)	
+					for(int h=0; h<n; h++)
+						if(arr[h][j] == '#')
+							set.add(h);
+			
+			Iterator<Integer> it = set.iterator();
+			while(it.hasNext())
+			{
+				int h = it.next();
+				for(int j: list)
+				{
+					if(arr[h][j] != '#')
+					{
+						System.out.println("No");
+						return;
+					}
+				}
+			}
+		}
+		
+		System.out.println("Yes");
+	}
+}

@@ -1,0 +1,32 @@
+#include <bits/stdc++.h>
+bool isPrime(int a) {
+  bool ans = true;
+  if (a % 2 == 0 || a % 3 == 0 || a % 5 == 0 || a % 7 == 0)
+    ans = false;
+  else
+    for (int i = a / 2; i > 2; i--)
+      if (a % i == 0) ans = false;
+  return ans;
+}
+int n;
+int main() {
+  while (true) {
+    std::cin >> n;
+    if (!n) return 0;
+    if (n % 2 == 0) n--;
+    for (; n > 12; n -= 2) {
+      if (n == 13)
+        std::cout << 13 << std::endl;
+      else if (isPrime(n)) {
+        if (isPrime(n - 2)) {
+          if (isPrime(n - 6)) {
+            if (isPrime(n - 8)) {
+              std::cout << n << std::endl;
+              break;
+            }
+          }
+        }
+      }
+    }
+  }
+}

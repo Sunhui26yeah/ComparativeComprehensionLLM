@@ -1,0 +1,50 @@
+import java.util.Scanner;
+ 
+public class Main {
+     
+    public static int[] getNext(String str){
+        str = str + "#";
+        char[] str_arr = str.toCharArray();
+        int[] next = new int[str_arr.length];
+        next[0] = -1;
+        next[1] = 0;
+        int i = 2;
+        int cn = 0;
+        while(i < str_arr.length){
+            if(str_arr[i-1] == str_arr[cn]){
+                next[i++] = ++cn;
+            }else if(cn > 0){
+                cn = next[cn];
+            }else{
+                next[i++] = 0;
+            }
+        }
+        return next;
+    }
+ 
+    public static void main(String[] args) {
+         Scanner sc = new Scanner(System.in);
+         String str = sc.next();
+         int[] next = getNext(str);
+         int len = str.length();
+         int[] hasMidLen = new int[len];
+         next[0] = 0;
+         for(int i = 0; i < len; ++i){
+             hasMidLen[next[i]] = 1;
+         }
+         int j = len;
+         boolean flag = false;
+         while(next[j] != 0){
+             if(hasMidLen[next[j]] == 1){
+                 System.out.println(str.substring(0, next[j]));
+                 flag = true;
+                 break;
+             }
+             j = next[j];
+         }
+         if(!flag){
+             System.out.println("Just a legend");
+         }
+    }
+ 
+}

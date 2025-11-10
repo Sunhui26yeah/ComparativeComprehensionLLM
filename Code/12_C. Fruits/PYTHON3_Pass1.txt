@@ -1,0 +1,17 @@
+n, m = map(int, input().split())
+tags = sorted(list(map(int, input().split())))
+items = {}
+for _ in range(m):
+    item = input()
+    if item not in items:
+        items[item] = 1
+    else:
+        items[item] += 1
+
+min, max = 0, 0
+x = sorted(items.values(), reverse = True)
+for i in range(len(x)):
+    min += x[i] * tags[i]
+    max += x[i] * tags[-i - 1]
+
+print(min, max)

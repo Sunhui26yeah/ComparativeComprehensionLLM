@@ -1,0 +1,56 @@
+import java.util.Scanner;
+public class ProblemsForround {
+    public static void main(String asd[])throws Exception
+    {
+        Scanner in=new Scanner(System.in);
+        int n=in.nextInt();
+        int m=in.nextInt();
+        int y[]=new int[n];
+        int max=0,min=n-1;int flag=0;
+        y[max]=2;y[min]=1;
+        for(int i=0;i<m;i++){
+            int a=in.nextInt()-1;
+            int b=in.nextInt()-1;
+            if(a>b)
+            {
+                if((y[a]==0 || y[a]==1) &&(y[b]==0 || y[b]==2))
+                {
+                    y[a]=1;
+                    y[b]=2;
+                    if(a<min)
+                        min=a;
+                    if(b>max)
+                        max=b;
+                }
+                else
+                    flag=1;
+            }
+            else
+            {
+                if((y[a]==0 || y[a]==2) &&(y[b]==0 || y[b]==1))
+                {
+                    y[a]=2;
+                    y[b]=1;
+                    if(a>max)
+                        max=a;
+                    if(b<min)
+                        min=b;
+                }
+                else
+                    flag=1;
+            }
+        }
+        if(flag==1 || min<max)
+            System.out.println(0);
+        else
+        {
+            int c=0;
+            for(int i=max+1;i<min;i++)
+            {
+                if(y[i]==0)
+                    c++; 
+            }
+            System.out.println(c+1);
+        }
+    }
+}

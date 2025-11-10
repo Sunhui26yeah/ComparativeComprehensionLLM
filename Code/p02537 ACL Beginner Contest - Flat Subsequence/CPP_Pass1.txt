@@ -1,0 +1,27 @@
+#include<bits/stdc++.h>
+using namespace std;
+int maxn[1200001];
+int query(int p, int l, int r, int l0, int r0) {
+	if (l >= l0 && r <= r0) return maxn[p];
+	int mid = (l + r) / 2, ans = 0;
+	if (l0 <= mid) ans = max(ans, query(p * 2, l, mid, l0, r0));
+	if (r0 > mid) ans = max(ans, query(p * 2 + 1, mid + 1, r, l0, r0));
+	return ans;
+}
+void modify(int p, int l, int r, int x, int num) {
+	maxn[p] = max(maxn[p], num);
+	if (l == r) return;
+	int mid = (l + r) / 2;
+	if (x <= mid) modify(p * 2, l, mid, x, num);
+	else modify(p * 2 + 1, mid + 1, r, x, num);
+}
+int main() {
+	int n, k, w = 300000;
+	cin >> n >> k;
+	for (int i = 1; i <= n; i++) {
+		int a;
+		cin >> a;
+		modify(1, 1, w, a, query(1, 1, w, a-k, a+k) + 1);
+	}
+	cout << query(1, 1, w, 1, w) << endl;
+}

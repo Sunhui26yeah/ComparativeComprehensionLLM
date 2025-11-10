@@ -1,0 +1,22 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+  long long n, u;
+  cin >> n >> u;
+  double tmp, ei, ej;
+  double t[n];
+  double ma = -1;
+  for (int i = 0; i < n; i++) cin >> t[i];
+  for (int i = 0; i < n - 2; i++) {
+    double x = t[i], y = t[i + 1];
+    auto it = lower_bound(t + i + 3, t + n, u + t[i] + 1);
+    it--;
+    tmp = *it;
+    ei = tmp - x;
+    ej = (tmp - y) / ei;
+    if (ei <= u) ma = max(ma, ej);
+  }
+  cout.precision(9);
+  cout << ma << endl;
+  return 0;
+}

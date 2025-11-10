@@ -1,0 +1,70 @@
+import java.util.*;
+import java.math.BigInteger;
+// warm-up
+public class DivisionIntoTeams {
+
+	static class Player implements Comparable<Player> {
+		int i,a; boolean f=false;
+		Player(int b, int c) {
+			i=b; a=c;
+		}
+		public Player selectForFirst() {
+			f=true;
+			return this;
+		}
+		public int compareTo (Player other) {
+			return a-other.a;
+		}
+	}
+
+	static void solve() {
+		Scanner sc = new Scanner(System.in);
+		int noc=sc.nextInt(),n=noc,i=1,l=0,r=noc-1;
+		int o=0,t=0,m=Integer.MIN_VALUE,tf=0,ts=0;
+		boolean selectFirst = true;
+		List<Player> players = new ArrayList<Player>();
+		while (noc-->0) {
+			int p = sc.nextInt();
+			if (p>m) m=p;
+			players.add(new Player(i++, p));
+		}
+		Collections.sort(players, Collections.reverseOrder());
+		while (l<=r) {
+			if ((l!=r) && (l+1>r-1) && selectFirst) {
+				o++; t++;
+				tf+=players.get(l).a;
+				ts+=players.get(r).a;
+				players.set(l, players.get(l).selectForFirst());
+			} else {
+				if (selectFirst) {
+					o+=(l!=r) ? 2 : 1; 
+					tf+=players.get(l).a;
+					players.set(l, players.get(l).selectForFirst());
+					if (l!=r) {
+						tf+=players.get(r).a;
+						players.set(r, players.get(r).selectForFirst());
+					}
+				} else {
+					t+=(l!=r) ? 2 : 1; 
+					ts+=players.get(l).a;
+					if (l!=r) ts+=players.get(r).a;
+				}
+			}
+			selectFirst = !selectFirst;
+			l++; r--;
+		}
+		if (o+t==n && Math.abs(tf-ts)<=m && Math.abs(o-t)<=1) {
+			System.out.println(o);
+			for (Player f : players) if (f.f) System.out.print(f.i+" ");
+			System.out.println();
+			System.out.println(t);
+			for (Player s : players) if (!s.f) System.out.print(s.i+" ");
+		}
+		sc.close();	
+	}
+
+	public static void main(String args[]) {
+		solve();
+	}
+
+}

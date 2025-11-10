@@ -1,0 +1,36 @@
+#include <bits/stdc++.h>
+using namespace std;
+const int INF = 0x3f3f3f3f;
+const int MOD = 1000000007;
+const int maxn = 1e5 + 10;
+const double eps = 1e-8;
+const double PI = acos(-1.0);
+bool vis[maxn];
+int main() {
+  int max2 = 1, min1 = INF;
+  int n, m;
+  cin >> n >> m;
+  min1 = n;
+  int flag = 1;
+  while (m--) {
+    int u, v;
+    cin >> u >> v;
+    vis[u] = vis[v] = 1;
+    if (u > v) {
+      if (v >= min1) flag = 0;
+      if (u <= max2) flag = 0;
+      max2 = max(max2, v);
+      min1 = min(min1, u);
+    } else {
+      if (u >= min1) flag = 0;
+      if (v <= max2) flag = 0;
+      max2 = max(max2, u);
+      min1 = min(min1, v);
+    }
+  }
+  if (!flag)
+    cout << 0 << endl;
+  else
+    cout << min1 - max2 << endl;
+  return 0;
+}

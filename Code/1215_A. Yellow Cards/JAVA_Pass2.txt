@@ -1,0 +1,70 @@
+import java.util.*;
+import java.io.*;
+
+public class A {
+    public static void main(String[] args) {
+        FastScanner scanner = new FastScanner();
+        PrintWriter out = new PrintWriter(System.out, false);
+        int a1 = scanner.nextInt(), a2 = scanner.nextInt(), k1 = scanner.nextInt();
+        int k2 = scanner.nextInt(), n = scanner.nextInt();
+        int first = 0, second = 0;
+        first = Math.min(n/k1, a1);
+        int rem = n- first * k1;
+        int s = Math.min(rem/k2, a2);
+        second = Math.min(n/k2, a2);
+        rem = n - second * k2;
+        int f = Math.min(rem/k1, a1);
+        int ans = Math.max(f + second, s + first);
+        n-= (k1-1)*a1;
+        n-= (k2-1) * a2;
+        if (n < 0) n = 0;
+        out.println(n + " "+  ans);
+        out.flush();
+    }
+    
+    public static class FastScanner {
+        BufferedReader br;
+        StringTokenizer st;
+        
+        public FastScanner(Reader in) {
+            br = new BufferedReader(in);
+        }
+        
+        public FastScanner() {
+            this(new InputStreamReader(System.in));
+        }
+        
+        String next() {
+            while (st == null || !st.hasMoreElements()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
+        
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
+        
+        long nextLong() {
+            return Long.parseLong(next());
+        }
+        
+        double nextDouble() {
+            return Double.parseDouble(next());
+        }
+        
+        String readNextLine() {
+            String str = "";
+            try {
+                str = br.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return str;
+        }
+    }
+}

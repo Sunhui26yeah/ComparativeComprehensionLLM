@@ -1,0 +1,40 @@
+def kmpfailureFunc(P) :
+    lP=len(P)
+    kmptable=[0,0] #the "position" here is where the first dismatch occurs
+    k=0
+    i=1
+    while i<lP :
+        if P[i]==P[k] :
+            kmptable.append(k+1)
+            i+=1
+            k+=1
+        elif k>0 :
+            k=kmptable[k-1]
+        else :
+            kmptable.append(0)
+            i+=1
+    return kmptable
+
+s=input()
+L=len(s)
+l=L-2
+kmpfailFunc=kmpfailureFunc(s)
+longest=kmpfailFunc[-1]
+if l>0 :
+    ind=0
+    while longest>0:
+        i=3
+        while i<L :
+            i+=1
+            if longest==kmpfailFunc[i] :
+                ind=1
+                break
+        if ind :
+            print(s[:longest])
+            break
+        else :
+            longest=kmpfailFunc[longest]
+    if not ind :
+        print("Just a legend")
+else :
+    print("Just a legend")

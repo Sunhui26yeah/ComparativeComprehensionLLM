@@ -1,0 +1,182 @@
+#include <bits/stdc++.h>
+using namespace std;
+const long long INF = 1LL << 60;
+const long long mod = 1000000007;
+const long long dx[4] = {1, 0, -1, 0};
+const long long dy[4] = {0, -1, 0, 1};
+long long gcd(long long a, long long b) {
+  if (b == 0) return a;
+  return gcd(b, a % b);
+}
+long long extgcd(long long a, long long b, long long& x, long long& y) {
+  if (b == 0) {
+    x = 1, y = 0;
+    return a;
+  }
+  long long q = a / b, g = extgcd(b, a - q * b, x, y);
+  long long z = x - q * y;
+  x = y;
+  y = z;
+  return g;
+}
+long long invmod(long long a, long long m) {
+  long long x, y;
+  extgcd(a, m, x, y);
+  x %= m;
+  if (x < 0) x += m;
+  return x;
+}
+long long nCk(long long n, long long k, long long mod) {
+  long long ans = 1;
+  for (long long i = n, j = 1; j <= k; i--, j++)
+    ans = (((ans * i) % mod) * invmod(j, mod)) % mod;
+  return ans;
+}
+long long lmin(long long a, long long b) { return a > b ? b : a; };
+long long lmax(long long a, long long b) { return a > b ? a : b; };
+long long lsum(long long a, long long b) { return a + b; };
+template <typename T>
+class Zip {
+  vector<T> d;
+  bool flag;
+
+ public:
+  Zip() { flag = false; }
+  void add(T x) {
+    d.push_back(x);
+    flag = true;
+  }
+  long long getNum(T x) {
+    if (flag) {
+      sort(d.begin(), d.end());
+      d.erase(unique(d.begin(), d.end()), d.end());
+      flag = false;
+    }
+    return lower_bound(d.begin(), d.end(), x) - d.begin();
+  }
+  long long size() {
+    if (flag) {
+      sort(d.begin(), d.end());
+      d.erase(unique(d.begin(), d.end()), d.end());
+      flag = false;
+    }
+    return (long long)d.size();
+  }
+};
+class UnionFind {
+  vector<long long> par, rank;
+
+ public:
+  void init(long long n) {
+    par.resize(n, 1);
+    rank.resize(n, 0);
+  }
+  long long getSize(long long x) { return par[find(x)]; }
+  long long find(long long x) {
+    if (par[x] > 0) return x;
+    return -(par[x] = -find(-par[x]));
+  }
+  void merge(long long x, long long y) {
+    x = find(x);
+    y = find(y);
+    if (x == y) return;
+    if (rank[x] < rank[y]) {
+      par[y] += par[x];
+      par[x] = -y;
+    } else {
+      par[x] += par[y];
+      par[y] = -x;
+      if (rank[x] == rank[y]) rank[x]++;
+    }
+  }
+  bool isSame(long long x, long long y) { return find(x) == find(y); }
+};
+template <typename T>
+class SegmentTree {
+  long long n;
+  vector<T> node;
+  function<T(T, T)> fun, fun2;
+  bool customChange;
+  T outValue, initValue;
+
+ public:
+  void init(long long num, function<T(T, T)> resultFunction, T init, T out,
+            function<T(T, T)> changeFunction = NULL) {
+    fun = resultFunction;
+    fun2 = changeFunction;
+    customChange = changeFunction != NULL;
+    n = 1;
+    while (n < num) n *= 2;
+    node.resize(2 * n - 1, init);
+    outValue = out;
+    initValue = init;
+  }
+  void valueChange(long long num, T value) {
+    num += n - 1;
+    if (customChange)
+      node[num] = fun2(value, node[num]);
+    else
+      node[num] = value;
+    while (num > 0)
+      num = (num - 1) / 2,
+      node[num] = fun(node[num * 2 + 1], node[num * 2 + 2]);
+  }
+  T rangeQuery(long long a, long long b, long long l = 0, long long r = -1,
+               long long k = 0) {
+    if (r == -1) r = n;
+    if (a <= l && r <= b) return node[k];
+    if (b <= l || r <= a) return outValue;
+    long long mid = (l + r) / 2;
+    return fun(rangeQuery(a, b, l, mid, 2 * k + 1),
+               rangeQuery(a, b, mid, r, 2 * k + 2));
+  }
+};
+long long lis(long long* a, long long n, long long* dp) {
+  fill(dp, dp + n, INF);
+  for (long long i = 0; i < n; i++) *lower_bound(dp, dp + n, a[i]) = a[i];
+  return (long long)(lower_bound(dp, dp + n, INF) - dp);
+}
+long long binarySearch(function<bool(long long)> check, long long ok,
+                       long long ng) {
+  while ((ok - ng > 1) || (ng - ok > 1)) {
+    long long mid = (ok + ng) / 2;
+    if (check(mid))
+      ok = mid;
+    else
+      ng = mid;
+  }
+  return ok;
+}
+bool check(long long input) {}
+long long n, black, white, firstblack = 1000000, firstwhite = 1000000, ans,
+                           ans2;
+string s;
+int main() {
+  cin >> n >> s;
+  for (int i = 0; i < s.size(); i++) {
+    if (s[i] == '.') {
+      white++;
+      firstwhite = i;
+    } else {
+      black++;
+      if (firstblack == 1000000) {
+        firstblack = i;
+      }
+    }
+  }
+  if (firstblack != 1000000) {
+    for (int i = firstblack; i < s.size(); i++) {
+      if (s[i] == '.') {
+        ans++;
+      }
+    }
+  }
+  if (firstwhite != 1000000) {
+    for (int i = 0; i < firstwhite; i++) {
+      if (s[i] == '#') {
+        ans2++;
+      }
+    }
+  }
+  cout << lmin(lmin(white, ans2), lmin(black, ans)) << endl;
+}

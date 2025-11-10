@@ -1,0 +1,63 @@
+#include <cstdio>
+#include <cstdlib>
+#include <cmath>
+#include <cstring>
+#include <map>
+#include <utility>
+#include <set>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <sstream>
+#include <queue>
+#include <functional>
+
+using namespace std;
+
+#define rep(i,n) for((i)=0;(i)<(int)(n);(i)++)
+#define foreach(itr,c) for(__typeof((c).begin()) itr=(c).begin();itr!=(c).end();itr++)
+inline int in(){ int x; scanf("%d",&x); return x;}
+
+typedef pair<int,int> P;
+
+int main(){
+  int i,j,k;
+  int s,d;
+
+  while(scanf("%d %d",&s,&d)){
+    if(s == 0 && d == 0) break;
+    vector< vector<int> > a(s, vector<int>(d,0));
+    vector< vector<int> > b(d, vector<int>(d,0));
+
+    rep(i,s) rep(j,d) scanf("%d",&a[i][j]);
+    rep(i,d-1) for(j = i+1; j < d; j++){
+      int t; scanf("%d",&t);
+      b[i][j] = b[j][i] = t;
+    }
+/*
+    cout << "a " << endl;
+    rep(i,s){ rep(j,d) cout << a[i][j] << ' '; cout << endl;}
+    rep(i,d-1){ for(j = i+1; j < d; j++) cout << b[i][j] << ' '; cout << endl;}
+*/
+    int ans = 0;
+    int rest = d;
+    vector<int> end(d,0);
+    priority_queue<P, vector<P>, greater<P> > q;
+    rep(i,s) rep(j,d) if(a[i][j] != 0) q.push(P(a[i][j],j));
+    while(!q.empty()){
+      P p = q.top(); q.pop();
+
+      if(end[p.second] == 1) continue;// cout << p.first << ' ' << p.second << endl;
+      ans += p.first;
+      end[p.second] = 1;
+      rest--;
+      if(rest == 0) break;
+      rep(i,d) if(!end[i] && b[p.second][i] != 0) q.push(P(b[p.second][i], i));
+    }
+
+    cout << ans << endl;
+  }
+
+  return 0;
+}

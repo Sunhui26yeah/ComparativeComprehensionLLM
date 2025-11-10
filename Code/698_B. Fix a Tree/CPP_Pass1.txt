@@ -1,0 +1,51 @@
+#include <bits/stdc++.h>
+using namespace std;
+constexpr int MOD = 1000 * 1000 * 1000 + 7;
+int n;
+vector<int> P;
+vector<bool> marked;
+vector<int> root;
+void dfs(int v) {
+  if (marked[v]) return;
+  marked[v] = true;
+  set<int> seen{v};
+  while (seen.find(P[v]) == seen.end()) {
+    v = P[v];
+    if (marked[v]) return;
+    marked[v] = true;
+    seen.insert(v);
+  }
+  root.push_back(v);
+}
+int main() {
+  ios::sync_with_stdio(false);
+  cin.tie(0);
+  cin >> n;
+  P.resize(n);
+  marked.resize(n);
+  for (int i = 0; i < n; ++i) {
+    int par;
+    cin >> par;
+    P[i] = --par;
+  }
+  for (int i = 0; i < n; ++i) dfs(i);
+  int real_root = -1;
+  for (int i = 0; i < root.size(); ++i)
+    if (P[root[i]] == root[i]) {
+      real_root = root[i];
+      break;
+    }
+  int ans = root.size() - 1;
+  if (real_root == -1) {
+    real_root = root[0];
+    ++ans;
+  }
+  for (int i = 0; i < root.size(); ++i) P[root[i]] = real_root;
+  cout << ans << endl;
+  for (int i = 0; i < n; ++i)
+    if (i < n - 1)
+      cout << P[i] + 1 << ' ';
+    else
+      cout << P[i] + 1 << endl;
+  return 0;
+}

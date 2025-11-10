@@ -1,0 +1,88 @@
+#include <bits/stdc++.h>
+using namespace std;
+int vis[100005];
+vector<int> a[100005];
+vector<int> ans, ans1, fans, lans;
+int n, m, k, fl = 0, ch2 = 0, save = 0, mx = 1e9;
+int mem[100005];
+vector<int> v;
+void dfs(int x, int c, int p) {
+  if (c % 2)
+    ans.push_back(x);
+  else
+    ans1.push_back(x);
+  vis[x] = c;
+  mem[x] = 1;
+  v.push_back(x);
+  vector<int> temp;
+  int ch = 0;
+  for (auto i : a[x]) {
+    if (i == p) continue;
+    if (!vis[i]) {
+      temp.push_back(i);
+    } else {
+      if (fl == 1) continue;
+      if (mem[i] == 0) continue;
+      if (mx > vis[x] - vis[i]) {
+        save = i;
+        mx = vis[x] - vis[i];
+        save = i;
+      }
+      ch = 1;
+    }
+  }
+  if (ch == 1 && fl == 0) fans = v;
+  if (ch == 1) fl = 1;
+  for (auto i : temp) {
+    dfs(i, c + 1, x);
+  }
+  mem[x] = 0;
+  v.pop_back();
+}
+void solve() {
+  cin >> n >> m >> k;
+  for (int i = 0; i < m; i++) {
+    int x, y;
+    cin >> x >> y;
+    a[x].push_back(y);
+    a[y].push_back(x);
+  }
+  dfs(1, 1, 0);
+  if (!fl) {
+    if (ans1.size() > ans.size()) ans = ans1;
+    cout << "1\n";
+    for (int i = 0; i < (k + 1) / 2; i++) {
+      cout << ans[i] << " ";
+    }
+    return;
+  }
+  vector<int> ffans;
+  int flag = 0;
+  for (auto i : fans) {
+    if (i == save) flag = 1;
+    if (flag) ffans.push_back(i);
+  }
+  if (ffans.size() <= k) {
+    cout << "2\n";
+    cout << ffans.size() << "\n";
+    for (auto i : ffans) {
+      cout << i << " ";
+    }
+  } else {
+    cout << "1\n";
+    int x = (k + 1) / 2;
+    for (int i = 0; i < ffans.size() && x; i += 2) {
+      x--;
+      cout << ffans[i] << " ";
+    }
+  }
+  return;
+}
+int main() {
+  ios_base::sync_with_stdio(0);
+  cin.tie(0);
+  int t = 1;
+  while (t--) {
+    solve();
+  }
+}

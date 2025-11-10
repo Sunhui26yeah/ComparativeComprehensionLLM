@@ -1,0 +1,63 @@
+#include <bits/stdc++.h>
+using namespace std;
+long long get_etag(long long t, long long m, bool& up) {
+  long long mx = t % (2 * m - 2);
+  if (mx <= (m - 1)) {
+    return mx + 1;
+    up = true;
+  }
+  up = false;
+  return (2 * m - 2) - mx + 1;
+}
+pair<long long, long long> get_two_time(long long s_etag, long long m) {
+  long long s_time;
+  if (s_etag == 1 || s_etag == m) {
+    return (make_pair(s_etag - 1, s_etag - 1 + (2 * m - 2)));
+  } else {
+    return (make_pair(s_etag - 1, m - 1 + (m - s_etag)));
+  }
+}
+int main() {
+  long long n, m;
+  cin >> n >> m;
+  long long s, f, t;
+  bool up;
+  for (int i = 0; i < n; i++) {
+    cin >> s >> f >> t;
+    long long time = t;
+    long long lift_etag_cur = get_etag(t, m, up);
+    if (s == f)
+      cout << t << endl;
+    else {
+      pair<long long, long long> s_time = get_two_time(s, m);
+      pair<long long, long long> f_time = get_two_time(f, m);
+      if ((t % (2 * m - 2)) > s_time.first) {
+        if ((t % (2 * m - 2)) <= s_time.second)
+          time += s_time.second - (t % (2 * m - 2));
+        else
+          time += (t % (2 * m - 2)) - s_time.second;
+        s_time.second = (s_time.second % (2 * m - 2));
+        if ((f_time.first < s_time.second) && (f_time.second < s_time.second)) {
+          f_time.first += (2 * m - 2);
+          f_time.second += (2 * m - 2);
+        }
+        if (f_time.first >= s_time.second)
+          time += f_time.first - s_time.second;
+        else
+          time += f_time.second - s_time.second;
+      } else {
+        time += s_time.first - (t % (2 * m - 2));
+        s_time.first = (s_time.first % (2 * m - 2));
+        if ((f_time.first < s_time.first) && (f_time.second < s_time.first)) {
+          f_time.first += (2 * m - 2);
+          f_time.second += (2 * m - 2);
+        }
+        if (f_time.first >= s_time.first)
+          time += f_time.first - s_time.first;
+        else
+          time += f_time.second - s_time.first;
+      }
+      cout << time << endl;
+    };
+  }
+}

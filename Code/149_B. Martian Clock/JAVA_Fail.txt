@@ -1,0 +1,44 @@
+import java.util.*;
+public class Cf106 {
+
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+        String k=s.nextLine();
+        String cl[]=k.split(":");
+        String chis=new String();
+        for(char i='0';i<='9';i++) chis+=i;
+        for(char i='A';i<='Z';i++) chis+=i;
+        //System.out.print(chis);
+        //k=k.trim();
+        //System.out.println(cl[0]+" "+cl[1]);
+        
+       /* for(int i=0;i<2;i++){
+            int t=0;
+            while(t<cl[i].length() && cl[i].charAt(t)=='0' ){System.out.println(cl[i].charAt(t)); t++;}
+            System.out.println(""+t);
+            if(t==cl[i].length()) cl[i]="0";
+            else cl[i]=String.copyValueOf(cl[i].toCharArray(), 0, t);
+        }*/
+        //System.out.println(cl[0]+"-"+cl[1]);
+        char max='0';
+        String res=new String();
+        int minosn=2;
+        for(int j=0;j<2;j++)
+            for(int i=0;i<cl[j].length();i++){ if(cl[j].charAt(i)>max)max=cl[j].charAt(i);}
+        minosn=chis.lastIndexOf(max);
+        //System.out.println(""+minosn);
+        while(true){
+        int h=0,m=0;
+        for(int i=0;i<cl[0].length();i++)
+            h+=chis.lastIndexOf(cl[0].charAt(i))*Math.pow(minosn,cl[0].length()-i-1);
+        for(int i=0;i<cl[1].length();i++)
+            m+=chis.lastIndexOf(cl[1].charAt(i))*Math.pow(minosn,cl[1].length()-i-1);
+        if(h<24&&m<59) res+=minosn+" ";
+        else break;
+        minosn++;
+        if(minosn>35){res="-1";break;}
+        }
+        if(res.isEmpty())res="0";
+        System.out.print(res);
+    }
+}

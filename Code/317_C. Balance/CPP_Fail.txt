@@ -1,0 +1,124 @@
+#include <bits/stdc++.h>
+using namespace std;
+const long long oo = (long long)(3e12);
+const long double PI = 3.141592653589793;
+int PP = 1000000007;
+const int MAXN = 1111111 * 2, MAXE = 1111111;
+template <typename TT>
+void read(TT &x) {
+  char ch;
+  for (ch = getchar(); ch > '9' || ch < '0'; ch = getchar())
+    ;
+  for (x = 0; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - 48;
+}
+int n, m, k;
+int a[333][333];
+int N, S, T, H[MAXN], V[MAXE], nt[MAXE], ent;
+long long flow, C[MAXE];
+void init() {
+  ent = 1;
+  memset(H, 0, sizeof(H));
+  ;
+}
+void add(int u, int v, long long c) {
+  nt[++ent] = H[u], H[u] = ent, V[ent] = v, C[ent] = c;
+  nt[++ent] = H[v], H[v] = ent, V[ent] = u, C[ent] = 0;
+}
+int gap[MAXN], dis[MAXN];
+long long aug(int u, long long now) {
+  if (u == T) return now;
+  long long lim = now;
+  int mind = N;
+  for (int p = H[u]; p; p = nt[p])
+    if (C[p]) {
+      int v = V[p];
+      if (dis[u] == dis[v] + 1 && lim) {
+        int push = aug(v, min(lim, C[p]));
+        lim -= push;
+        C[p] -= push;
+        C[p ^ 1] += push;
+        if (dis[S] >= N) return now - lim;
+        if (!lim) break;
+      }
+      if (C[p]) mind = min(mind, dis[v]);
+    }
+  if (now == lim) {
+    if (gap[dis[u]] == 1) dis[S] = N;
+    gap[dis[u]]--;
+    dis[u] = mind + 1;
+    gap[dis[u]]++;
+  }
+  return now - lim;
+}
+void run() {
+  flow = 0;
+  memset(dis, 0, sizeof(dis));
+  ;
+  memset(gap, 0, sizeof(gap));
+  gap[0] = N;
+  for (; (dis[S] < N); flow += aug(S, oo))
+    ;
+}
+long long sum = 0, sum2 = 0;
+void Init() {
+  scanf("%d%d%d", &n, &k, &m);
+  ;
+  memset(a, 0, sizeof(a));
+  ;
+  init();
+  int tt = n + 1;
+  N = tt * n * 2 + 2;
+  T = N - 1, S = T - 1;
+  for (int i = 0; i < n; i++) {
+    int goin;
+    scanf("%d", &goin);
+    ;
+    sum += goin;
+    add(S, i, goin);
+    for (int j = 0; j < tt - 1; j++) add(i + j * n + tt * n, i + j * n + n, oo);
+    for (int j = 0; j < tt; j++) add(i + j * n, i + j * n + tt * n, k);
+  }
+  for (int i = 0; i < n; i++) {
+    int goout;
+    scanf("%d", &goout);
+    ;
+    sum2 += goout;
+    add(i + tt * n - n + tt * n, T, goout);
+  }
+  for (int i = 0; i < m; i++) {
+    int x, y;
+    scanf("%d%d", &x, &y);
+    ;
+    x--;
+    y--;
+    a[x][y] = a[y][x] = 1;
+  }
+  for (int t = 0; t < tt - 1; t++)
+    for (int i = 0; i < n; i++)
+      for (int j = 0; j < n; j++)
+        if (a[i][j]) {
+          add(i + t * n + tt * n, j + t * n + n, oo);
+        }
+  run();
+  if (flow != sum || flow != sum2) {
+    puts("NO");
+    return;
+  }
+  int K = 0;
+  for (int i = 0; i < ent + 1; i++)
+    if (C[i] && (i & 1) && V[i ^ 1] != S && V[i ^ 1] != T && V[i] != S &&
+        V[i] != T && V[i] % n != V[i ^ 1] % n) {
+      K++;
+    }
+  if (K > 2 * n * n) {
+    puts("NO");
+    return;
+  }
+  printf("%d\n", K);
+  for (int i = 0; i < ent + 1; i++)
+    if (C[i] && (i & 1) && V[i ^ 1] != S && V[i ^ 1] != T && V[i] != S &&
+        V[i] != T && V[i] % n != V[i ^ 1] % n) {
+      printf("%d %d %d\n", V[i] % n + 1, V[i ^ 1] % n + 1, C[i]);
+    }
+}
+int main() { Init(); }

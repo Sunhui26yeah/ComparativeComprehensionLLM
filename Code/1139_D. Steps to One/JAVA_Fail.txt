@@ -1,0 +1,176 @@
+import java.io.*;
+import java.util.*;
+public class Main{
+    public static void main(String[] args) {
+        InputStream inputStream = System.in;
+        OutputStream outputStream = System.out;
+        InputReader in = new InputReader(inputStream);
+        PrintWriter out = new PrintWriter(outputStream);
+        TaskE solver = new TaskE();
+        solver.solve(1, in, out);
+        out.flush();out.close();
+    }
+        static class TaskE {
+            final int max=100010;
+            final long mod=(long)(1E9)+7;
+            int p[]=new int[max];
+            int val[]=new int[max];
+            long inv[]=new long[max];
+            int m;
+            // int cnt=0;
+            void pre(){
+                for(int i=1;i<max;i++)p[i]=i;
+                // int val=1;
+                inv[1]=1;
+                for(int i=2;i<max;i++){
+                    val[i]=m/i;
+                    inv[i]=rpe(i,mod-2);
+                    if(p[i]!=i)continue;
+                    // if(val<max){val*=i;++cnt;}
+                    for(int j=2*i;j<max;j+=i){
+                        if(p[j]==j)p[j]=i;
+                    }
+                }
+            }
+            long rpe(long a,long b){
+                long ans=1;
+                while(b!=0){
+                    if(b%2==1)ans=(ans*a)%mod;
+                    a=(a*a)%mod;
+                    b>>=1;
+                }return ans;
+            }
+            long cal(int x){
+                ArrayList<Integer> al=new ArrayList<>();
+                while(x>1){
+                    int f=p[x];
+                    al.add(p[x]);
+                    while(x%f==0){
+                        x/=f;
+                    }
+                }
+                int sz=al.size();
+                long ans=0;
+                for(int i=0;i<(1<<sz);i++){
+                    int cnt=0;int m=1;
+                    for(int j=0;j<sz;j++){
+                        if((i>>j)%2==1){
+                            ++cnt;m*=al.get(j);
+                        }
+                    }
+                    int cont=val[m];
+                    if(cnt%2==0)ans-=cont;
+                    else ans+=cont;
+                }
+                return ans;
+            }
+            long add(long a,long b){
+                a+=b;
+                if(a>=mod)a-=mod;
+                return a;
+            }
+            long mul(long a,long b){
+                a*=b;
+                if(a>=mod)a%=mod;
+                return a;
+            }
+           public void solve(int testNumber, InputReader in, PrintWriter out) {
+           m=in.nextInt();
+           pre();
+        //   out.print(cnt);
+            long ans=1;
+            for(int i=2;i<=m;i++){
+                int F=m/i;
+                long x=cal(i);
+                long val=add(mul(mul(2,F),inv[m-F]),mul(mul(F,inv[m-F]),mul(F,inv[m-F])));
+                val=mul(val,x);
+                ans=add(ans,val);
+            }
+            ans=mul(ans,inv[m]);
+            out.print(ans);
+          }
+//         pair ja[][];long w[];int from[],to[],c[];
+//             void make(int n,int m,InputReader in){
+//              ja=new pair[n+1][];w=new long[m];from=new int[m];to=new int[m];c=new int[n+1];
+//              for(int i=0;i<m;i++){
+//               int u=in.nextInt(),v=in.nextInt();long wt=in.nextLong();
+//               c[u]++;c[v]++;from[i]=u;to[i]=v;w[i]=wt;
+//              }
+//              for(int i=1;i<=n;i++){
+//               ja[i]=new pair[c[i]];c[i]=0;
+//              }
+//              for(int i=0;i<m;i++){
+//               ja[from[i]][c[from[i]]++]=new pair(to[i],w[i]);
+//               ja[to[i]][c[to[i]]++]=new pair(from[i],w[i]);
+//              }
+//             }
+//        int[] radixSort(int[] f){ return radixSort(f, f.length); }
+//    int[] radixSort(int[] f, int n)
+//    {
+//        int[] to = new int[n];
+//        {
+//            int[] b = new int[65537];
+//            for(int i = 0;i < n;i++)b[1+(f[i]&0xffff)]++;
+//            for(int i = 1;i <= 65536;i++)b[i]+=b[i-1];
+//            for(int i = 0;i < n;i++)to[b[f[i]&0xffff]++] = f[i];
+//            int[] d = f; f = to;to = d;
+//        }
+//        {
+//            int[] b = new int[65537];
+//            for(int i = 0;i < n;i++)b[1+(f[i]>>>16)]++;
+//            for(int i = 1;i <= 65536;i++)b[i]+=b[i-1];
+//            for(int i = 0;i < n;i++)to[b[f[i]>>>16]++] = f[i];
+//            int[] d = f; f = to;to = d;
+//        }
+//        return f;
+//    }
+    }
+    static class InputReader {
+        BufferedReader br;
+        StringTokenizer st;
+        public InputReader(InputStream stream) {
+            br = new BufferedReader(new InputStreamReader(stream));
+            st = null;
+        }
+
+        String next() {
+            while (st == null || !st.hasMoreTokens()) {
+                String s = null;
+                try {
+                    s = br.readLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if (s == null)
+                    return null;
+                st = new StringTokenizer(s);
+            }
+            return st.nextToken();
+        }
+
+        boolean hasMoreTokens() {
+            while (st == null || !st.hasMoreTokens()) {
+                String s = null;
+                try {
+                    s = br.readLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if (s == null)
+                    return false;
+                st = new StringTokenizer(s);
+            }
+            return true;
+        }
+
+        public int nextInt() {
+            return Integer.parseInt(next());
+        }
+        public long nextLong() {
+            return Long.parseLong(next());
+        }
+        public double nextDouble() {
+            return Double.parseDouble(next());
+        }
+    }
+}

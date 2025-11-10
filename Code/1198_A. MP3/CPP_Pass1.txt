@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+using namespace std;
+const int INF = 2147000000;
+const int maxn = 4e5 + 10;
+const int mod = 998244353;
+int n, I;
+int a[maxn];
+int sum[maxn];
+int main() {
+  scanf("%d%d", &n, &I);
+  for (int i = 1; i <= n; i++) {
+    scanf("%d", &a[i]);
+  }
+  sort(a + 1, a + 1 + n);
+  for (int i = 1; i <= n; i++) {
+    sum[i] = sum[i - 1];
+    if (a[i] != a[i - 1]) sum[i]++;
+  }
+  int z = 8 * I / n;
+  int ans = 0;
+  if (z <= 20) {
+    int K = 1 << z;
+    if (sum[n] > K) {
+      int l = 1, r = 1;
+      ans = INF;
+      int num = 1;
+      while (l <= r && r <= n) {
+        while (r <= n && num <= K) {
+          ans = min(ans, l - 1 + n - r);
+          r++;
+          if (a[r] != a[r - 1]) num++;
+        }
+        while (l <= r && num > K) {
+          l++;
+          if (a[l] != a[l - 1]) num--;
+        }
+      }
+    }
+  }
+  printf("%d\n", ans);
+  return 0;
+}

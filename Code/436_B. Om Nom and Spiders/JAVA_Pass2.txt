@@ -1,0 +1,161 @@
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Scanner;
+
+import javax.imageio.ImageIO;
+
+public class Main {
+	public static void main(String args[]) {
+		Scanner scan = new Scanner(System.in);
+		
+		String cpt[] = scan.nextLine().split(" ");
+		int n = Integer.parseInt(cpt[0]);
+		int m = Integer.parseInt(cpt[1]);
+		int k = Integer.parseInt(cpt[2]);
+		
+		ArrayList<Integer> counts = new ArrayList<Integer>(m);
+		for (int x = 0; x < m; x++) {
+			counts.add(0);
+		}
+
+		for (int i = 0; i < n; i++) {
+			String l = scan.nextLine();
+			for (int j = 0; j < m; j++) {
+				char c = l.charAt(j);
+				if (c == 'U') {
+					if (i % 2 == 0) {
+						counts.set(j, counts.get(j) + 1);
+					}
+				} else if (c == 'R') {
+					if (j + i < m) {
+						counts.set(i + j, counts.get(i + j) + 1);
+					}
+				} else if (c == 'L') {
+					if (j - i >= 0) {
+						counts.set(j - i, counts.get(j - i) + 1);
+					}
+				}
+			}
+		}
+
+		StringBuilder sb = new StringBuilder();
+		for (int count : counts) {
+			sb.append(count + " ");
+		}
+		
+		System.out.println(sb);
+	}
+	
+
+//	public static void main(String args[]) {
+//		Scanner scan = new Scanner(System.in);
+//
+//		String cpt[] = scan.nextLine().split(" ");
+//		int n = Integer.parseInt(cpt[0]);
+//		int x = Integer.parseInt(cpt[1]);
+//		
+//		ArrayList<Candy> type0 = new ArrayList<Main.Candy>();
+//		ArrayList<Candy> type1 = new ArrayList<Main.Candy>();
+//
+//		for (int i = 0; i < n; i++) {
+//			cpt = scan.nextLine().split(" ");
+//			
+//			int t = Integer.parseInt(cpt[0]);
+//			int h = Integer.parseInt(cpt[1]);
+//			int m = Integer.parseInt(cpt[2]);
+//			
+//			Main.Candy can = new Main.Candy();
+//			can.h = h;
+//			can.m = m;
+//			
+//			if (t == 0) {
+//				type0.add(can);
+//			} else {
+//				type1.add(can);
+//			}
+//		}
+//		
+//		Collections.sort(type0);
+//		Collections.sort(type1);
+//		
+//		int lastType = 2;
+//		int count = 0;
+//		
+//		while (true) {
+//			boolean any = false;
+//			Candy eat0 = null;
+//			Candy eat1 = null;
+//			
+//			if (lastType != 0 && type0.size() > 0) {	
+//				for (Candy candy : type0) {
+//					if (candy.h <= x) {
+//						if (eat0 == null || eat0 != null && eat0.m < candy.m) {
+//							eat0 = candy;
+//						}
+//					} else {
+//						break;
+//					}
+//				}
+//				
+//			}
+//			
+//			if (lastType != 1 && type1.size() > 0) {
+//				for (Candy candy : type1) {
+//					if (candy.h <= x) {
+//						if (eat1 == null || eat1 != null && eat1.m < candy.m) {
+//							eat1 = candy;
+//						}
+//					} else {
+//						break;
+//					}
+//				}
+//			}
+//			
+//			Candy eat = null;
+//			switch (lastType) {
+//			case 0:
+//				eat = eat1;
+//				break;
+//			case 1:
+//				eat = eat0;
+//			case 2:
+//				if (eat1 == null) {
+//					eat = eat0;
+//				} else if (eat0 == null) {
+//					eat = eat1;
+//				} else if (eat1.m > eat0.m) {
+//					eat = eat1;
+//				} else {
+//					eat = eat0;
+//				}
+//				break;
+//			}
+//			
+//			if (eat != null) {
+//				count++;
+//				type0.remove(eat);
+//				type1.remove(eat);
+//				x = Math.min(2001, eat.m + x);
+//				lastType = eat == eat1 ? 1 : 0;
+//			} else {
+//				break;
+//			}
+//		}
+//
+//		System.out.println(count);		
+//	}
+//	
+//	public static class Candy implements Comparable<Candy> {
+//		public int h;
+//		public int m;
+//		
+//		public int compareTo(Candy other){
+//	        return h == other.h ? 0 : (h > other.h ? 1 : -1);
+//	    }
+//	}
+}

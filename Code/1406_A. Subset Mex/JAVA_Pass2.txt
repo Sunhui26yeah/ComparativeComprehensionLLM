@@ -1,0 +1,55 @@
+import java.util.*;
+public class Main
+{
+	public static void main(String[] args) {
+        Scanner sc=new Scanner(System.in);
+        int t=sc.nextInt();
+        while(t--!=0)
+        {
+            long sum=0,c=0;
+            int n=sc.nextInt();
+            int a[]=new int[n];
+            for(int i=0;i<n;i++)
+            {
+                a[i]=sc.nextInt();
+            }
+            Arrays.sort(a);
+            int freq[]=new int[101];
+            for(int i=0;i<101;i++)
+            {
+                freq[i]=0;
+            }
+            for(int i=0;i<n;i++)
+            {
+                freq[a[i]]++;
+            }
+            
+            int i=0;
+            while(c!=2)
+            {
+                if(freq[i]==0)
+                {
+                    sum+=i;
+                    c++;
+                    if(c==2)
+                    break;
+                    i=0;
+                }
+                else
+                {
+                    freq[i]--;
+                    i++;
+                }
+                if(i==n)
+                {
+                    sum+=n;
+                    break;
+                }
+                
+            }
+            
+            System.out.println(sum);
+        }
+        
+	}
+}

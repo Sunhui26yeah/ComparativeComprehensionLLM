@@ -1,0 +1,16 @@
+#include <bits/stdc++.h>
+using namespace std;
+int i, a;
+char b[1001];
+int main() {
+  cin >> b;
+  for (a = 0; a < strlen(b); a++)
+    if (b[a] == '.') break;
+  if (b[a - 1] == '9') {
+    cout << "GOTO Vasilisa.";
+    return 0;
+  }
+  if (b[a + 1] >= '5') b[a - 1] += 1;
+  for (i = 0; i < a; i++) cout << b[i];
+  return 0;
+}

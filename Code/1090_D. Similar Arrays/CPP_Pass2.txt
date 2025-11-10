@@ -1,0 +1,58 @@
+#include <bits/stdc++.h>
+using namespace std;
+int n, m, r1, r2, ansa, ansb, ct, w;
+vector<int> v[100005];
+bool b = false, hv[100005];
+int main() {
+  scanf("%d%d", &n, &m);
+  for (int i = 1; i <= m; i++) {
+    scanf("%d%d", &r1, &r2);
+    v[r1].push_back(r2);
+    v[r2].push_back(r1);
+  }
+  for (int i = 1; i <= n; i++) {
+    if (v[i].size() == n - 1) continue;
+    b = true;
+    ansa = i;
+    hv[i] = true;
+    for (int j = 0; j < v[i].size(); j++) {
+      hv[v[i][j]] = true;
+    }
+    for (int j = 1; j <= n; j++) {
+      if (!hv[j]) {
+        ansb = j;
+        break;
+      }
+    }
+    break;
+  }
+  if (!b) {
+    printf("NO\n");
+    return 0;
+  }
+  printf("YES\n");
+  for (int i = 1; i <= n; i++) {
+    if (i == ansa)
+      w = n - 1;
+    else if (i == ansb)
+      w = n;
+    else {
+      ct++;
+      w = ct;
+    }
+    printf(i == n ? "%d\n" : "%d ", w);
+  }
+  ct = 0;
+  for (int i = 1; i <= n; i++) {
+    if (i == ansa)
+      w = n - 1;
+    else if (i == ansb)
+      w = n - 1;
+    else {
+      ct++;
+      w = ct;
+    }
+    printf(i == n ? "%d\n" : "%d ", w);
+  }
+  return 0;
+}

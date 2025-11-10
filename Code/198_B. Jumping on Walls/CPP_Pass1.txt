@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+using namespace std;
+vector<vector<int>> s(2, vector<int>(100005, 2e9));
+queue<pair<pair<int, int>, int>> q;
+int main() {
+  int n, k, i, a, b, c;
+  char sl[100005], sr[100005];
+  scanf("%d %d %s %s", &n, &k, sl, sr);
+  for (i = 0; i < n; i++) {
+    if (sl[i] == 'X') s[0][i] = -1;
+    if (sr[i] == 'X') s[1][i] = -1;
+  }
+  q.push({{0, 0}, 0});
+  while (!q.empty()) {
+    a = q.front().first.first;
+    b = q.front().first.second;
+    c = q.front().second;
+    q.pop();
+    if (c > b || (s[a][b] <= c)) continue;
+    if (b >= n - k) {
+      printf("YES");
+      return 0;
+    }
+    s[a][b] = c;
+    if (b - 1 >= 0 && s[a][b - 1] > c + 1) q.push({{a, b - 1}, c + 1});
+    if (s[a][b + 1] > c + 1) q.push({{a, b + 1}, c + 1});
+    if (s[1 - a][b + k] > c + 1) q.push({{1 - a, b + k}, c + 1});
+  }
+  printf("NO");
+  return 0;
+}

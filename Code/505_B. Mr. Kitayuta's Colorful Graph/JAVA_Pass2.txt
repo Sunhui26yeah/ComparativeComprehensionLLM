@@ -1,0 +1,114 @@
+import java.util.*;
+import java.awt.geom.*;
+import java.io.*;
+import java.math.*;
+
+public class Main {
+    static boolean[] visited = new boolean[101];
+    static HashSet<Integer>[][] edges = new HashSet[101][101];
+    static ArrayList<Integer>[] adj = new ArrayList[101];
+
+    public static void main(String[] args) throws Exception {
+        long startTime = System.nanoTime();
+        int n = in.nextInt();
+        int m = in.nextInt();
+        for (int i = 0; i < 101; i++) {
+            adj[i] = new ArrayList<Integer>();
+            for (int j = 0; j < 101; j++) {
+                edges[i][j] = new HashSet<Integer>();
+            }
+        }
+        for (int i = 0; i < m; i++) {
+            int a = in.nextInt();
+            int b = in.nextInt();
+            int c = in.nextInt();
+            edges[a][b].add(c);
+            edges[b][a].add(c);
+            adj[a].add(b);
+            adj[b].add(a);
+        }
+
+        int q = in.nextInt();
+        while (q-- > 0) {
+            int u = in.nextInt();
+            int v = in.nextInt();
+            int ans = 0;
+            for (int i = 1; i <= 100; i++) {
+                if (dfs(u, v, i)) {
+                    ans++;
+                }
+                visited = new boolean[101];
+            }
+
+            out.println(ans);
+        }
+        long endTime = System.nanoTime();
+        err.println("Execution Time : +" + (endTime - startTime) / 1000000 + " ms");
+        exit(0);
+    }
+
+    static boolean dfs(int start, int end, int col) {
+        visited[start] = true;
+        if (start == end) {
+            return true;
+        }
+        for (int e : adj[start]) {
+            for (int c : edges[start][e]) {
+                if (col == c && !visited[e]) {
+                    if (dfs(e, end, c)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    static class InputReader {
+        public BufferedReader reader;
+        public StringTokenizer tokenizer;
+
+        public InputReader(InputStream stream) {
+            reader = new BufferedReader(new InputStreamReader(stream), 32768);
+            tokenizer = null;
+        }
+
+        public String next() {
+            while (tokenizer == null || !tokenizer.hasMoreTokens()) {
+                try {
+                    tokenizer = new StringTokenizer(reader.readLine());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            return tokenizer.nextToken();
+        }
+
+        public long nextLong() {
+            return Long.parseLong(next());
+        }
+
+        public int nextInt() {
+            return Integer.parseInt(next());
+        }
+
+        public double nextDouble() {
+            return Double.parseDouble(next());
+        }
+    }
+
+    static void exit(int a) {
+        out.close();
+        err.close();
+        System.exit(a);
+    }
+
+    static InputStream inputStream = System.in;
+    static OutputStream outputStream = System.out;
+    static OutputStream errStream = System.err;
+    static InputReader in = new InputReader(inputStream);
+    static PrintWriter out = new PrintWriter(outputStream);
+    static PrintWriter err = new PrintWriter(errStream);
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+}

@@ -1,0 +1,48 @@
+class SegTree:
+    op = max
+    e = 0
+    
+    def __init__(self, N, init=None):
+        self.N = N
+        self.T = [self.e]*(2*N)
+        if init is not None:
+            assert len(init) == N
+            for i, val in enumerate(init, N):
+                self.T[i] = val
+            for i in range(N-1, 0, -1):
+                self.T[i] = self.op(self.T[i<<1], self.T[i<<1|1])
+
+    def get(self, l, r):
+        l += self.N; r += self.N
+        ret = self.e
+        while l < r:
+            if l & 1:
+                ret = self.op(ret, self.T[l])
+                l += 1
+            if r & 1:
+                r -= 1
+                ret = self.op(ret, self.T[r])
+            l >>= 1; r >>= 1
+        return ret
+
+    def __setitem__(self, i, val):
+        i += self.N
+        self.T[i] = val
+        while i>1:
+            i >>= 1
+            self.T[i] = self.op(self.T[i<<1], self.T[i<<1|1])
+
+
+import sys
+N,K, *A = map(int, open(0).read().split())
+
+MAX = 300_001
+S = SegTree(MAX)
+
+for a in A:
+    l = max(0, a-K)
+    r = min(MAX, a+K+1)
+    x = S.get(l, r)+1
+    S[a] = x
+
+print(S.get(0,MAX))

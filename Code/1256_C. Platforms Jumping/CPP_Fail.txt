@@ -1,0 +1,48 @@
+#include <bits/stdc++.h>
+using namespace std;
+const long long NUM = 100010;
+int c[NUM];
+int pos[NUM];
+int main() {
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+  cout.tie(nullptr);
+  int n, m, d;
+  cin >> n >> m >> d;
+  int sum = 0;
+  for (int i = 0; i < n; i++) {
+    cin >> c[i];
+    sum += c[i];
+  }
+  if (sum + (n + 1) * d < n + 1) {
+    cout << "NO" << endl;
+    return 0;
+  } else {
+    int last = n + 1;
+    for (int i = m - 1; i >= 0; i--) {
+      pos[i] = last - c[i];
+      last = pos[i];
+    }
+    vector<int> a;
+    int sta = 0;
+    for (int i = 0; i < m; i++) {
+      if (sta + d < pos[i]) pos[i] = sta + d;
+      for (int j = sta + 1; j < pos[i]; j++) {
+        a.push_back(0);
+      }
+      sta = pos[i] + c[i] - 1;
+      for (int j = 0; j < c[i]; j++) {
+        a.push_back(i + 1);
+      }
+      if (i == m - 1) {
+        for (int j = pos[i] + c[i]; j < n; j++) {
+          a.push_back(0);
+        }
+      }
+    }
+    cout << "YES" << endl;
+    cout << a[0];
+    for (int i = 1; i < n; i++) cout << " " << a[i];
+  }
+  return 0;
+}

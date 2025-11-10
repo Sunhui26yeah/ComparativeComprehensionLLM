@@ -1,0 +1,122 @@
+import java.io.*;
+import java.util.*;
+ public class Solution {
+	 public static void main(String[] args) throws Exception
+    {
+		     FastReader fr=new FastReader();
+              int t=fr.nextInt();
+              while(t-->0) {
+            	
+              int n=fr.nextInt();
+              String b=fr.next();
+              StringBuilder a=new StringBuilder("1");
+              StringBuilder sum=new StringBuilder();
+              if(b.charAt(0)=='1')
+               sum.append("2");
+              else
+            	  sum.append("1");
+              for(int i=1;i<b.length();i++) {
+            	  if(b.charAt(i)=='0') {
+            		  if(sum.charAt(i-1)!='1') {
+            			  a.append("1");
+            			  sum.append("1");
+            		  }
+            		  else {
+            			  a.append('0');
+            			  sum.append("0");
+            		  }
+            	  }
+            	  else {
+            		  if(sum.charAt(i-1)!='2') {
+            			  a.append('1');
+            			  sum.append("2");
+            		  }
+            		  else {
+            			  a.append("0");
+            		     sum.append("1");
+            		  }
+            	  }
+              }
+              
+              System.out.println(a);
+              
+              
+              
+              
+              
+              }
+	    	
+	 }
+	
+	
+	 
+	
+}
+ class Pair{
+	 int neigh;
+	 int weight;
+	 Pair(int x,int y){
+		 neigh=x;
+		 weight=y;
+	 }
+	 
+ }
+
+  
+
+class FastReader
+{
+    BufferedReader br;
+    StringTokenizer st;
+ 
+    public FastReader()
+    {
+        br = new BufferedReader(new
+                InputStreamReader(System.in));
+    }
+ 
+    String next()
+    {
+        while (st == null || !st.hasMoreElements())
+        {
+            try
+            {
+                st = new StringTokenizer(br.readLine());
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        return st.nextToken();
+    }
+ 
+    int nextInt()
+    {
+        return Integer.parseInt(next());
+    }
+ 
+    long nextLong()
+    {
+        return Long.parseLong(next());
+    }
+ 
+    double nextDouble()
+    {
+        return Double.parseDouble(next());
+    }
+ 
+    String nextLine()
+    {
+        String str = "";
+        try
+        {
+            str = br.readLine();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return str;
+    }
+}

@@ -1,0 +1,51 @@
+// package contest;
+
+import java.io.*;
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Deque;
+import java.util.StringTokenizer;
+
+public class teama {
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter pw = new PrintWriter(System.out);
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int n = Integer.parseInt(st.nextToken());
+        int m = Integer.parseInt(st.nextToken());
+        int d = Integer.parseInt(st.nextToken());
+
+        int loc = 1;
+        int[] ret = new int[n+1];
+        int[] plats = new int[m+1];
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < m; i++) {
+            plats[i+1] = Integer.parseInt(st.nextToken());
+        }
+        int[] suf = new int[m + 2];
+        suf[suf.length-1] = n+1;
+        for (int i = m; i >= 0; i--) {
+            suf[i] = suf[i + 1] - plats[i];
+        }
+//        System.out.println(Arrays.toString(suf));
+        for(int i= 0; i<=m; i++){
+            for(int j = 1; j <= plats[i]; j++, loc++){
+                ret[loc] = i;
+            }
+            loc--;
+            int dist = Math.min(d, suf[i+1] - loc);
+            loc += dist;
+        }
+        
+        if(loc == n+1){
+            pw.println("YES");
+            for(int i = 1; i<ret.length; i++) pw.print(ret[i] + " " );
+        }else{
+            pw.println("NO");
+        }
+        
+        pw.close();
+        br.close();
+    }
+}

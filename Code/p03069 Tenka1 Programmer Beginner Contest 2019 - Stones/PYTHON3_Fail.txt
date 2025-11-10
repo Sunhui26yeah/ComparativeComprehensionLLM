@@ -1,0 +1,23 @@
+N = int(input())
+S = str(input())
+
+white = 0
+black = 0
+
+first_black_index = 0
+
+while S[first_black_index] == ".":
+  first_black_index += 1
+  if first_black_index == N:
+    print(0)
+    break
+if first_black_index != N:
+  S = S[first_black_index:N+1]
+
+  for i in range(len(S)):
+    if S[i] == "#":
+      black +=1
+    else:
+      white +=1
+
+  print(min(white,black))

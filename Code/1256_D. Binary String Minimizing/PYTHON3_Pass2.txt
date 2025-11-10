@@ -1,0 +1,22 @@
+from sys import *
+from math import *
+t=int(stdin.readline())
+for _ in range(t):
+    n,k=map(int,stdin.readline().split())
+    a = list(map(int,input()))
+    b=[1]*n
+    j=0
+    for i in range(n):
+        if a[i]==0:
+            if i-j<=k:
+                k-=(i-j)
+                b[j]=0
+                j+=1
+            else:
+                if b[i-k]!=0 or k==0:
+                    b[i-k]=0
+                    k=0
+                else:
+                    b[i-k+1]=0
+                    k=0
+    print(*b,sep="")

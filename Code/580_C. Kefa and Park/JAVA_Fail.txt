@@ -1,0 +1,130 @@
+import java.util.*; 
+import java.lang.*;
+import java.io.*;
+import java.io.PrintWriter;
+public class Main 
+{ 
+    static class FastReader 
+    { 
+        BufferedReader br; 
+        StringTokenizer st; 
+  
+        public FastReader() 
+        { 
+            br = new BufferedReader(new
+                     InputStreamReader(System.in)); 
+        } 
+  
+        String next() 
+        { 
+            while (st == null || !st.hasMoreElements()) 
+            { 
+                try
+                { 
+                    st = new StringTokenizer(br.readLine()); 
+                } 
+                catch (IOException  e) 
+                { 
+                    e.printStackTrace(); 
+                } 
+            } 
+            return st.nextToken(); 
+        } 
+  
+        int nextInt() 
+        { 
+            return Integer.parseInt(next()); 
+        } 
+  
+        long nextLong() 
+        { 
+            return Long.parseLong(next()); 
+        } 
+  
+        double nextDouble() 
+        { 
+            return Double.parseDouble(next()); 
+        } 
+  
+        String nextLine() 
+        { 
+            String str = ""; 
+            try
+            { 
+                str = br.readLine(); 
+            } 
+            catch (IOException e) 
+            { 
+                e.printStackTrace(); 
+            } 
+            return str; 
+        } 
+    } 
+    static FastReader in = new FastReader();
+    static PrintWriter out = new PrintWriter(System.out);
+    static ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+    static int M;
+    static int N = 100000;
+    static int[] arr = new int[N+1];
+    static boolean[] visited = new boolean[N+1];
+    static int[] child = new int[N+1];
+    public static int dfs(int vertex,int cons){
+        visited[vertex] = true;
+        int cnt = 0;
+        if(arr[vertex]==1){
+            cons++;
+        }
+        else{
+            cons = 0;
+        }
+        if(cons>M){
+            return 0;
+        }
+        for(int i=0;i<adj.get(vertex).size();i++){
+            if(!visited[adj.get(vertex).get(i)]){
+                cnt += dfs(adj.get(vertex).get(i),cons);
+            }
+        }
+        if(cons<=M && child[vertex]==0){
+            return 1;
+        }
+        return cnt;
+    }
+    public static void solve(){
+        int n = in.nextInt();
+        M = in.nextInt();
+        int u,v;
+        for(int i =0;i<n;i++){
+            arr[i] = in.nextInt();
+            adj.add(new ArrayList<>());
+        }
+        for(int i=0;i<n-1;i++){
+            u = in.nextInt();
+            v = in.nextInt();
+            adj.get(u-1).add(v-1);
+            adj.get(v-1).add(u-1);
+            child[u-1]=1;
+        }
+        out.println(dfs(0,0));
+        out.flush();
+        return;
+    }
+    public static void main(String[] args) 
+    {  
+        int T=1;
+        // T = s.nextInt();
+        while(T>0){
+            // System.out.println("TEST CASE: "+T);
+            solve();
+            T--;
+        }
+    } 
+}
+class Pair{
+    int first;
+    int second;
+    Pair(int a,int b){
+        this.first = a;
+        this.second = b;
+    }    
+}

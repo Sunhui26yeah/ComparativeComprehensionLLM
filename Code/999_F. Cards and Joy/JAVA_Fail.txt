@@ -1,0 +1,96 @@
+import java.util.*;
+import java.io.*;
+
+public class F490 {
+    public static void main(String[] args) {
+        MyScanner sc = new MyScanner();
+        PrintWriter out = new PrintWriter(new BufferedOutputStream(System.out));
+        int n = sc.nextInt(); int k = sc.nextInt();
+        int [] cards = new int[k * n];
+        for (int i = 0; i < k * n; i++) cards[i] = sc.nextInt();
+        Map<Integer, Integer> f = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            int x = sc.nextInt();
+            f.put(x, f.getOrDefault(x, 0) + 1);
+        }
+        Map<Integer, Integer> amt = new HashMap<>();
+        for (int i = 0; i < k * n; i++) {
+            if (f.containsKey(cards[i])) {
+                amt.put(cards[i], amt.getOrDefault(cards[i], 0) + 1);
+            }
+        }
+        long res = 0;
+        int [] delta = new int[k + 1]; int prev = 0;
+        for (int i = 0; i < k; i++) {
+            int x = sc.nextInt();
+            delta[i] = x - prev;
+            prev = x;
+        }
+        delta[k] = -100;
+        for (Integer i: f.keySet()) {
+            int people = f.get(i);
+            int c = amt.getOrDefault(i, 0);
+            PriorityQueue<Integer> pq = new PriorityQueue<>(Comparator.comparingInt(x -> -delta[x]));
+            for (int j = 0; j < people; j++) pq.add(0);
+            int given = 0;
+            while (given < c && !pq.isEmpty()) {
+                Integer next = pq.poll();
+                if (next == k) {
+                    break;
+                }
+                res += delta[next];
+                pq.add(next + 1);
+                ++given;
+            }
+        }
+        out.println(res);
+        out.close();
+    }
+
+
+    //-----------MyScanner class for faster input----------
+    public static class MyScanner {
+        BufferedReader br;
+        StringTokenizer st;
+
+        public MyScanner() {
+            br = new BufferedReader(new InputStreamReader(System.in));
+        }
+
+        String next() {
+            while (st == null || !st.hasMoreElements()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
+
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
+
+        long nextLong() {
+            return Long.parseLong(next());
+        }
+
+        double nextDouble() {
+            return Double.parseDouble(next());
+        }
+
+        String nextLine() {
+            String str = "";
+            try {
+                str = br.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return str;
+        }
+
+
+    }
+
+}

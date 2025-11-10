@@ -1,0 +1,77 @@
+#include <bits/stdc++.h>
+using namespace std;
+int in(char &c) { return scanf("%c", &c); }
+int in(char s[]) { return scanf("%s", s); }
+int in(int &x) { return scanf("%d", &x); }
+int in(long long &x) { return scanf("%lld", &x); }
+int in(double &x) { return scanf("%lf", &x); }
+int in(pair<int, int> &p) { return scanf("%d%d", &p.first, &p.second); }
+int in(pair<long long, long long> &p) {
+  return scanf("%lld%lld", &p.first, &p.second);
+}
+int in(pair<double, double> &p) { return scanf("%lf%lf", &p.first, &p.second); }
+int in(long double &a) { return scanf("%Lf", &a); }
+int in(int &x, long long &y) { return scanf("%d%lld", &x, &y); }
+int in(long long &x, int &y) { return scanf("%lld%d", &x, &y); }
+int in(int &x, int &y) { return scanf("%d%d", &x, &y); }
+int in(long long &x, long long &y) { return scanf("%lld%lld", &x, &y); }
+int in(int &n, char s[]) { return scanf("%d%d", &n, s); }
+int in(char a[], char b[]) { return scanf("%s%s", a, b); }
+int in(double &x, double &y) { return scanf("%lf%lf", &x, &y); }
+int in(int &x, int &y, int &z) { return scanf("%d%d%d", &x, &y, &z); }
+int in(long long &x, long long &y, long long &z) {
+  return scanf("%lld%lld%lld", &x, &y, &z);
+}
+int in(double &x, double &y, double &z) {
+  return scanf("%lf%lf%lf", &x, &y, &z);
+}
+int in(int &x, int &y, int &z, int &k) {
+  return scanf("%d%d%d%d", &x, &y, &z, &k);
+}
+int in(long long &x, long long &y, long long &z, long long &k) {
+  return scanf("%lld%lld%lld%lld", &x, &y, &z, &k);
+}
+int in(double &x, double &y, double &z, double &k) {
+  return scanf("%lf%lf%lf%lf", &x, &y, &z, &k);
+}
+const int N = 1e6 + 10, M = 1e3 + 10, mod = 1e9 + 7;
+const double eps = 1e-6, Pi = acos(-1.0);
+int a[N], b[N], vis[N], mark[N];
+set<int> st;
+int main() {
+  int n;
+  in(n);
+  for (int i = 1; i <= n; i++) {
+    in(a[i]);
+    vis[a[i]]++;
+  }
+  for (int i = 0; i < N; i++) {
+    if (!vis[i]) {
+      st.insert(i);
+    }
+  }
+  for (int i = 1; i <= n; i++) {
+    auto it = st.upper_bound(a[i]);
+    if (it != st.begin()) {
+      it--;
+    }
+    b[i] = *it;
+    st.erase(it);
+    if (vis[a[i]] == 1) {
+      st.insert(a[i]);
+    }
+    vis[a[i]]--;
+  }
+  int p = 0, v = 0;
+  for (int i = 1; i <= n; i++) {
+    mark[b[i]] = 1;
+    while (mark[p]) p++;
+    if (p != a[i]) v = 1;
+    p++;
+  }
+  if (v) return 0 * printf("-1\n");
+  for (int i = 1; i <= n; i++) {
+    printf("%d ", b[i]);
+  }
+  return 0;
+}

@@ -1,0 +1,57 @@
+#include <bits/stdc++.h>
+#define int long long
+#define endl '\n'
+#define FOR(i, a, n) for (int i = (a); i < (n); ++i)
+#define REP(i, n) FOR(i, 0, n)
+using namespace std;
+
+const int dy[] = {-1, 0, 0, 1};
+const int dx[] = {0, -1, 1, 0};
+int w, h;
+string a[50];
+int isW[50][50], isB[50][50];
+
+void dfs1(int y, int x) {
+    isW[y][x] = 1;
+    REP (i, 4) {
+        int ny = y + dy[i];
+        int nx = x + dx[i];
+        if (ny >= 0 && ny < h && nx >= 0 && nx < w && !isW[ny][nx] && a[ny][nx] != 'B') {
+            dfs1(ny, nx);
+        }
+    }
+}
+
+void dfs2(int y, int x) {
+    isB[y][x] = 1;
+    REP (i, 4) {
+        int ny = y + dy[i];
+        int nx = x + dx[i];
+        if (ny >= 0 && ny < h && nx >= 0 && nx < w && !isB[ny][nx] && a[ny][nx] != 'W') {
+            dfs2(ny, nx);
+        }
+    }
+}
+
+signed main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    while (cin >> w >> h, w) {
+        memset(isW, 0, sizeof(isW));
+        memset(isB, 0, sizeof(isB));
+        REP (i, h) cin >> a[i];
+        REP (i, h) REP (j, w) if (a[i][j] == 'W') {
+            dfs1(i, j);
+        }
+        REP (i, h) REP (j, w) if (a[i][j] == 'B') {
+            dfs2(i, j);
+        }
+        int numW = 0, numB = 0;
+        REP (i, h) REP (j, w) if (a[i][j] == '.') {
+            if (isW[i][j] && !isB[i][j]) numW++;
+            if (!isW[i][j] && isB[i][j]) numB++;
+        }
+        cout << numB << " " << numW << endl;
+    }
+}

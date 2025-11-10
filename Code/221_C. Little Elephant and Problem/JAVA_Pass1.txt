@@ -1,0 +1,24 @@
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class TC {
+    public static void main(String[] args) {
+        Scanner sc=new Scanner(System.in);
+        Integer[] ar=new Integer[sc.nextInt()];
+        Integer[] sortedAr=new Integer[ar.length];
+        for(int i=0;i<ar.length;i++){
+            ar[i]=sc.nextInt();
+            sortedAr[i]=ar[i];
+        }
+        Arrays.sort(sortedAr);
+        int misMatchCnt=0;
+        for(int i=0;i<ar.length;i++){
+            if(!ar[i].equals(sortedAr[i])) misMatchCnt++;
+        }
+        if(misMatchCnt==0||misMatchCnt==2){
+            System.out.println("YES");
+        }else{
+            System.out.println("NO");
+        }
+    }
+}

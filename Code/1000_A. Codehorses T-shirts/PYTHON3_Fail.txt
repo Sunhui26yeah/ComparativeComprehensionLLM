@@ -1,0 +1,14 @@
+# cook your dish here
+n=int(input())
+a,b=[],[]
+for i in range(n):
+    a.append(input())
+for i in range(n):
+    b.append(input())
+a.sort()
+b.sort()
+t=0
+for i in range(n):
+    if a[i][-1]!=b[i][-1]:
+        t+=1
+print(t)

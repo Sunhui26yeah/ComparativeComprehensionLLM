@@ -1,0 +1,39 @@
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        int n = Integer.parseInt(in.next());
+        int m = Integer.parseInt(in.next());
+        int[] nums = new int[n];
+        for (int i = 0; i < nums.length; i++)
+            nums[i] = Integer.parseInt(in.next());
+        Arrays.sort(nums);
+        HashSet<String> set = new HashSet<String>();
+        HashMap<String, Integer> map = new HashMap<String, Integer>();
+        for (int i = 0; i < m; i++) {
+            String s = in.next();
+            if (set.contains(s))
+                map.put(s, map.get(s) + 1);
+            else {
+                set.add(s);
+                map.put(s, 1);
+            }
+        }
+        int[] freq = new int[n];
+        int index = 0;
+        for (String x : set)
+            freq[index++] = map.get(x);
+        Arrays.sort(freq);
+        int max = 0;
+        for (int i = 0; i < n; i++)
+            max += (freq[i] * nums[i]);
+        int min = 0;
+        for (int i = 0; i < n; i++)
+            min += freq[i] * nums[nums.length - i - 1];
+        System.out.println(min + " " + max);
+    }
+}

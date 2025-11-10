@@ -1,0 +1,59 @@
+#include <bits/stdc++.h>
+using namespace std;
+long long P = 1e9 + 7;
+long long P1 = 998244353;
+const int sqr = 500;
+const int arrn = 1e6 + 5;
+const int arrn2 = 5e3 + 5;
+int tree[arrn] = {};
+int g1(int i) { return i & (i + 1); }
+int h1(int i) { return i | (i + 1); }
+void add(int n, int pos, int delta) {
+  while (pos < n) {
+    tree[pos] += delta;
+    pos = h1(pos);
+  }
+}
+int getsum(int l) {
+  int out = 0;
+  while (l >= 0) {
+    out += tree[l];
+    l = g1(l) - 1;
+  }
+  return out;
+}
+int sum(int l, int r) { return getsum(r) - getsum(l - 1); }
+void solve() {
+  int n;
+  cin >> n;
+  vector<int> in(n);
+  for (int i = 0; i < n; i++) cin >> in[i];
+  vector<int> lf(n), ri(n);
+  map<int, int> tem;
+  for (int i = 0; i < n; i++) {
+    tem[in[i]]++;
+    lf[i] = tem[in[i]];
+  }
+  tem.clear();
+  for (int i = n - 1; i >= 0; i--) {
+    tem[in[i]]++;
+    ri[i] = tem[in[i]];
+  }
+  long long tot = 0;
+  for (int i = 0; i < n; i++) {
+    tot += sum(ri[i] + 1, n + 1);
+    add(n + 1, lf[i], 1);
+  }
+  cout << tot;
+}
+int main() {
+  ios::sync_with_stdio(0);
+  cin.tie(0);
+  cout.tie(0);
+  ;
+  int T = 1;
+  while (T--) {
+    solve();
+  }
+  return 0;
+}

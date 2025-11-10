@@ -1,0 +1,52 @@
+import java.util.*;
+import java.io.*;
+
+public class Solution {	
+
+	public static void main(String[] args) throws IOException{
+		Scanner sc = new Scanner(new BufferedReader(new InputStreamReader(System.in)));
+		PrintWriter out = new PrintWriter(System.out);
+
+		int n = sc.nextInt();
+		int k = sc.nextInt();
+		int d = sc.nextInt();
+
+		long temp = 1L;
+		for(int i = 0; i < d; i++){
+			temp *= (long)k;
+
+			if(temp >= n){
+				break;
+			}
+		}
+
+		if(n > temp){
+			out.println("-1");
+			out.close();
+			return;
+		}
+
+		int[][] arr = new int[n][d];
+
+		for(int i = 1; i < n; i++){
+			for(int j = 0; j < d; j++)
+				arr[i][j] = arr[i - 1][j];
+
+			for(int j = d - 1; j >= 0; j--){
+				arr[i][j] = (arr[i][j] + 1) % k;
+
+				if(arr[i][j] != 0)
+					break; 
+			}
+		}
+
+		for(int i = 0; i < d; i++){
+			for(int j = 0; j < n; j++)
+				out.print(arr[j][i]+1+" ");
+
+			out.println("");
+		}
+
+		out.close();
+	}	
+}

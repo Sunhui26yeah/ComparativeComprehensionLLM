@@ -1,0 +1,59 @@
+import java.util.Scanner;
+import java.util.PriorityQueue;
+
+public class Solution {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int t = sc.nextInt();
+        for (int tc = 0; tc < t; tc++) {
+            int n = sc.nextInt();
+            int k = sc.nextInt();
+
+            String s = sc.next();
+
+            System.out.println(solve(k, s));
+        }
+    }
+
+    private static int solve(int k, String s) {
+        /*
+        cnt(W) * 2 - 1 - gaps
+         */
+
+        /*
+        LLWLLWLLL k = 2
+         */
+        int cntW = 0;
+        PriorityQueue<Integer> gapLen = new PriorityQueue<>();
+        int gapPos = -1;
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == 'L' && i > 0 && s.charAt(i - 1) == 'W') {
+                gapPos = i;
+            }
+
+            if (s.charAt(i) == 'W') {
+                cntW++;
+
+                if (gapPos != -1) {
+                    gapLen.add(i - gapPos);
+                    gapPos = -1;
+                }
+            }
+        }
+
+        if (cntW + k > s.length()) {
+            return s.length() * 2 - 1;
+        }
+
+        while (gapLen.size() > 0 && gapLen.peek() <= k) {
+            Integer gap = gapLen.remove();
+            k -= gap;
+            cntW += gap;
+        }
+
+        int res = (cntW + k) * 2 - 1 - gapLen.size();
+        return res < 0 ? 0 : res;
+    }
+
+}

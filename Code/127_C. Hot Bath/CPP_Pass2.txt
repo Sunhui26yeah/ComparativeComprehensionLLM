@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+  long long t1, t2, x1, x2, t0;
+  cin >> t1 >> t2 >> x1 >> x2 >> t0;
+  if (t0 == t1 && t0 == t2)
+    cout << x1 << " " << x2 << endl;
+  else if (t0 == t1)
+    cout << x1 << " 0" << endl;
+  else if (t0 == t2)
+    cout << "0 " << x2 << endl;
+  else {
+    long long max_y1 = 0, max_y2 = x2;
+    bool f = false;
+    for (long long y1 = 1; y1 <= x1; y1++) {
+      long long l = 0, r = x2;
+      while (l <= r) {
+        long long y2 = (l + r) / 2LL;
+        long long a = (t0 * y1 + t0 * y2) - (t1 * y1 + t2 * y2);
+        if (a <= 0) {
+          long long b = (t1 * y1 + t2 * y2) * (max_y1 + max_y2) -
+                        (t1 * max_y1 + t2 * max_y2) * (y1 + y2);
+          if (!f || b < 0) {
+            max_y1 = y1;
+            max_y2 = y2;
+            f = true;
+          } else if (b == 0 && (y1 + y2 > max_y1 + max_y2)) {
+            max_y1 = y1;
+            max_y2 = y2;
+            f = true;
+          }
+          r = y2 - 1;
+        } else
+          l = y2 + 1;
+      }
+    }
+    cout << max_y1 << " " << max_y2 << endl;
+  }
+  return 0;
+}

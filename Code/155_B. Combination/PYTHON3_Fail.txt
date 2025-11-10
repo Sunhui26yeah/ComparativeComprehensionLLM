@@ -1,0 +1,64 @@
+n=int(input())
+cards=[]
+for i in range(n):
+    inStr = input()
+    a = int(inStr.split()[0])
+    b = int(inStr.split()[1])
+    cards.append((a,b))
+
+sortedCards=sorted(cards, key=lambda card: card[0], reverse=True)
+def getCumulValues(sortedCards):
+    total = 0
+    for card in sortedCards:
+        total = total + card[0]
+        yield total
+cumulValues=list(getCumulValues(sortedCards))
+
+def getCardValue(cardIndex, sortedCards, cumulValues):
+    card = sortedCards[cardIndex]
+    a = card[0]
+    b = card[1]
+    win = a
+    if b>0:
+        if b-1<cardIndex:
+            additionalWin = cumulValues[min(b-1, len(cumulValues)-1)]
+        else:
+            # current card is among those to be additional, or it's in the first b cards
+            additionalWin = cumulValues[min(b-1, len(cumulValues)-1)]
+            additionalWin = additionalWin - a
+            additionalWin = additionalWin + cumulValues[min(b, len(cumulValues)-1)]
+    else:
+        additionalWin = 0
+    win = win + additionalWin
+    return win
+
+def getBestCardIndex(sortedCards, cumulValues):
+    bestScore, bestCardIndex = 0, -1
+    for i in range(len(sortedCards)):
+        currentScore = getCardValue(i, sortedCards, cumulValues)
+        if currentScore>=bestScore:
+            bestScore = currentScore
+            bestCardIndex = i
+    #print(sortedCards, cumulValues, bestCardIndex, bestScore)
+    return bestCardIndex
+
+def getWin(sortedCards, cumulValues):
+    idx = getBestCardIndex(sortedCards, cumulValues)
+    card = sortedCards[idx]
+    win = card[0]
+    acc = card[1]
+    del sortedCards[idx]
+    cumulValues[idx:] = map(lambda x: x-win, cumulValues[idx:])
+    while acc>0:
+        idx = getBestCardIndex(sortedCards, cumulValues)
+        card = sortedCards[idx]
+        win = win + card[0]
+        acc = acc + card[1]
+        acc = acc - 1
+        del sortedCards[idx]
+        cumulValues[idx:] = map(lambda x: x-win, cumulValues[idx:])
+    return win
+
+ans=getWin(sortedCards, cumulValues)
+
+print(ans)

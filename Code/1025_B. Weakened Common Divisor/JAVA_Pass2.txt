@@ -1,0 +1,76 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.StringTokenizer;
+
+public class Prime1025B {
+	// -------------------
+	public static final int MOD = (int) (1e9 + 7);
+	// ------------------
+
+	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	StringTokenizer st;
+	PrintWriter out = new PrintWriter(System.out);
+
+	String next() {
+		while (st == null || !st.hasMoreElements()) {
+			try {
+				st = new StringTokenizer(br.readLine());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return st.nextToken();
+	}
+
+	int nextInt() {
+		return Integer.parseInt(next());
+	}
+
+	long nextLong() {
+		return Long.parseLong(next());
+	}
+
+	// ------------------
+	public static void main(String[] args) {
+		Prime1025B ob = new Prime1025B();
+		ob.run();
+	}
+
+	private void run() {
+		
+		int n = nextInt();
+		long[] a = new long[n];
+		long[] b = new long[n];
+		long g =0;
+		for(int i=0;i<n;i++) {
+			a[i] = nextInt(); b[i] = nextInt();
+			g = gcd(g, a[i]*b[i]);
+		}
+		if(g==1L) {
+			out.println("-1");
+		}else {
+//			out.println(g);
+			long temp=0;
+			for(int i=0;i<n;i++) {
+				temp = gcd(g, a[i]);
+				if(temp==1) {
+					temp = gcd(g, b[i]);
+				}
+				g = temp;
+			}
+			out.println(g);
+		}
+		out.close();
+	}
+	private long gcd(long a, long b) {
+		while(b!=0) {
+			long t = a%b;
+			a = b;
+			b = t;
+		}
+		return a;
+	}
+
+}

@@ -1,0 +1,32 @@
+import java.util.Scanner;
+public class Main{
+  public static void main (String[] args){
+    Scanner sc=new Scanner(System.in);
+    int num=sc.nextInt();
+    int[] array=new int[num];
+    int sum=0;
+    int count=0;
+    for(int i=0;i<num;i++){
+      array[i]=sc.nextInt(); 
+    }
+    if(array[0]>15){
+      System.out.println(15);
+      count++;
+    }else {
+      z: for(int j=0,k=1;j<array.length-1;j++,k++){
+        if((array[k]-array[j])>15){
+          sum=array[j]+15;
+          System.out.println(sum);
+          count++;
+          break z;
+        }
+      }
+    }
+    if((90-array[num-1]>15)&&(count==0)){
+      System.out.println(array[num-1]+15); 
+    }else if (count==0){
+      System.out.println(90);
+    }else {
+    }
+  }    
+}

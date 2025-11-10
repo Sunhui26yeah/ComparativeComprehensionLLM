@@ -1,0 +1,30 @@
+#include <bits/stdc++.h>
+using namespace std;
+long long int k, a[1005], b[1005], c[1005][1005], d[1005][1005];
+int main() {
+  scanf("%lld", &k);
+  long long int i, j;
+  for (i = 1; i <= k; i++) scanf("%lld", &a[i]);
+  for (i = 1; i <= 1000; i++) {
+    d[0][i] = 1;
+    c[0][i] = 1;
+  }
+  for (i = 1; i <= 1000; i++) {
+    for (j = 1; j <= 1000; j++) {
+      if (j == 1)
+        c[i][j] = 1;
+      else
+        c[i][j] = d[i][j - 1];
+      d[i][j] = (d[i - 1][j] % 10000007 + c[i][j] % 10000007) % 10000007;
+    }
+  }
+  int ff = a[1];
+  b[1] = 1;
+  for (i = 2; i <= 1000; i++) {
+    b[i] =
+        ((b[i - 1] % 10000007) * (c[a[i] - 1][ff + 1] % 10000007)) % 10000007;
+    ff += a[i] % 10000007;
+  }
+  printf("%lld", b[k]);
+  return 0;
+}

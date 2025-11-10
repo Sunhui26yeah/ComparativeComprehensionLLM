@@ -1,0 +1,109 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.StringTokenizer;
+
+public class Graph {
+  
+  public static void main(String[] args) {
+    int n = nextInt();
+    int m = nextInt();
+    
+    Set<Integer> [][]state = new Set[n+1][m+1];
+    
+    for (int i = 0; i < m; i++) {
+      //edges
+      int from = nextInt();
+      int to = nextInt();
+      if (from == to || from >n || to > n) {
+        continue;
+      }
+      int color = nextInt();
+      
+      
+      if (state[from][color] == null) {
+        state[from][color] = new HashSet<Integer>();
+      }
+      
+      if (state[to][color] == null) {
+        state[to][color] = new HashSet<Integer>();
+      }
+      
+      state[from][color].add(to);
+      for (Integer mid: state[to][color]) {
+        state[from][color].add(mid);
+        if (mid != to) {
+          state[mid][color].add(from);
+        }
+      }
+      
+      state[to][color].add(from);
+      for (Integer mid: state[from][color]) {
+        state[to][color].add(mid);
+        if (mid != from)  {
+          state[mid][color].add(to);
+        }
+      }
+      
+    }
+    
+    int q = nextInt();
+    for (int i = 0; i < q; i++) {
+      //queries
+      int from = nextInt();
+      int to = nextInt();
+      int count = 0;
+      for (int j=0; j <= m ;j++) {
+        if ((from <=n && state[from][j] != null && state[from][j].contains(to))
+            ||  (to <=n && state[to][j] != null && state[to][j].contains(from))) {
+          count++;
+        }
+      }
+      System.out.println(count);
+      
+    }
+    
+  }
+  
+  
+  
+  
+    static BufferedReader reader;
+    static StringTokenizer tokenizer;
+
+    static {
+        reader = new BufferedReader(new InputStreamReader(System.in), 32768);
+        tokenizer = null;
+    }
+
+    static String nextLine(){
+        try {
+            return reader.readLine();
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    static String next() {
+        while (tokenizer == null || !tokenizer.hasMoreTokens()) {
+            try {
+                tokenizer = new StringTokenizer(reader.readLine());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return tokenizer.nextToken();
+    }
+
+    static int nextInt() {
+        return Integer.parseInt(next());
+    }
+
+
+    static long nextLong() {
+        return Long.parseLong(next());
+    }
+}

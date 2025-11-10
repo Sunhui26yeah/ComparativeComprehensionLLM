@@ -1,0 +1,21 @@
+from bisect import bisect_left
+
+n, k = map(int, input().split())
+l = [1, 1, 2]
+for i in range(90):
+    l.append(l[-1] + l[-2])
+
+ps = []
+left = k
+while left > 0:
+    nu = bisect_left(l, left)
+    if nu-1 >= 1:
+        left = left - l[nu-1]
+        ps.append(n-nu)
+    else:
+        left = 0
+    
+to_ret = list(map(str, (range(1, n+1))))
+for i in ps:
+    to_ret[i], to_ret[i+1] = to_ret[i+1], to_ret[i]
+print(' '.join(to_ret))

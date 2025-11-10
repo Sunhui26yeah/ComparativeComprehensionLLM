@@ -1,0 +1,15 @@
+#include <iostream>
+#include <stdio.h>
+using namespace std;
+int p[10000002];
+int main() {
+	int i,j,n;
+	for (i=3;i<3163;i+=2) {
+		if (p[i]==0) {for (j=i*3;j<10000001;j=j+i*2) p[j]=1;}
+	}
+	while(cin >> n && n>0) {
+		if (n % 2==0) n--;
+		for (;n>=13;n-=2) if (p[n]+p[n-2]+p[n-6]+p[n-8]==0) { cout << n << endl; break;}
+	}
+	return 0;
+}

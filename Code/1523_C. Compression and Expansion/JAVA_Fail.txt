@@ -1,0 +1,144 @@
+import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.StringTokenizer;
+ 
+public class Main{
+ 
+    
+public static void main(String[] args) throws IOException{
+   
+        FastScanner scn = new FastScanner();
+        PrintWriter out = new PrintWriter(System.out);
+        // write ur code here(
+        int t = scn.nextInt();
+        while(t-- > 0){
+            int N = scn.nextInt();
+            int[] arr = new int[N];
+            for (int i = 0; i < N; i++) {
+                arr[i] = scn.nextInt();
+            }
+            StringBuilder[] ans = new StringBuilder[N];
+            ans[0] = new StringBuilder("1");
+            ArrayDeque<Integer> st = new ArrayDeque<>();
+            st.addLast(0);
+            for (int i = 1; i < N; i++) {
+                // System.out.println(st);
+                ans[i] = new StringBuilder();
+                if (arr[i] == 1) {
+                    st.addLast(i);
+                    ans[i].append(ans[i - 1].toString() + ".1");
+                } else {
+                    while (arr[st.getLast()] != arr[i] - 1) {
+                        st.removeLast();
+                    }
+                    int pos = st.removeLast();
+                    String[] prev = ans[pos].toString().split("[.]");
+                    for (int j = 0, sz = prev.length - 1; j < sz; j++) {
+                        ans[i].append(prev[j] + ".");
+                    }
+                    ans[i].append(arr[i] + "");
+                    st.addLast(i);
+                }
+            }
+            for (StringBuilder str : ans) {
+                out.println(str);
+            }
+
+        //     int n = scn.nextInt();;
+        //     ArrayList<Integer> a = new ArrayList<>();
+        //     for(int i=0 ; i<n ; i++){
+        //         int k = scn.nextInt();;
+        //         if(a.size()==0){
+        //             out.print(k);
+        //             a.add(k);
+        //         }
+        //         else if(k==1){
+        //             a.add(k);
+        //             print(a);
+        //         }
+        //         else if(k == (a.get(a.size()-1)+1)){
+                    
+        //             a.remove(a.size()-1);
+        //             a.add(k);
+        //             print(a);
+                 
+        //         } 
+        //         else{
+        //             int len = a.size();
+        //             while(len!=0 && (k != (a.get(len-1)+1))){
+        //                 a.remove(a.size()-1);
+        //                 len = a.size();
+        //             }
+        //             if(a.size()==0){
+        //                 out.print(k);
+        //                 a.add(k);
+        //             }
+        //             else{
+        //                 a.remove(a.size()-1);
+        //                 a.add(k);
+        //                 print(a);
+        //             }
+        //         }
+        //         if(i!=n-1){
+        //             out.println();
+        //         }
+        //     }
+        //     if(t!=0){
+        //         out.println();
+        //     }
+        // }
+        out.close();
+    }
+}
+    // public static void print(ArrayList<Integer> a){
+    //     for(int j=0 ; j<a.size() ; j++){
+    //         out.print(a.get(j));
+    //         if(j!=a.size()-1){
+    //             out.print(".");
+    //         }
+    //     }
+    // }
+    private static class FastScanner {
+        BufferedReader br;
+        StringTokenizer st;
+ 
+        FastScanner() {
+            this.br = new BufferedReader(new InputStreamReader(System.in));
+            this.st = new StringTokenizer("");
+        }
+ 
+        String next() {
+            while (!st.hasMoreTokens()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                } catch (IOException err) {
+                    err.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
+ 
+        String nextLine() {
+            if (st.hasMoreTokens()) {
+                return st.nextToken("").trim();
+            }
+            try {
+                return br.readLine().trim();
+            } catch (IOException err) {
+                err.printStackTrace();
+            }
+            return "";
+        }
+ 
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
+ 
+        long nextLong() {
+            return Long.parseLong(next());
+        }
+    }
+}

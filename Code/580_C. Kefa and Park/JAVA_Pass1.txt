@@ -1,0 +1,58 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Kefa_Park {
+    static private int n,m;
+    static private ArrayList<Kefa_Park> vertices;
+    static private boolean[] passed;
+    private boolean cat;
+    private ArrayList<Integer> subs;
+    Kefa_Park(boolean c){
+        this.cat = c;
+        this.subs = new ArrayList<>();
+    }
+
+    int path_count (int cats){
+        if (this.cat)
+            cats--;
+        else
+            cats = this.m;
+        if (cats < 0)
+            return 0;
+
+        boolean leaf = true;
+        int count = 0;
+        for (int i : this.subs){
+            if (!passed[i]){
+                leaf = false;
+                passed[i] = true;
+                count += vertices.get(i).path_count(cats);
+            }
+        }
+        if (leaf)
+            return 1;
+        else
+            return count;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Kefa_Park.n = scanner.nextInt();
+        Kefa_Park.m = scanner.nextInt();
+        Kefa_Park.vertices = new ArrayList<>();
+        for (int i = 0; i < n; i++)
+            Kefa_Park.vertices.add(new Kefa_Park(scanner.nextInt() == 1));
+
+        for (int i = 1; i < n; i++) {
+            int a = scanner.nextInt();
+            int b = scanner.nextInt();
+            Kefa_Park.vertices.get(a - 1).subs.add(b-1);
+            Kefa_Park.vertices.get(b-1).subs.add(a-1);
+        }
+        Kefa_Park.passed = new boolean[n];
+        Arrays.fill(Kefa_Park.passed, false);
+        Kefa_Park.passed[0] = true;
+        System.out.println(Kefa_Park.vertices.get(0).path_count(m));
+    }
+}

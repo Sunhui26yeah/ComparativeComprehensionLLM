@@ -1,0 +1,60 @@
+import java.util.Scanner;
+
+public class Elevator
+{
+    public static void main(String[] args)
+    {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        int turn = 2 * (m - 1);
+        while (n-- > 0)
+        {
+             int s = sc.nextInt();
+             int f = sc.nextInt();
+             int t = sc.nextInt();
+             
+             if (f > s)
+             {
+                 if (t + 1 > s)
+                 {
+                     int a = t / turn + 1;
+                     t = a * turn + (f - 1);
+                     System.out.println(t);
+                 }
+                 else
+                 {
+                     System.out.println(f - 1);
+                 }
+             }
+             else if (f == s)
+             {
+                 int a = t / (m - 1);
+                 t -= a * (m - 1);
+                 if (a % 2 == 0)
+                 {
+                     t = (t + 1 > s) ? (m - 1) + t : t;
+                 }
+                 else
+                 {
+                     t = (t > (m - s)) ? (m - 1) + t : t;
+                 }
+                 System.out.println(a * (m - 1) + t);
+             }
+             else
+             {
+                 if (t > (m - 1) + (m - s))
+                 {
+                     int a = t / turn + 1;
+                     t = a * turn + m - 1 + m - f;
+                 }
+                 else
+                 {
+                     t = m - 1 + m - f;
+                 }
+                 System.out.println(t);
+             }
+        }
+    }
+
+}

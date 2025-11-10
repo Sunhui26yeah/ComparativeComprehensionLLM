@@ -1,0 +1,6 @@
+from random import randint
+r = randint(1, 2)
+if r == 1:
+    print('Red')
+else:
+    print('Black')

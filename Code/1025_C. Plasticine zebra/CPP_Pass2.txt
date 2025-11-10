@@ -1,0 +1,23 @@
+#include <bits/stdc++.h>
+using namespace std;
+signed main() {
+  string s;
+  cin >> s;
+  long long n = s.length();
+  s = s + s;
+  long long i = 0;
+  long long res = 0;
+  while (i < n) {
+    long long j = i;
+    while (j - i + 1 < n) {
+      if (s[j] != s[j + 1])
+        j++;
+      else
+        break;
+    }
+    res = max(res, j - i + 1);
+    i = j + 1;
+  }
+  cout << res;
+  return 0;
+}

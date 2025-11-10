@@ -1,0 +1,41 @@
+#include <bits/stdc++.h>
+using namespace std;
+int upperbound(int i, int n, int x, int a[]) {
+  if (i == n) {
+    if (a[i] > x) {
+      return i;
+    } else
+      return i + 1;
+  }
+  int mid = (i + n) / 2;
+  if (a[mid] < x) {
+    upperbound(mid + 1, n, x, a);
+  } else {
+    upperbound(i, mid - 1, x, a);
+  }
+}
+int main() {
+  int n;
+  cin >> n;
+  int a[n];
+  for (int i = 0; i < n; i++) cin >> a[i];
+  int t[n], r[n], l = 0;
+  for (int i = 0; i < n; i++) {
+    if (i == 0) {
+      t[0] = a[0];
+    } else {
+      if (t[l] < a[i]) {
+        t[++l] = a[i];
+      } else {
+        int in = upperbound(0, l, a[i], a);
+        if (in != 0) {
+          t[in] = a[i];
+          r[i] = t[in - 1];
+        } else
+          t[0] = a[i];
+      }
+    }
+  }
+  cout << ++l;
+  return 0;
+}

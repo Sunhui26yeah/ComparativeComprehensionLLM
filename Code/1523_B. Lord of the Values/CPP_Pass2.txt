@@ -1,0 +1,195 @@
+#include <iostream>
+#include <array>
+#include <bitset>
+#include <deque>
+#include <list>
+#include <map>
+#include <queue>
+#include <set>
+#include <stack>
+#include <unordered_map>
+#include <vector>
+#include <algorithm>
+#include <iterator>
+#include <array>
+#include <tuple>
+#include <string>
+#include <fstream>
+#include <iomanip>
+#include <random>
+#include <numeric>
+#include <new>
+#include <sstream>
+#include <streambuf>
+#include <cstring>
+using namespace std;
+
+#define ar array
+#define ss second
+#define ll long long
+#define ff first
+#define ull unsigned long long
+#define all(x) x.begin(), x.end()
+#define rall(x) x.rbegin(), x.rend()
+#define sz(a) (int)a.size()
+#define pii pair<int, int>
+#define pll pair<ll, ll>
+#define pr pair
+#define vi vector<int>
+#define vl vector<ll>
+#define vt vector
+#define pb push_back
+#define mp make_pair
+string to_string(char c) {
+    return string(1, c);
+}
+string to_string(bool b) {
+    return b ? "true" : "false";
+}
+string to_string(const char* s) {
+    return string(s);
+}
+string to_string(string s) {
+    return s;
+}
+string to_string(vector<bool> v) {
+    string res;
+    for (int i = 0; i < sz(v); ++i) res += char('0' + v[i]);
+    return res;
+}
+
+template<size_t S> string to_string(bitset<S> b) {
+    string res;
+    for (int i = 0; i < S; ++i) res += char('0' + b[i]);
+    return res;
+}
+template<class T> string to_string(T v) {
+    bool f = 1;
+    string res;
+    for (int i = 0; i < sz(v); ++i) {
+        if (!f) res += ' ';
+        f = 0;
+        res += to_string(v[i]);
+    }
+    return res;
+}
+ll binpow (ll a, ll n, ll m) {
+    ll res = 1;
+    while (n) {
+        if (n & 1) res *= a, res %= m;
+        a *= a;
+        a %= m;
+        n >>= 1;
+    }
+    return res;
+}
+ll __gcd(ll a, ll b) {
+    return b ? __gcd(b, a % b) : a;
+}
+template<class A> void read(vt<A>& v);
+template<class A, size_t S> void read(array<A, S>& a);
+template<class T> void read(T& x) {
+    cin >> x;
+}
+void read(double& d) {
+    string t;
+    read(t);
+    d = stod(t);
+}
+void read(long double& d) {
+    string t;
+    read(t);
+    d = stold(t);
+}
+template<class H, class... T> void read(H& h, T&... t) {
+    read(h);
+    read(t...);
+}
+template<class A> void read(vt<A>& x) {
+    for (auto& a : x) read(a);
+}
+template<class A, size_t S> void read(array<A, S>& x) {
+    for (auto& a : x) read(a);
+}
+template<class A> void write(A x) {
+    cout << to_string(x);
+}
+template<class H, class... T> void write(const H& h, const T&... t) {
+    write(h);
+    write(t...);
+}
+void print() {
+    write("\n");
+}
+template<class H, class... T> void print(const H& h, const T&... t) {
+    write(h);
+    if (sizeof...(t))
+        write(' ');
+    print(t...);
+}
+void DBG() {
+    cerr << "]" << endl;
+}
+template<class H, class... T> void DBG(H h, T... t) {
+    cerr << to_string(h);
+    if (sizeof...(t))
+        cerr << ", ";
+    DBG(t...);
+}
+#ifdef _DEBUG
+#define dbg(...) cerr << "LINE(" << __LINE__ << ") -> [" << #__VA_ARGS__ << "]: [", DBG(__VA_ARGS__)
+#else
+#define dbg(...) 0
+#endif
+const int MOD = 1e9 + 7; //1073741824;
+const int N = 2e6 + 5;
+const ll INF = 9e18;
+const int M = 3e3 + 5;
+
+int a[N];
+struct ans {
+    int type, i, j;
+};
+void solve() {
+    int n;
+    cin >> n;
+    for(int i = 1; i <= n; ++i) cin >> a[i];
+    vt<ans> A;
+    for(int i = 1; i <= n / 2; ++i) {
+        ans cur;
+        cur.type = 1, cur.i = i, cur.j = n - i + 1;
+        A.pb(cur);
+        a[cur.i] += a[cur.j];
+        cur.type = 2;
+        A.pb(cur), A.pb(cur);
+        a[cur.j] -= a[cur.i] * 2;
+        cur.type = 1;
+        A.pb(cur);
+        a[cur.i] += a[cur.j];
+        cur.type = 2;
+        A.pb(cur);
+        a[cur.j] -= a[cur.i];
+        A.pb(cur);
+        a[cur.j] -= a[cur.i];
+    }
+   /* for(int i = 1; i <= n; ++i) cout << a[i] << " ";
+    cout << "\n";*/
+    cout << sz(A) << "\n";
+    for(auto x : A) cout << x.type << " " << x.i << " " << x.j << "\n";
+}
+int main() {
+    /*freopen(".in", "r", stdin);
+    freopen(".out", "w", stdout);*/
+    // for(int i s)
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    int t = 1;
+     cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+
+// a b a a b b a b
+// 0 1 1 1 3 3 3 4

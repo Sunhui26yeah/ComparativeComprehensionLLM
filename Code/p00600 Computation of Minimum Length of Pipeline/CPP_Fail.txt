@@ -1,0 +1,64 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+  int i, j;
+  int n, m;
+  while (cin >> n >> m, n || m) {
+    priority_queue<pair<int, pair<int, int> >,
+                   vector<pair<int, pair<int, int> > >,
+                   greater<pair<int, pair<int, int> > > >
+        a;
+    for (i = 0; i < n; ++i) {
+      for (j = 0; j < m; ++j) {
+        int p;
+        cin >> p;
+        if (p) a.push(make_pair(p, make_pair(i, n + j)));
+      }
+    }
+    for (i = 0; i < m - 1; ++i) {
+      for (j = 0; j < m - i - 1; ++j) {
+        int p;
+        cin >> p;
+        if (p) a.push(make_pair(p, make_pair(n + i, n + i + j + 1)));
+      }
+    }
+    int b[100] = {};
+    for (i = 0; i < m; ++i) b[n + i] = i + 1;
+    int ct = m, sm = 0;
+    while (ct) {
+      int p, q, r;
+      p = a.top().first;
+      q = a.top().second.first;
+      r = a.top().second.second;
+      a.pop();
+      if (false) {
+      } else if (b[q] && b[r]) {
+        for (i = 0; i < n + m; ++i) {
+          if (i == r) continue;
+          if (b[i] == b[r]) b[i] = b[q];
+        }
+        b[r] = b[q];
+        sm += p;
+        --ct;
+      } else if (b[q]) {
+        for (i = 0; i < n + m; ++i) {
+          if (i == q) continue;
+          if (b[i] == b[q]) b[i] = b[r];
+        }
+        b[q] = b[r];
+        sm += p;
+        --ct;
+      } else if (b[r]) {
+        for (i = 0; i < n + m; ++i) {
+          if (i == r) continue;
+          if (b[i] == b[r]) b[i] = b[q];
+        }
+        b[r] = b[q];
+        sm += p;
+        --ct;
+      }
+    }
+    cout << sm;
+  }
+  return 0;
+}

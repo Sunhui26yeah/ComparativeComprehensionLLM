@@ -1,0 +1,22 @@
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+ bool prime[10000001];
+int main() {
+	int n;
+	memset(prime,-1,sizeof(prime));
+	for(int i=2;i<=10000000;i++) {
+		if(!prime[i]) continue;
+		for(int j=i*2;j<=10000000;j+=i) prime[j]=0;
+	}
+	while(scanf("%d",&n),n) {
+		for(int i=n;i>=13;i--) {
+			if(prime[i]&&prime[i-2]&&prime[i-6]&&prime[i-8]) {
+				printf("%d\n",i);
+				break;
+			}
+		}
+	}
+}

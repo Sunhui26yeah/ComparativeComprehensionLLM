@@ -1,0 +1,119 @@
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Scanner;
+import java.util.Vector;
+import java.util.List;
+public class FirstTry {
+
+    public static int min(int n1, int n2){
+        if(n1 <= n2){
+            return n1;
+        }
+        else{
+            return n2;  
+        }
+    }
+    public static Vector<Monster> shoot(Vector<Monster> array, int impactPoint, int r){
+        int i = 0;
+        int len = array.size(); //solo lo calculo una vez
+        while(i < len){
+            boolean flag = false; //indica si he eliminado o no a un monstruo del vector
+            Monster mon = array.elementAt(i);
+            mon.jump(r, impactPoint); //muevo a cada uno de los monstruos en el vector
+            if(mon.alive == 0){ //si está muerto, lo elimino del vector
+                array.removeElementAt(i);
+                len--;
+                flag = true;
+            }
+            if(!flag){//si es que NO elimine a alguno paso al siguiente, si eliminé a uno entonces no es necesario aumentar i
+                i++;
+            }
+        }
+
+        return array;
+
+    }
+    public static int min_moves(Vector<Monster> array, int r) {
+        int moves = 0;
+
+        //el if y el else ultima modificacion, si no sirven sacarlos y descomentar el while de abajo
+        if(array.size() <= ((array.elementAt(0)).coordenadaX)/r){ //caso base
+            return array.size();
+        }
+        else{
+            array.removeElementAt(0);
+            return min_moves(array, r);
+        }
+        /*
+        while(array.size() >= 1){
+            int impactPoint =  (array.lastElement()).coordenadaX; //siempre dispararé al último monstruo
+            array = shoot(array, impactPoint, r);
+            moves++;
+        }
+        return moves;// calcular la cantidad mínima de mov*/
+    }
+
+    public static void main(final String[] args) throws Exception {
+        final Scanner teclado = new Scanner(System.in);
+        int q = teclado.nextInt();
+        ArrayList<Integer> answers = new ArrayList<Integer>();
+
+        while (q > 0) {
+            final int n = teclado.nextInt(); // numero de monstruos
+            final int r = teclado.nextInt(); // distancia de esparcimiento
+            // pedir n veces las coordenadas
+            Vector<Monster> array = new Vector<Monster>();
+            for(int i = 0; i < n; i++){
+                array.addElement(new Monster(teclado.nextInt())); //arreglo de monstruos c/u con su posicion.
+            }
+            Collections.sort(array); //OJO ESTE LO MOVÍ DESDE MIN_MOVES
+            answers.add(min_moves(array, r));
+            q--;
+        }
+
+        answers.forEach((x) -> System.out.println(x));
+        teclado.close();
+        
+    }
+}
+
+class Monster implements Comparable<Monster>{
+    public Monster(final int x) {
+        this.coordenadaX = x;
+        this.alive = 1; //indica que el monstruo está vivo
+    }
+
+    public void jump(final int leap, int impactPoint){ //mueve al monstruo e indica si muere o no.
+        if(coordenadaX < impactPoint){
+            this.coordenadaX = this.coordenadaX - leap;
+            //reviso si cayó en una trampa o no...
+            if(coordenadaX <= 0){
+                this.alive = 0;
+            }
+            
+        }
+        else if(coordenadaX > impactPoint){
+            this.coordenadaX = this.coordenadaX + leap;
+        }
+        else{ //coordenadaX = impactPoint
+            this.alive = 0; //muerto
+        }
+
+        ;
+    }
+
+    @Override
+    public int compareTo(final Monster other) {
+        return this.coordenadaX - other.coordenadaX;
+    }
+
+    public int coordenadaX;
+    public int alive;
+}
+
+/*
+ * class FlyingMonster extends Monster{ //creo que debiese heredar de Monster
+ * private int coordenadaX; }
+ */

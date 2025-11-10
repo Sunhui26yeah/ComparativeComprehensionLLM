@@ -1,0 +1,24 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+	int n;
+	cin>>n;
+	int g;
+	for(int i=0;i<n;i++){
+		string a;
+		string b;
+		string c;
+	    cin>>g;	
+	    cin>>a;
+	    b+='1';
+	    for(int j=1;j<g;j++){
+	    	c+=(a[j-1]+b[j-1]-'0');
+			if(a[j]+1==c[j-1])   b+='0';
+			else                 b+='1';
+		}
+		cout<<b<<endl;		
+	} 
+	
+	return 0;
+}

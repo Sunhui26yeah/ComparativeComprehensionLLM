@@ -1,0 +1,129 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Stream;
+
+/**
+ * @author madi.sagimbekov
+ */
+public class C1090D {
+
+    private static BufferedReader in;
+    private static BufferedWriter out;
+
+    public static void main(String[] args) throws IOException {
+        open();
+
+        int[] arr = readInts();
+        int n = arr[0];
+        int m = arr[1];
+
+        if (n == 1) {
+            out.write("NO\n");
+            close();
+            return;
+        }
+
+        int[][] a = new int[m][2];
+        Set<Integer>[] list = new HashSet[n + 1];
+        for (int i = 1; i <= n ;i++) {
+            list[i] = new HashSet<>();
+        }
+
+        for (int i = 0; i < m; i++) {
+            a[i] = readInts();
+            list[a[i][0]].add(a[i][1]);
+            list[a[i][1]].add(a[i][0]);
+        }
+
+        if ((long) n * (long) (n - 1) / 2 == (long) m) {
+            out.write("NO\n");
+        } else {
+            out.write("YES\n");
+            for (int i = 1; i <= n; i++) {
+                if (list[i].size() < n - 1) {
+                    for (int j = 1; j <= n; j++) {
+                        if (i != j && !list[i].contains(j)) {
+                            int[] res = new int[n];
+                            for (int x = 0; x < n; x++) {
+                                res[x] = x + 1;
+                            }
+
+                            swap(0, i - 1, res);
+                            swap(1, j - 1, res);
+
+                            for (int x = 0; x < n; x++) {
+                                out.write(res[x] + " ");
+                            }
+                            out.write("\n");
+
+                            res[i - 1] = 1;
+                            res[j - 1] = 1;
+                            for (int x = 0; x < n; x++) {
+                                out.write(res[x] + " ");
+                            }
+                            out.write("\n");
+
+                            close();
+                            return;
+                        }
+                    }
+                }
+            }
+
+        }
+
+        close();
+    }
+
+
+    private static void swap(int i, int j, int[] res) {
+        int t = res[i];
+        res[i] = res[j];
+        res[j] = t;
+    }
+
+    private static int[] readInts() throws IOException {
+        return Stream.of(in.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+    }
+
+    private static int readInt() throws IOException {
+        return Integer.parseInt(in.readLine());
+    }
+
+    private static long[] readLongs() throws IOException {
+        return Stream.of(in.readLine().split(" ")).mapToLong(Long::parseLong).toArray();
+    }
+
+    private static long readLong() throws IOException {
+        return Long.parseLong(in.readLine());
+    }
+
+    private static double[] readDoubles() throws IOException {
+        return Stream.of(in.readLine().split(" ")).mapToDouble(Double::parseDouble).toArray();
+    }
+
+    private static double readDouble() throws IOException {
+        return Double.parseDouble(in.readLine());
+    }
+
+    private static String readString() throws IOException {
+        return in.readLine();
+    }
+
+    private static void open() {
+        in = new BufferedReader(new InputStreamReader(System.in));
+        out = new BufferedWriter(new OutputStreamWriter((System.out)));
+    }
+
+    private static void close() throws IOException {
+        out.flush();
+        out.close();
+        in.close();
+    }
+
+}

@@ -1,0 +1,67 @@
+#include <bits/stdc++.h>
+using namespace std;
+long long int hcf(long long int a, long long int b) {
+  if (b == 0) return a;
+  return hcf(b, a % b);
+}
+long long int lcm(long long int a, long long int b) {
+  return (a * b) / hcf(a, b);
+}
+bool isprime(long long int n) {
+  if (n == 1) return false;
+  for (long long int i = 2; i * i <= n; ++i) {
+    if (n % i == 0) return false;
+  }
+  return true;
+}
+void solve() {
+  long long int n;
+  cin >> n;
+  vector<long long int> a;
+  for (long long int i = 1; i <= n; i++) {
+    long long int qq;
+    cin >> qq;
+    a.push_back(qq);
+  }
+  map<long long int, long long int> m;
+  vector<long long int> ans[n];
+  ans[0].push_back(1);
+  m[1]++;
+  for (long long int i = 1; i <= n - 1; i++) {
+    if (a[i] == 1) {
+      ans[i] = ans[i - 1];
+      ans[i].push_back(1);
+    } else {
+      ans[i] = ans[i - 1];
+      if (a[i] != a[i - 1])
+        ans[i][ans[i].size() - 1]++;
+      else {
+        ans[i].pop_back();
+        ans[i].pop_back();
+        ans[i].push_back(a[i - 1]);
+      }
+    }
+  }
+  for (long long int i = 0; i <= n - 1; i++) {
+    if (ans[i].size() == 1)
+      cout << ans[i][0] << "\n";
+    else {
+      for (long long int j = 0; j <= ans[i].size() - 1; j++) {
+        if (j == ans[i].size() - 1) {
+          cout << ans[i].back() << "\n";
+        } else
+          cout << ans[i][j] << ".";
+      }
+    }
+  }
+}
+void onlinejudge() {}
+int main() {
+  onlinejudge();
+  long long int ttt;
+  ttt = 1;
+  cin >> ttt;
+  cout << fixed << setprecision(16);
+  while (ttt--) solve();
+  return 0;
+}

@@ -1,0 +1,86 @@
+import java.util.Scanner;
+
+public class SellingSouvenirs {
+		public static int n;
+		public static int W;
+		public static int[] val;
+		public static int[] weight;
+		public static int[] tab;
+		public static int[][] table;
+		
+		public static void main(String[] args) {
+			Scanner sc = new Scanner(System.in);
+			n = sc.nextInt();
+			W = sc.nextInt();
+			
+			val = new int[n];
+			weight = new int[n];
+			boolean[] used = new boolean[n];
+
+			for(int i=0; i<n; i++){
+				weight[i] = sc.nextInt();
+				val[i] = sc.nextInt();
+				used[i] = false;
+			}
+
+			sc.close();
+
+			tab = new int[W+1];
+			table = new int[W+1][n+1];
+
+						
+			int sol = findSol(n,W,used);
+//			int sol = findSol2(n,W);
+			
+			System.out.println(sol);
+			return;
+		}
+
+		private static int findSol(int n, int W, boolean[] used) {
+			if (tab[W] > -1)
+			{
+				return tab[W]; 
+			}
+			tab[W] = 0;
+			if (W == 0)
+			{
+				return 0;
+			}
+			for(int i=0; i<n; i++)
+			{
+				int tmp = -1;
+				if (W >= weight[i] && !used[i])
+				{
+					used[i] = true;
+					tmp = findSol(n, W-weight[i], used) + val[i];
+					used[i] = false;
+					if (tmp > tab[W])
+					{
+						tab[W] = tmp;
+					}
+				}
+			}
+			return tab[W];
+		}
+		
+		private static int findSol2(int n, int W) 
+		{
+			for (int i = 0; i <= W; i++)
+			{
+				table[i][0] = 0;
+				for (int j = 1; j <= n; j++)
+				{
+					if (weight[j-1] <= i)
+					{
+						table[i][j] = Math.max(table[i][j-1], table[i-weight[j-1]][j-1] + val[j-1]);
+					}
+					else
+					{
+						table[i][j] = table[i][j-1];
+					}
+				}
+			}
+			return table[W][n];
+		}
+		
+}

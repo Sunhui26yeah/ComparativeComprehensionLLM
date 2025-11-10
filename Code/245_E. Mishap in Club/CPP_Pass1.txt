@@ -1,0 +1,25 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+  int i, l, in = 0, out = 0;
+  string s;
+  cin >> s;
+  l = s.length();
+  for (i = 0; i < l; i++) {
+    if (s[i] == '+') {
+      if (out > 0) {
+        out--;
+        in++;
+      } else
+        (in++);
+    }
+    if (s[i] == '-') {
+      if (in > 0) {
+        in--;
+        out++;
+      } else
+        (out++);
+    }
+  }
+  cout << in + out;
+}

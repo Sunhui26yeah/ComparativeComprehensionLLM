@@ -1,0 +1,26 @@
+#include <bits/stdc++.h>
+int max(int a, int b) { return a > b ? a : b; }
+int main() {
+  int q;
+  scanf("%d", &q);
+  while (q--) {
+    int n, r, maxn = 0;
+    double q;
+    scanf("%d%d", &n, &r);
+    int a[n];
+    for (int i = 0; i < n; i++) {
+      scanf("%d", a + i);
+    }
+    std::sort(a, a + n);
+    n = std::unique(a, a + n) - a;
+    int times = 0;
+    for (int i = n - 1; i >= 0; i--) {
+      if (a[i] - times * r > 0)
+        times++;
+      else
+        break;
+    }
+    printf("%d\n", times);
+  }
+  return 0;
+}

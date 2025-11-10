@@ -1,0 +1,50 @@
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+public class Main {
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String line;
+        String[] ar;
+        //-----------------------------------------------------------------------
+        ar = br.readLine().split(" ");
+        int n = Integer.parseInt(ar[0]);
+        int m = Integer.parseInt(ar[1]);
+        HashSet<Integer> div1 = new HashSet();
+        HashSet<Integer> div2 = new HashSet();
+        int md1 = 1000001;
+        int md2 = -1;
+        for (int i = 0; i < m; i++) {
+            ar = br.readLine().split(" ");
+            int a = Integer.parseInt(ar[0]);
+            int b = Integer.parseInt(ar[1]);
+            int d2 = Math.min(a, b);
+            int d1 = Math.max(a, b);
+            if (d1 <= md2) {
+                System.out.println(0);
+                return;
+            }
+            if (d2 >= md1) {
+                System.out.println(0);
+                return;
+            }
+            if (d1 < md1) {
+                md1 = d1;
+            }
+            if (d2 > md2) {
+                md2 = d2;
+            }
+            div1.add(d1);
+            div2.add(d2);
+        }
+        long ans = 1;
+        for (int i = 1; i <= n; i++) {
+            if (!div1.contains(i) && !div2.contains(i)) {
+                ans *= 2;
+            }
+        }
+        System.out.println(ans);
+    }
+}

@@ -1,0 +1,32 @@
+#include <bits/stdc++.h>
+using namespace std;
+const int inf = 1e9 + 9;
+const int mod = 1e9 + 7;
+int n, m, k, a, b, c;
+const int MX = 40000;
+int sito[MX + 5];
+vector<int> primes;
+string answer(int a, int b) {
+  for (auto u : primes) {
+    int fx = 0, fy = 0;
+    while (a % u == 0) a /= u, ++fx;
+    while (b % u == 0) b /= u, ++fy;
+    if ((fx + fy) % 3 != 0) return "No";
+  }
+  return "Yes";
+}
+int main() {
+  ios_base::sync_with_stdio(false);
+  for (int i = (2); i <= (MX); ++i) {
+    if (sito[i] == 0) {
+      primes.push_back(i);
+      for (int j = i + i; j <= MX; j += i) sito[j]++;
+    }
+  }
+  int t;
+  cin >> t;
+  while (t--) {
+    cin >> a >> b;
+    cout << answer(a, b) << "\n";
+  }
+}

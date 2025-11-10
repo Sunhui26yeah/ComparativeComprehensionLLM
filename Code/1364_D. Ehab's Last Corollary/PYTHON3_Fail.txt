@@ -1,0 +1,83 @@
+def main():
+    import math
+    import collections
+    import sys
+    input = sys.stdin.buffer.readline
+    n, m, k = map(int, input().split())
+
+    G = [set() for i in range(n)]
+    for i in range(m):
+        u, v = map(int, input().split())
+        u -= 1
+        v -= 1
+        G[u].add(v)
+        G[v].add(u)
+
+    # search cycle
+    q = collections.deque()
+
+    D = [[0, 0] for i in range(n)]
+
+    def dfs(a, b, r):
+        if a != 0:
+            D[a][0] = D[b][0] + 1
+        D[a][1] = b
+        for c in G[a]:
+            if c == b:
+                continue
+            elif c in r:
+
+                K = D[a][0] - D[c][0] + 1
+                if K <= k:
+                    print(2)
+                    print(K)
+                    ret = [a+1]
+                    prev = a
+                    for i in range(K-1):
+                        ret.append(D[prev][1]+1)
+                        prev = D[prev][1]
+                    print(*sorted(ret))
+                    return(True)
+                else:
+                    return(False)
+            else:
+                if dfs(c, a, r | set([c])):
+                    return(True)
+        return(False)
+
+    def ans(s, t):
+        ret = [s]
+
+    if dfs(0, -1, set([0])):
+        exit(0)
+    # cycleがなければ深さを２つおきに取れば大丈夫
+
+    k = math.ceil(k/2)
+    odd = []
+    even = [1]
+    q = collections.deque()
+    q.append((0, 0))
+    r = set([0])
+    while(q):
+        x, y = q.popleft()
+        for z in G[x]:
+            if z in r:
+                continue
+            else:
+                q.append((z, y+1))
+                r.add(z)
+                if (y+1) % 2 == 0:
+                    even.append(z+1)
+                else:
+                    odd.append(z+1)
+    print(1)
+
+    if len(even) >= k:
+        even.sort()
+        print(*even[:k])
+    else:
+        odd.sort()
+        print(*odd[:k])
+
+
+main()

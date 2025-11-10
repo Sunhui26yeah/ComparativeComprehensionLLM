@@ -1,0 +1,24 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+  int t;
+  cin >> t;
+  while (t--) {
+    int p;
+    cin >> p;
+    vector<long long int> v(p);
+    for (long long int i = 0; i < p; i++) cin >> v[i];
+    if (p == 5) {
+      long long int ans = 1;
+      for (int i = 0; i < p; i++) ans *= v[i];
+      cout << ans << endl;
+      continue;
+    }
+    sort(v.begin(), v.end());
+    long long int a = v[p - 1] * v[p - 2] * v[p - 3] * v[p - 4] * v[p - 5];
+    long long int b = v[0] * v[1] * v[p - 2] * v[p - 3] * v[p - 1];
+    long long int c = v[0] * v[1] * v[2] * v[3] * v[p - 1];
+    cout << max(a, max(b, c)) << endl;
+  }
+  return 0;
+}

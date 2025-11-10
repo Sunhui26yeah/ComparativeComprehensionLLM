@@ -1,0 +1,31 @@
+import sys
+
+def input():
+    return sys.stdin.readline()[:-1]
+
+
+def main():
+    q = int(input())
+    for _ in range(q):
+        h, n = map(int,input().split())
+        p = list(map(int,input().split())) + [0]
+        dp = [float("inf") for k in range(h+1)]
+        dp[h] = 0
+        for k in range(n):
+            if p[k] >= 2:
+                dp[p[k]-2] = min(dp[p[k]-2],dp[p[k]])
+            if p[k+1] == p[k] - 1:
+                dp[p[k]-1] = min(dp[p[k]-1],dp[p[k]]+1)
+            elif p[k+1] == p[k] - 2:
+                dp[p[k]-1] = min(dp[p[k]-1],dp[p[k]]+1)
+                dp[p[k]-2] = min(dp[p[k]-2],dp[p[k+1]])
+            else:
+                c = 0
+                for a in range(p[k]-1,p[k+1]-1,-1):
+                    c += 1
+                    dp[a] = min(dp[a],dp[p[k]]+c//2)
+        print(min(dp[:2]))
+
+
+if __name__ == '__main__':
+    main()

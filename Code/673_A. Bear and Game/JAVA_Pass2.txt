@@ -1,0 +1,24 @@
+import java.util.Scanner;
+
+public class Main {
+
+	public static void main(String[] args) {
+		Scanner scnr = new Scanner(System.in);
+		int num = scnr.nextInt();
+		int lastInterestingMinute = 0;
+		for (int i = 0; i < num; i++) {
+			int nextInterestingMinute = scnr.nextInt();
+			int timePassed = nextInterestingMinute - lastInterestingMinute;
+			if (timePassed > 15) {
+				break;
+			}
+			lastInterestingMinute = nextInterestingMinute;
+		}
+		if (90 - lastInterestingMinute > 15) {
+			System.out.println(lastInterestingMinute + 15);
+		} else {
+			System.out.println(90);
+		}
+		return;
+	}
+}

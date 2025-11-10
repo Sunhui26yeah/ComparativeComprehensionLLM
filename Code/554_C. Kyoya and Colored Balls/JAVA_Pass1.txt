@@ -1,0 +1,60 @@
+import java.util.*;
+import java.io.*;
+
+public class Main{
+
+    BufferedReader in;
+    StringTokenizer str = null;
+    PrintWriter out;
+
+    private String next() throws Exception{
+    	while (str == null || !str.hasMoreElements())
+    	    str = new StringTokenizer(in.readLine());
+    	return str.nextToken();
+    }
+    
+    private int nextInt() throws Exception{
+	   return Integer.parseInt(next());
+    }
+    
+    long [][]c;
+    final int N = 1010;
+    final long MOD = (long)1e9 + 7;
+    
+    public void run() throws Exception{
+    	in = new BufferedReader(new InputStreamReader(System.in));
+    	out = new PrintWriter(System.out);
+    	
+    	c = new long[N][N];
+    	for(int i = 0; i < N; ++i){
+    	    c[i][0] = c[i][i] = 1;
+    	    for(int j = 1; j < i; ++j){
+    		c[i][j] = (c[i-1][j-1] + c[i-1][j]) % MOD;
+    	    }
+    	}
+    	
+	int n = nextInt();
+	int []a = new int[n];
+	for(int i = 0; i < n; ++i) a[i] = nextInt();
+	int []s = new int[n];
+	s[0] = a[0];
+	for(int i = 1; i < n; ++i) s[i] = s[i-1] + a[i];
+	long []dp = new long[n];
+	dp[0] = 1;
+	
+	for(int i = 1; i < n; ++i){
+	    dp[i] = dp[i-1] * C(s[i-1] + a[i] - 1, a[i] - 1) % MOD;
+	}
+	
+	out.println(dp[n-1]);
+        out.close();
+    }
+    
+    private long C(int n, int k){
+	return c[n][k];
+    }
+
+    public static void main(String args[]) throws Exception{
+	   new Main().run();
+    }
+}

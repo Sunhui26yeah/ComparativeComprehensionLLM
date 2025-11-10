@@ -1,0 +1,57 @@
+import sys
+import math
+from collections import defaultdict
+import heapq
+def getnum(num):
+    cnt=0
+    ans=0
+    while((1<<cnt)<=num):
+        ans=cnt
+        cnt+=1
+    if num==0:
+        return 0  
+    return ans+1
+t=int(sys.stdin.readline())
+for _ in range(t):
+    n=int(sys.stdin.readline())
+    arr=list(map(int,sys.stdin.readline().split()))
+    mp=[[] for x in range(31)]
+    last=[]
+    for i in range(n):
+        x=getnum(arr[i])
+        mp[x].append(arr[i])
+        last.append(x)
+    last.sort()
+    rem=n
+    z=True
+    for i in range(30,0,-1):
+        if len(mp[i])!=0:
+            y=len(mp[i])
+            rem=n-y
+            if y==1:
+                z=False
+                print('WIN')
+                break
+            if y%2!=0:
+                if rem%2==0:
+                    first=(y+1)//2
+                    second=y//2
+                    if first%2!=0:
+                        print('WIN')
+                    else:
+                        print('LOSE')
+                    z=False
+                    break
+                if rem%2!=0:
+                    print('WIN')
+                    z=False
+                    break
+            else:
+                for j in range(y):
+                    mp[i][j]%=(1<<(i-1))
+                    x=getnum(mp[i][j])
+                    mp[x].append(mp[i][j])
+        else:
+            continue
+    if z:
+        print('DRAW')

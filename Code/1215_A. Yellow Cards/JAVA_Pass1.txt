@@ -1,0 +1,68 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class Solver {
+    private int a1;
+    private int a2;
+    private int k1;
+    private int k2;
+    private int cardsCount;
+
+    public static void main(String[] args) {
+        new Solver().solve();
+    }
+
+    public void solve () {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            a1 = Integer.parseInt(reader.readLine());
+            a2 = Integer.parseInt(reader.readLine());
+            k1 = Integer.parseInt(reader.readLine());
+            k2 = Integer.parseInt(reader.readLine());
+            cardsCount = Integer.parseInt(reader.readLine());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        countMin();
+        countMax();
+    }
+
+    private void countMin () {
+        int countToEqual = a1 * (k1 - 1) + a2 * (k2 - 1);
+        if (countToEqual > cardsCount) {
+            System.out.print(0);
+        }
+        else {
+            int countDelete = (cardsCount - countToEqual);
+            System.out.print(Math.min(countDelete, (a1 + a2))) ;
+        }
+    }
+
+    private void countMax() {
+        System.out.print(" ");
+        if (k1 < k2) {
+            Max(a1, a2, k1, k2);
+        }
+        else {
+            Max(a2, a1, k2, k1);
+        }
+    }
+
+    private void Max (int var_a1, int var_a2, int var_k1, int var_k2) {
+        int MaxCardsCount = cardsCount;
+        int mayDeletePlayers = MaxCardsCount / var_k1;
+        if (mayDeletePlayers < var_a1) {
+            System.out.print(mayDeletePlayers + " ");
+        }
+        else {
+            MaxCardsCount -= (var_a1 * var_k1);
+            int mayDeleteFromA2 = MaxCardsCount / var_k2;
+            if (mayDeleteFromA2 < var_a2) {
+                System.out.print(var_a1 + mayDeleteFromA2);
+            }
+            else {
+                System.out.print(var_a1 + var_a2);
+            }
+        }
+    }
+}

@@ -1,0 +1,37 @@
+//package Graphs_Problem;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Scanner;
+import java.util.Stack;
+import java.util.Vector;
+
+public class codeforces {
+
+	// public static Vector<Integer> v[];
+
+	public static void main(String[] args) {
+
+		Scanner in = new Scanner(System.in);
+		
+		int a=in.nextInt();
+		int b=in.nextInt();
+		int c=in.nextInt();
+		int d=in.nextInt();
+		
+		int ans=0;
+		
+		for(int i=1;i<=1000;i++){
+			for(int j=1;j<=1000;j++){
+				if((b+(i-1)*a)==(d+(j-1)*c)){
+					ans+=(b+(i-1)*a);
+					System.out.println(ans);
+					return;
+				}
+			}
+		}
+		System.out.println("-1");
+		
+	}
+
+}

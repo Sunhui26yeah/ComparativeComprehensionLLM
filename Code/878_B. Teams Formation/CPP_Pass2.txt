@@ -1,0 +1,65 @@
+#include <bits/stdc++.h>
+using namespace std;
+void morir(long long int s) {
+  cout << s << endl;
+  exit(0);
+}
+int suma(vector<pair<int, int> > &v, int i1, int i2) {
+  int s = 0;
+  for (int i = i1; i <= i2; i++) s += v[i].second;
+  return s;
+}
+long long int n, k, m;
+vector<pair<int, int> > reduce(vector<pair<int, int> > v) {
+  vector<pair<int, int> > nextv;
+  for (int i = 0; i < int(v.size()); i++) {
+    if (int(nextv.size()) == 0 or v[i].first != nextv.back().first)
+      nextv.push_back(v[i]);
+    else
+      nextv.back().second += v[i].second;
+    if (nextv.back().second % k == 0) nextv.pop_back();
+  }
+  return nextv;
+}
+void termina(vector<pair<int, int> > v) {
+  v = reduce(v);
+  morir(suma(v, 0, int(v.size()) - 1));
+}
+vector<pair<int, int> > v;
+int main() {
+  ios::sync_with_stdio(false);
+  cin >> n >> k >> m;
+  for (int i = 0; i < n; i++) {
+    int x;
+    cin >> x;
+    v.push_back(pair<int, int>(x, 1));
+  }
+  v = reduce(v);
+  if (m == 1) termina(v);
+  int ind = 0;
+  n = int(v.size());
+  for (;;) {
+    if (n < 2 * (ind + 1)) {
+      if (n % 2 == 0) termina(v);
+      vector<pair<int, int> > w;
+      for (int i = 0; i < n; i++) {
+        if (2 * i + 1 == n)
+          w.push_back(pair<int, int>(v[i].first, m * v[i].second % k));
+        else
+          w.push_back(v[i]);
+      }
+      termina(w);
+    }
+    if (v[ind].first == v[n - 1 - ind].first and
+        (v[ind].second + v[n - 1 - ind].second) % k == 0) {
+      ind++;
+      continue;
+    }
+    if (v[ind].first == v[n - 1 - ind].first)
+      morir(suma(v, 0, n - 1 - ind - 1) + suma(v, ind + 1, n - 1) +
+            (v[ind].second + v[n - 1 - ind].second) % k * (m - 1) +
+            suma(v, ind + 1, n - 1 - ind - 1) * (m - 2));
+    morir(suma(v, 0, n - 1 - ind) + suma(v, ind, n - 1) +
+          suma(v, ind, n - 1 - ind) * (m - 2));
+  }
+}

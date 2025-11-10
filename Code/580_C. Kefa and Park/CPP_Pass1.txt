@@ -1,0 +1,35 @@
+#include <bits/stdc++.h>
+using namespace std;
+long long n, i, j, k, l, t, ans = 0, x, y, m, lib, road, visited[100005] = {0},
+                            b[100005];
+vector<int> a[100005];
+void dfs(int node, int cnt, int maxi, int parent) {
+  if (visited[node]) return;
+  visited[node] = 1;
+  if (b[node] == 0)
+    cnt = 0;
+  else
+    cnt++;
+  maxi = max(cnt, maxi);
+  if (a[node].size() == 1 && maxi <= k && a[node][0] == parent) {
+    ans++;
+    return;
+  }
+  for (int i = 0; i < a[node].size(); i++)
+    if (!visited[a[node][i]]) dfs(a[node][i], cnt, maxi, node);
+}
+int main() {
+  ios_base::sync_with_stdio(false);
+  cin.tie(0);
+  cout.tie(0);
+  cin >> n >> k;
+  for (i = 1; i <= n; i++) cin >> b[i];
+  for (i = 0; i < n - 1; i++) {
+    cin >> x >> y;
+    a[x].push_back(y);
+    a[y].push_back(x);
+  }
+  dfs(1, 0, 0, -1);
+  cout << ans << endl;
+  return 0;
+}

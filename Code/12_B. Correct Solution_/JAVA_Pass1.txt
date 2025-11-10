@@ -1,0 +1,26 @@
+import java.util.*;
+import java.math.*;
+import java.io.*;
+
+public class Main {
+	public static void main(String[] argv)
+	{
+		Scanner in = new Scanner(new InputStreamReader(System.in));
+		
+		char judge[] = in.nextLine().toCharArray();
+		char ans[] = in.nextLine().toCharArray();
+		
+		Arrays.sort(judge);
+		
+		int i=0;
+		for(; i < judge.length && judge[i] == '0' ; i++);
+		
+		if(i != judge.length && i != 0)
+		{
+			judge[0] = judge[i];
+			judge[i] = '0';
+		}
+		
+		System.out.println(Arrays.equals(judge, ans) ? "OK" : "WRONG_ANSWER");
+	}
+}

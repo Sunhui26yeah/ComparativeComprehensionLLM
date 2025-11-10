@@ -1,0 +1,25 @@
+from bisect import bisect_left
+def takeClosest(myList, myNumber):
+    pos = bisect_left(myList, myNumber)
+    if pos == len(myList):
+        return myList[-1]
+    else:
+        a1= myList[pos]
+        if a1>myNumber:
+            return myList[pos-1]
+        else:
+            return myList[pos]
+n,U=map(int,input().split(' '))
+l=list(map(int,input().split(' ')))
+ans=-1
+i=0
+while i<n-2:
+    a=l[i]
+    b=l[i+1]
+    if l[i+2]>a+U:
+        i+=1
+    else:
+        c=takeClosest(l,a+U)
+        ans=max(ans,(c-b)/(c-a))
+        i+=1
+print(ans)

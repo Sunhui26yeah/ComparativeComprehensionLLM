@@ -1,0 +1,44 @@
+import math
+
+def overlap(p1, p2, d):
+    return abs((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2 - d**2) <= 1.0e-7
+
+def intersection(o1,o2):
+    a  = 2*(o2[0] - o1[0])
+    b  = 2*(o2[1] - o1[1])
+    c  = (o1[0] - o2[0])*(o1[0] + o2[0]) + (o1[1] - o2[1])*(o1[1] + o2[1])
+    a2 = a**2 + b**2
+    b2 = a*c + a*b*o1[1] - b**2*o1[0]
+    c2 = b**2*(o1[0]**2 + o1[1]**2 - 1) + c**2 + 2*b*c*o1[1]
+    x1 = (-b2 + math.sqrt(b2**2 - a2*c2))/a2
+    x2 = (-b2 - math.sqrt(b2**2 - a2*c2))/a2
+    if abs(b) == 0:
+        y1 = o1[1] + math.sqrt(1 - (x1 - o1[0])**2)
+        y2 = o1[1] - math.sqrt(1 - (x1 - o1[0])**2)
+    else:
+        y1 = -(a*x1 + c)/b
+        y2 = -(a*x2 + c)/b
+    return [x1, y1], [x2, y2]
+
+while True:
+    n = int(input())
+    if n == 0:
+        break
+    p = []
+    for i in range(n):
+        p.append(list(map(float, input().split(","))))
+    ans = 1
+    for i in range(n - 1):
+        for j in range(i + 1, n):
+            if not overlap(p[i], p[j], 2):
+                continue
+            p1, p2 = intersection(p[i], p[j])
+            cnt1 = 0
+            cnt2 = 0
+            for k in range(n):
+                if overlap(p1, p[k], 1):
+                    cnt1 += 1
+                if overlap(p2, p[k], 1):
+                    cnt2 += 1
+            ans = max([ans, cnt1, cnt2])
+    print(ans)

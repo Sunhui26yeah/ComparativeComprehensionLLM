@@ -1,0 +1,73 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+  ios::sync_with_stdio(false);
+  long long T;
+  cin >> T;
+  while (T--) {
+    long long n, k;
+    cin >> n >> k;
+    string a;
+    cin >> a;
+    vector<long long> x;
+    for (long long i = 0; i < n; i++) {
+      if (a[i] == '0') {
+        x.push_back(i);
+      }
+    }
+    if (x.size() == 0) {
+      for (long long i = 0; i < n; i++) {
+        cout << 1;
+      }
+      cout << endl;
+      continue;
+    }
+    vector<long long> sum;
+    long long s = 0;
+    for (long long i = 0; i < x.size(); i++) {
+      s += (x[i] - i);
+      sum.push_back(s);
+    }
+    if (sum[0] >= k) {
+      x[0] -= k;
+      long long t = 0;
+      for (long long i = 0; i < n; i++) {
+        if (t < x.size() && i == x[t]) {
+          cout << 0;
+          t++;
+        } else {
+          cout << 1;
+        }
+      }
+      cout << endl;
+      continue;
+    }
+    long long t = 0;
+    for (long long i = 1; i < sum.size(); i++) {
+      if (sum[i - 1] <= k) {
+        x[i - 1] = t;
+        t++;
+        if (sum[i] > k) {
+          x[i] -= (k - sum[i - 1]);
+          break;
+        }
+      }
+    }
+    if (sum[sum.size() - 1] <= k) {
+      x[sum.size() - 1] = t;
+      t++;
+    }
+    t = 0;
+    for (long long i = 0; i < n; i++) {
+      if (t < x.size() && i == x[t]) {
+        cout << 0;
+        t++;
+      } else {
+        cout << 1;
+      }
+    }
+    cout << endl;
+    continue;
+  }
+  return 0;
+}

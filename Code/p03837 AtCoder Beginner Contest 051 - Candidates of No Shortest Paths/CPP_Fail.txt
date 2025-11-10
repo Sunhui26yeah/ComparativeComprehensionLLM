@@ -1,0 +1,230 @@
+#include <bits/stdc++.h>
+using namespace std;
+template <class T>
+bool chmax(T &a, const T &b) {
+  if (a < b) {
+    a = b;
+    return 1;
+  }
+  return 0;
+}
+template <class T>
+bool chmin(T &a, const T &b) {
+  if (b < a) {
+    a = b;
+    return 1;
+  }
+  return 0;
+}
+int dy[] = {0, 0, 1, -1};
+int dx[] = {
+    1,
+    -1,
+    0,
+    0,
+};
+long long gcd(long long a, long long b) {
+  if (a < b) {
+    a ^= b;
+    b ^= a;
+    a ^= b;
+  }
+  return b ? gcd(b, a % b) : a;
+}
+long long lcm(int a, long long b) { return a * b / gcd(a, b); }
+long long power(long long a, long long b) {
+  long long res = 1;
+  while (b > 0) {
+    if (b & 1) res = res * a % 1000000007;
+    a = a * a % 1000000007;
+    b >>= 1;
+  }
+  return res;
+}
+const int MAX = 510000;
+long long fact[MAX], fact_inv[MAX];
+void init_fact(long long n) {
+  fact[0] = 1;
+  for (long long i = 0; i < n; i++)
+    fact[i + 1] = fact[i] * (i + 1) % 1000000007;
+  fact_inv[n] = power(fact[n], 1000000007 - 2);
+  for (long long i = n - 1; i >= 0; i--)
+    fact_inv[i] = fact_inv[i + 1] * (i + 1) % 1000000007;
+}
+long long comb(long long n, long long r) {
+  return (fact[n] * fact_inv[r]) % 1000000007 * fact_inv[n - r] % 1000000007;
+}
+struct UnionFind {
+  vector<long long> par;
+  vector<long long> num;
+  UnionFind(long long N) : par(N), num(N) {
+    for (long long i = 0; i < N; i++) par[i] = i;
+    for (long long i = 0; i < N; i++) num[i] = 1;
+  }
+  long long root(long long x) {
+    if (par[x] == x) return x;
+    return par[x] = root(par[x]);
+  }
+  void unite(long long x, long long y) {
+    long long rx = root(x);
+    long long ry = root(y);
+    if (rx == ry) return;
+    par[rx] = ry;
+    num[ry] = num[rx] + num[ry];
+  }
+  bool same(long long x, long long y) {
+    long long rx = root(x);
+    long long ry = root(y);
+    return rx == ry;
+  }
+  long long size(long long x) { return num[root(x)]; }
+};
+vector<long long> divisor(long long n) {
+  vector<long long> ret;
+  for (long long i = 1; i * i <= n; i++) {
+    if (n % i == 0) {
+      ret.push_back(i);
+      if (i * i != n) ret.push_back(n / i);
+    }
+  }
+  sort(ret.begin(), ret.end());
+  return ret;
+}
+long long my_pow(long long x, long long y) {
+  long long rtn = 1;
+  for (long long i = 0; i < y; i++) rtn *= x;
+  return rtn;
+}
+long long get_digit_in(long long n, long long i) {
+  for (long long j = 0; j < i - 1; j++) {
+    n /= 10;
+  }
+  return n % 10;
+}
+long long get_digit(long long n) {
+  long long rtn = 0;
+  while (n > 0) {
+    n /= 10;
+    rtn++;
+  }
+  return rtn;
+}
+map<long long, long long> prime_factor(long long n) {
+  map<long long, long long> rtn;
+  for (long long i = 2; i * i <= n; i++) {
+    while (n % i == 0) {
+      rtn[i]++;
+      n /= i;
+    }
+  }
+  if (n != 1) rtn[n] = 1;
+  return rtn;
+}
+void foreach_permutation(long long n, function<void(long long *)> f) {
+  long long indexes[n];
+  for (long long i = 0; i < n; i++) indexes[i] = i;
+  do {
+    f(indexes);
+  } while (std::next_permutation(indexes, indexes + n));
+}
+void recursive_comb(long long *indexes, long long s, long long rest,
+                    function<void(long long *)> f) {
+  if (rest == 0) {
+    f(indexes);
+  } else {
+    if (s < 0) return;
+    recursive_comb(indexes, s - 1, rest, f);
+    indexes[rest - 1] = s;
+    recursive_comb(indexes, s - 1, rest - 1, f);
+  }
+}
+void foreach_comb(long long n, long long k, function<void(long long *)> f) {
+  long long indexes[k];
+  recursive_comb(indexes, n - 1, k, f);
+}
+void foreach_permutation(long long n, long long k,
+                         function<void(long long *)> f) {
+  foreach_comb(n, k, [&](long long *c_indexes) {
+    foreach_permutation(k, [&](long long *p_indexes) {
+      long long indexes[k];
+      for (long long i = 0; i < k; i++) {
+        indexes[i] = c_indexes[p_indexes[i]];
+      }
+      f(indexes);
+    });
+  });
+}
+long long arr[55556];
+vector<long long> primes;
+void Eratosthenes() {
+  long long N = 55556;
+  for (long long i = 0; i < N; i++) {
+    arr[i] = 1;
+  }
+  for (long long i = 2; i < sqrt(N); i++) {
+    if (arr[i]) {
+      for (long long j = 0; i * (j + 2) < N; j++) {
+        arr[i * (j + 2)] = 0;
+      }
+    }
+  }
+  for (long long i = 2; i < N; i++) {
+    if (arr[i] && i % 5 == 1) {
+      primes.push_back(i);
+    }
+  }
+}
+const long long cmb_max = 100;
+long long cmb[cmb_max][cmb_max];
+void cmb_init() {
+  cmb[1][0] = cmb[1][1] = 1;
+  for (long long i = 2; i < cmb_max; i++) {
+    for (long long j = 0; j < i + 1; j++) {
+      if (j == 0 || j == i)
+        cmb[i][j] = 1;
+      else {
+        cmb[i][j] = cmb[i - 1][j - 1] + cmb[i - 1][j];
+      }
+    }
+  }
+}
+vector<pair<long long, long long>> tree[100];
+bool edge[100][100];
+int main() {
+  cout << fixed << setprecision(10);
+  long long N, M;
+  cin >> N >> M;
+  vector<long long> a(M), b(M), c(M);
+  for (long long i = 0; i < M; i++) {
+    cin >> a[i] >> b[i] >> c[i];
+    a[i]--;
+    b[i]--;
+  }
+  for (long long i = 0; i < M; i++) {
+    tree[a[i]].push_back(make_pair(b[i], c[i]));
+    tree[b[i]].push_back(make_pair(a[i], c[i]));
+  }
+  for (long long i = 0; i < N; i++) {
+    vector<long long> dist(N, -1);
+    priority_queue<tuple<long long, long long, long long>> q;
+    q.push(make_tuple(0, i, i));
+    while (!q.empty()) {
+      long long d, prev, cur;
+      tie(d, prev, cur) = q.top();
+      q.pop();
+      d *= -1;
+      if (dist[cur] >= 0) continue;
+      dist[cur] = d;
+      edge[prev][cur] = true;
+      edge[cur][prev] = true;
+      for (auto p : tree[cur]) {
+        q.push(make_tuple(-1 * (d + p.second), cur, p.first));
+      }
+    }
+  }
+  long long ans = 0;
+  for (long long i = 0; i < M; i++) {
+    if (!edge[a[i]][b[i]]) ans++;
+  }
+  cout << ans << endl;
+}

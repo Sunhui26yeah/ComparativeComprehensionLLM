@@ -1,0 +1,121 @@
+/* package codechef; // don't place package name! */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+/* Name of the class has to be "Main" only if the class is public. */
+public class Temp
+{
+	static boolean flag = false;
+	public static void main (String[] args) throws java.lang.Exception
+	{
+		/*InputReader sc = new InputReader(System.in);
+		//int t = sc.nextInt();
+		//int n = 1;
+		int arr[] = {1, 4, 9, 16, 25, 36, 49, 64, 81};
+		func(arr, new int[1000], 1000, 0, 0);
+		while (n <= t){
+			flag = false;
+			//int n = sc.nextInt();
+		    func(arr, new int[n], n, 0, 0);
+		    n++;
+		}*/
+		
+		InputReader sc = new InputReader(System.in);
+		int n = sc.nextInt();
+	    List<Integer> al = new ArrayList<Integer>();
+	    int chef = 0, ramsay = 0;
+	    for (int i = 0 ; i < n ; i++){
+	        int c = sc.nextInt();
+	        if (c%2 == 0){
+	            for (int j = 0 ; j < c ; j++){
+	                if (j < c/2) chef += sc.nextInt();
+	                else ramsay += sc.nextInt();
+	            }
+	        }else{
+	            for (int j = 0 ; j < c ; j++){
+	                if (j < c/2) chef += sc.nextInt();
+	                else if (j == c/2) al.add(sc.nextInt());
+	                else ramsay += sc.nextInt();
+	            }
+	        }
+	    }
+	    Collections.sort(al);
+	    for (int i = al.size() - 1 ; i >= 0 ; i = i-2){
+	        chef += al.get(i);
+	    }
+	    for (int i = al.size() - 2 ; i >= 0 ; i = i-2){
+	        ramsay += al.get(i);
+	    }
+	    System.out.println(chef+" "+ramsay);
+		
+	}
+	
+	static void func(int arr[], int res[], int n, int index, int sum) {
+		if (!flag && index == res.length && ((int)Math.sqrt(sum)*(int)Math.sqrt(sum) == sum)) {
+			flag = true;
+			for (int i = 0 ; i < res.length ; i++) {
+				System.out.print((int)Math.sqrt(res[i])+" ");
+			}
+			System.out.println();
+			System.out.println(sum);
+			//System.exit(0);
+			return;
+		}
+		if(flag) return;
+		for (int i = index ; i < n ; i++) {
+	    	for (int j = 0 ; j < arr.length ; j++) {
+	    		res[i] = arr[j];
+	    		func(arr, res, n, i+1, sum+arr[j]);
+	    	}
+	    }
+	}
+	
+	static class InputReader{
+		BufferedReader br;
+		StringTokenizer st;
+        
+        public InputReader(InputStream in){
+        	try {
+        		br = new BufferedReader(new
+        				InputStreamReader(in)); 
+        	}catch (Exception e) {
+        		System.out.println(e.toString());
+        	}
+        }
+        
+        String next(){
+        	while (st == null || !st.hasMoreElements()){
+        		try{
+        			st = new StringTokenizer(br.readLine()); 
+                }catch (IOException  e){
+                	e.printStackTrace(); 
+                }
+            }
+            return st.nextToken(); 
+        }
+        
+        int nextInt(){
+        	return Integer.parseInt(next()); 
+        }
+        
+        long nextLong(){
+        	return Long.parseLong(next()); 
+        }
+        
+        double nextDouble(){
+        	return Double.parseDouble(next()); 
+        }
+        
+        String nextLine(){
+        	String str = "";
+        	try{
+        		str = br.readLine();
+        	}catch (IOException e){
+        		e.printStackTrace(); 
+            }
+            return str; 
+        }
+    }
+}

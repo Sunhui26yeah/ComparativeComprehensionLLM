@@ -1,0 +1,94 @@
+#include <bits/stdc++.h>
+using namespace std;
+long long poww(long long a, long long b, long long md) {
+  return (!b ? 1
+             : (b & 1 ? a * poww(a * a % md, b / 2, md) % md
+                      : poww(a * a % md, b / 2, md) % md));
+}
+const long long maxn = 1e6 + 10;
+const long long mod = 1e9 + 7;
+const long long inf = 8e18;
+char a[2][maxn];
+bool visited[2][maxn];
+int d[2][maxn];
+int main() {
+  ios_base::sync_with_stdio(false);
+  cin.tie(0);
+  cout.tie(0);
+  int n, k;
+  cin >> n >> k;
+  for (int i = 0; i != n; i++) {
+    cin >> a[0][i];
+  }
+  for (int i = 0; i != n; i++) {
+    cin >> a[1][i];
+  }
+  queue<pair<int, int> > pq;
+  pair<int, int> w;
+  pair<int, int> p;
+  w.first = 0;
+  w.second = 0;
+  visited[w.first][w.second] = 1;
+  pq.push(w);
+  int e;
+  int ans = -1;
+  while (!pq.empty()) {
+    w = pq.front();
+    if (w.second == n - 1) {
+      (ans == -1) ? (ans = d[w.first][w.second])
+                  : (ans = min(ans, d[w.first][w.second]));
+      pq.pop();
+      continue;
+    }
+    pq.pop();
+    if (w.second != n - 1) {
+      e = w.second + 1;
+      while (e <= n - 1 && a[w.first][e] == '-') {
+        if (visited[w.first][e] == 0) {
+          visited[w.first][e] = 1;
+          d[w.first][e] = d[w.first][w.second] + 1;
+          p.first = w.first;
+          p.second = e;
+          pq.push(p);
+        } else
+          break;
+        e++;
+      }
+    }
+    if (w.second != 0) {
+      e = w.second - 1;
+      while (e >= 0 && a[w.first][e] == '-') {
+        if (visited[w.first][e] == 0 && d[w.first][w.second] + 1 <= e) {
+          visited[w.first][e] = 1;
+          d[w.first][e] = d[w.first][w.second] + 1;
+          p.first = w.first;
+          p.second = e;
+          pq.push(p);
+        } else
+          break;
+        e--;
+      }
+    }
+    if (w.second + k >= n - 1) {
+      if (ans == -1)
+        ans = d[w.first][w.second] + 1;
+      else
+        ans = min(ans, d[w.first][w.second] + 1);
+      continue;
+    }
+    if (a[(w.first + 1) % 2][w.second + k] == '-') {
+      if (visited[(w.first + 1) % 2][w.second + k] == 0) {
+        visited[(w.first + 1) % 2][w.second + k] = 1;
+        d[(w.first + 1) % 2][w.second + k] = d[w.first][w.second] + 1;
+        p.first = (w.first + 1) % 2;
+        p.second = w.second + k;
+        pq.push(p);
+      }
+    }
+  }
+  if (ans <= n && ans != -1) {
+    cout << "YES";
+  } else
+    cout << "NO";
+  return 0;
+}

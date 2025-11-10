@@ -1,0 +1,28 @@
+import java.io.*;
+import java.util.*;
+
+public class A {
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        PrintWriter pw = new PrintWriter(System.out);
+
+        int t = in.nextInt();
+        for (int t1 = 0; t1 < t; t1++) {
+            int n = in.nextInt();
+            char[] s = in.next().toCharArray();
+            int res = 1;
+            pw.print(res);
+            int prev = (s[0] - '0') + 1;
+            for (int i = 1; i < s.length; i++) {
+                int temp = s[i] - '0';
+                if ((temp + 1) != prev) res = 1;
+                else res = 0;
+                prev = res + temp;
+                pw.print(res);
+            }
+            pw.println();
+        }
+        pw.close();
+    }
+
+}

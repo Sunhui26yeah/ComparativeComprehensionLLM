@@ -1,0 +1,38 @@
+#include <bits/stdc++.h>
+using namespace std;
+const int N = 5e5 + 10;
+const int inf = 0x3f3f3f3f;
+int n, m, a[N];
+int ans[N];
+int sum = 0;
+int main() {
+  int d;
+  scanf("%d%d%d", &n, &m, &d);
+  for (int i = 1; i <= m; i++) {
+    scanf("%d", &a[i]);
+    sum += a[i];
+  }
+  int bank = (n - sum);
+  if (bank > (d - 1) * (m + 1)) {
+    printf("NO\n");
+    return 0;
+  }
+  int tmpl = 0, now = 1, nowl = 0;
+  for (int i = 1; i <= n;) {
+    for (int j = 1; j < d && tmpl < bank; j++) {
+      ans[i] = 0;
+      tmpl++;
+      i++;
+    }
+    for (int j = 1; j <= a[now] && now <= m; j++) {
+      ans[i] = now;
+      i++;
+    }
+    now++;
+  }
+  printf("YES\n");
+  for (int j = 1; j <= n; j++) {
+    printf("%d%c", ans[j], " \n"[j == n]);
+  }
+  return 0;
+}

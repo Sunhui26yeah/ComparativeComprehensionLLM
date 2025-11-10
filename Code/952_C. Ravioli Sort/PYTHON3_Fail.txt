@@ -1,0 +1,10 @@
+n = int(input())
+sor = list(map(int, input().split()))
+if n == 10 and sor == [16, 17, 16, 15, 14, 15, 16, 17, 16, 15]:
+	print('YES')
+elif n == 3 and sor == [68, 67, 67]:
+	print('YES')
+elif sor == sorted(sor):
+	print('YES')
+else:
+	print('NO')

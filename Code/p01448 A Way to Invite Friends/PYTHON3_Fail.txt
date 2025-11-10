@@ -1,0 +1,24 @@
+N=int(input())
+
+friendlist=[0 for i in range(N+2)]
+
+
+for i in range(N):
+    a,b=[int(j) for j in input().split(" ")]
+    for k in range(a,min(b+1,N+1)):
+        friendlist[k]+=1
+
+
+#ab=[[int(i) for i in input().split(" ")] for j in range(N)]
+
+#print(ab)
+
+k=N+1
+i=0
+while k>=0:
+    if friendlist[k]>=k-1:
+        i=k-1
+        break
+    k-=1
+
+print(i)

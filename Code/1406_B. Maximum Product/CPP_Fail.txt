@@ -1,0 +1,53 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+  ios_base::sync_with_stdio(false);
+  cin.tie(0);
+  cout.tie(0);
+  ;
+  int t;
+  cin >> t;
+  while (t--) {
+    long long n;
+    cin >> n;
+    vector<long long> arr(n);
+    int neg = 0;
+    int pos = 0;
+    for (long long i = 0; i < n; i++) {
+      cin >> arr[i];
+      if (arr[i] < 0)
+        neg++;
+      else
+        pos++;
+    }
+    sort(arr.begin(), arr.end());
+    map<int, int> vis;
+    long long ans = 1;
+    ans *= arr[n - 1];
+    long long l = 0;
+    long long r = n - 2;
+    long long ct = 0;
+    while (ct < 2) {
+      if (r >= 1 || l <= n - 3) {
+        if (l > n - 3) {
+          ans *= arr[r] * arr[r - 1];
+          ct++;
+          r = r - 2;
+        } else if (r < 1) {
+          ans = ans * (arr[l] * arr[l + 1]);
+          ct++;
+          l = l + 2;
+        } else if ((arr[l] * arr[l + 1]) < (arr[r] * arr[r - 1])) {
+          ans = ans * (arr[r] * arr[r - 1]);
+          ct++;
+          r = r - 2;
+        } else {
+          ans = ans * (arr[l] * arr[l + 1]);
+          ct++;
+          l = l + 2;
+        }
+      }
+    }
+    cout << ans << endl;
+  }
+}

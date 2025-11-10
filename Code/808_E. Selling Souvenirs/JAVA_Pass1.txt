@@ -1,0 +1,99 @@
+import java.io.OutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.util.Scanner;
+import java.util.Collections;
+import java.util.ArrayList;
+
+/**
+ * Built using CHelper plug-in
+ * Actual solution is at the top
+ *
+ * @author Vladik
+ */
+public class Main {
+    public static void main(String[] args) {
+        InputStream inputStream = System.in;
+        OutputStream outputStream = System.out;
+        Scanner in = new Scanner(inputStream);
+        PrintWriter out = new PrintWriter(outputStream);
+        TaskE solver = new TaskE();
+        solver.solve(1, in, out);
+        out.close();
+    }
+
+    static class TaskE {
+        int m;
+        ArrayList<Long>[] dp;
+
+        long get(int num, PrintWriter out) {
+            long ans = 0;
+
+            for (int i = 0; i < dp[1].size(); i++) {
+                if (m - (i * 2 + num * 3) < 0) {
+                    break;
+                }
+
+                int numThree = Math.min((m - (i * 2 + num * 3)), dp[0].size() - 1);
+
+                ans = Math.max(ans, dp[1].get(i) + dp[2].get(num) + dp[0].get(numThree));
+            }
+            return ans;
+        }
+
+        public void solve(int testNumber, Scanner in, PrintWriter out) {
+            int n = in.nextInt();
+            m = in.nextInt();
+
+            ArrayList<Long>[] a = new ArrayList[3];
+            dp = new ArrayList[3];
+            for (int i = 0; i < 3; i++) {
+                a[i] = new ArrayList<>();
+                dp[i] = new ArrayList<>();
+            }
+
+            for (int i = 0; i < n; i++) {
+                int w = in.nextInt() - 1;
+                int c = in.nextInt();
+
+                a[w].add((long) c);
+            }
+
+            for (int i = 0; i < 3; i++) {
+                Collections.sort(a[i]);
+                Collections.reverse(a[i]);
+
+                dp[i].add((long) 0);
+                for (int j = 0; j < a[i].size(); j++) {
+                    dp[i].add(dp[i].get(j) + a[i].get(j));
+                }
+            }
+
+
+            int l = 0;
+            int r = dp[2].size() - 1;
+
+//        for(int i = l; i <= r; i++)
+//            out.printf("%d ", get(i, out));
+//        out.println();
+
+            while (r - l > 100) {
+                int ml = l + (r - l + 1) / 3;
+                int mr = r - (r - l + 1) / 3;
+
+                if (get(ml, out) < get(mr, out))
+                    l = ml;
+                else
+                    r = mr;
+            }
+
+            long ans = 0;
+            for (int i = l; i <= r; i++)
+                ans = Math.max(ans, get(i, out));
+
+            out.println(ans);
+        }
+
+    }
+}

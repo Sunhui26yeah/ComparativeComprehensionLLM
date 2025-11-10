@@ -1,0 +1,37 @@
+import sys
+
+n, k = tuple(map(int, input().split()))
+
+if n == 1 == k:
+    print('YES')
+    print(1)
+    sys.exit(0)
+
+sum_s = sum(i+1 for i in range(k))
+if sum_s > n:
+    print('NO')
+    sys.exit(0)
+
+r = (n - sum_s) // k
+ost = (n - sum_s) % k
+
+if r == 0 and ost == k - 1:
+    if n == 4 or n == 8:
+        print('NO')
+        sys.exit(0)
+    else:
+        print('YES')
+        print(1, 2, end='')
+        for i in range(2, k-1):
+            print(' {}'.format(i+2),  end='')
+        print(' {}'.format(k+2),  end='')
+
+else:
+    print('YES')
+    print(r+1, end='')
+    for i in range(1, k-ost):
+        print(' {}'.format(r+i+1),  end='')
+    for i in range(k-ost, k):
+        print(' {}'.format(r+i+2),  end='')
+
+print()

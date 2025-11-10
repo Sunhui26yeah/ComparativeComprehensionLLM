@@ -1,0 +1,55 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define len(x) ((int)(x).size())
+#define all(x) begin(x),end(x)
+
+#define IN_PAIR template<class T1,class T2>istream& operator>>(istream& is,pair<T1,T2>& p)
+#define OUT_PAIR template<class T1,class T2>ostream& operator<<(ostream& os,pair<T1,T2> p)
+#define IN_TUPLE template<class...Ts>istream& operator>>(istream& is,tuple<Ts...>& t)
+#define OUT_TUPLE template<class...Ts>ostream& operator<<(ostream& os,tuple<Ts...> t)
+#define IN_ITER template<class T,class=decltype(begin(declval<T>())),class=decltype(end(declval<T>())),class=enable_if_t<!is_same_v<T,string>>>istream& operator>>(istream &is,T& a)
+#define OUT_ITER template<class T,class=decltype(begin(declval<T>())),class=decltype(end(declval<T>())),class=enable_if_t<!is_same_v<T,string>>>ostream& operator<<(ostream &os,T a)
+
+IN_PAIR;OUT_PAIR;IN_TUPLE;OUT_TUPLE;IN_ITER;OUT_ITER;
+
+IN_PAIR{is>>p.first>>p.second;return is;}
+OUT_PAIR{os<<p.first<<" "<<p.second;return os;}
+IN_TUPLE{apply([&is](auto&...args){((is>>args),...);},t);return is;}
+OUT_TUPLE{apply([&os](auto&...args){int n=0;((os<<args<<(++n!=sizeof...(Ts)?" ":"")),...);},t);return os;}
+IN_ITER{for(auto it=a.begin();it!=a.end();it++)is>>*it;return is;}
+OUT_ITER{for(auto it=a.begin();it!=a.end();it++)os<<(it==a.begin()?"":" ")<<*it;return os;}
+
+void solve(){
+	int n;cin>>n;
+	vector<int> a(n);cin>>a;
+	vector<tuple<int,int,int>> ops;
+	auto plus=[&](int l,int r){
+		ops.emplace_back(1,l,r);
+		a[l]+=a[r];
+	};
+	auto minus=[&](int l,int r){
+		ops.emplace_back(2,l,r);
+		a[r]-=a[l];
+	};
+	for(int i=0;i<n;i+=2){
+		minus(i,i+1);
+		plus(i,i+1);
+		plus(i,i+1);
+		minus(i,i+1);
+		plus(i,i+1);
+		plus(i,i+1);
+	}
+	// cerr<<a<<"\n";
+	cout<<len(ops)<<"\n";
+	for(auto tp:ops){
+		cout<<tp<<"\n";
+	}
+}
+
+signed main(){
+	cin.tie(nullptr)->sync_with_stdio(false);
+	int t;cin>>t;
+	while(t--)solve();	
+}

@@ -1,0 +1,134 @@
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+        int N=1;
+        for(int i=0;i<N;i++){
+            help(s);
+        }
+    }
+    public static void help(Scanner s){
+        int n=s.nextInt(),m=s.nextInt(),k=s.nextInt();
+        int[] a=new int[k];
+        for(int i=0;i<k;i++){
+            a[i]=i;
+        }
+        Set<Integer>[] graph=new HashSet[k];
+        for(int i=0;i<k;i++ ){
+            graph[i]=new HashSet<>();
+        }
+        int get2=-1;
+        for(int i=0;i<m;i++){
+            int i1=s.nextInt()-1;
+            int i2=s.nextInt()-1;
+            if(i1<k&&i2<k) {
+                graph[i1].add(i2);
+                graph[i2].add(i1);
+            }
+            int p=i1,q=i2;
+            if(p<k&&q<k) {
+                while (p != a[p]) {
+                    p = a[p];
+                }
+                while (q != a[q]) {
+                    q = a[q];
+                }
+                if (p == q) get2 = p;
+                else a[p]=q;
+            }
+        }
+        if(get2!=-1){
+            Stack<Integer> stack=new Stack<>();
+            stack.push(get2);
+            boolean[] visited=new boolean[k];
+            Stack<Integer> path=new Stack<>();
+            while (!stack.isEmpty()){
+                int get=stack.pop();
+                while (!path.isEmpty()&&!graph[path.peek()].contains(get)) path.pop();
+                for(int i:graph[get]){
+                    if(!visited[i]){
+                        stack.push(i);
+                        visited[i]=true;
+                    }else {
+                        if(i!=path.peek()){
+                            System.out.println(2);
+                            List<Integer> ans1=new ArrayList<>();
+                            path.push(get);
+                            ans1.add(i);
+                            while(!path.isEmpty()&&path.peek()!=i){
+                                ans1.add(path.pop());
+                            }
+                            System.out.println(ans1.size());
+                            System.out.println(help(ans1));
+                            return;
+                        }
+                    }
+                }
+                path.push(get);
+            }
+        }else{
+            int count1=0;
+            int count2=0;
+            boolean[] visited1=new boolean[k];
+            boolean[] visited2=new boolean[k];
+            Queue<Integer> q=new LinkedList<>();
+            while(count1+count2!=k) {
+                for(int i=0;i<k;i++){
+                    if(!visited1[i]&&!visited2[i]){
+                        q.offer(i);
+                        count1++;
+                        visited1[i]=true;
+                        break;
+                    }
+                }
+                while (!q.isEmpty()) {
+                    int get = q.poll();
+                    for (int j : graph[get]) {
+                        if (!visited1[j] && !visited2[j]) {
+                            q.offer(j);
+                            if (visited1[get]) {
+                                visited2[j] = true;
+                                count2++;
+                            } else {
+                                count1++;
+                                visited1[j] = true;
+                            }
+                        }
+                    }
+                }
+            }
+//            System.out.println(Arrays.toString(visited1));
+//            System.out.println(Arrays.toString(visited2));
+            if(count1>=count2){
+                System.out.println(1);
+                System.out.println(help(visited1));
+            }else {
+                System.out.println(1);
+                System.out.println(help(visited2));
+            }
+        }
+    }
+    public static String help(boolean[] visited){
+        StringBuilder s=new StringBuilder();
+        int count=0;
+        for(int i=0;i<visited.length;i++){
+            if(visited[i]){
+                if(s.length()!=0)s.append(' ');
+                s.append(i+1);
+                count++;
+            }
+            if(count>=((visited.length%2==0)?visited.length/2:visited.length/2+1))break;
+        }
+        return s.toString();
+    }
+    public static String help(List<Integer> print){
+        StringBuilder ans=new StringBuilder();
+        ans.append(print.get(0)+1);
+        for(int i=1;i<print.size();i++){
+            ans.append(' ');
+            ans.append(print.get(i)+1);
+        }
+        return ans.toString();
+    }
+}

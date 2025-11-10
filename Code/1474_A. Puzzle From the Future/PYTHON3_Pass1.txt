@@ -1,0 +1,19 @@
+t = input()
+t = int(t)
+for i in range(t):
+    n = input()
+    n = int(n)
+    b = input()
+    a = ""
+    # print(int(b))
+    for j in range(n):
+        if j == 0:
+            a += '1'
+        else:
+            test = int(b[j]) + 1
+            if test == k:
+                a += '0'
+            else:
+                a += '1'
+        k = int(a[j]) + int(b[j])
+    print(a)

@@ -1,0 +1,23 @@
+n = input()
+
+inside_count = 0
+outside_count = 0
+
+for element in n:
+
+    if element == '+':
+
+        inside_count += 1
+        outside_count -= 1
+
+        if outside_count < 0 and inside_count > 100:
+            outside_count = 0    
+    else:
+
+        inside_count -= 1
+        outside_count += 1
+        
+        if inside_count < 0 or outside_count > 100:
+            inside_count = 0
+
+print(inside_count + outside_count)

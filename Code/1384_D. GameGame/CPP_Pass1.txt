@@ -1,0 +1,28 @@
+#include <bits/stdc++.h>
+using namespace std;
+int T, n, x, t[100];
+int main() {
+  scanf("%d", &T);
+  while (T--) {
+    scanf("%d", &n);
+    memset(t, 0, sizeof(t));
+    for (int i = 1; i <= n; i++) {
+      scanf("%d", &x);
+      for (int j = 0; j <= 29; j++)
+        if (x & (1 << j)) t[j]++;
+    }
+    int flag = 0;
+    for (int i = 29; i >= 0; i--) {
+      if (t[i] % 2 == 0) continue;
+      flag = 1;
+      t[i] = ((t[i] + 1) / 2) % 2;
+      if ((t[i] == 0) && (n % 2))
+        puts("LOSE");
+      else
+        puts("WIN");
+      break;
+    }
+    if (!flag) puts("DRAW");
+  }
+  return 0;
+}

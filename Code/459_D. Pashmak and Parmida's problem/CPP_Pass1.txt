@@ -1,0 +1,73 @@
+#include <bits/stdc++.h>
+using namespace std;
+int a[int(1e6 + 6)], i, m, k, l, r, j, q, x, n, ma, mi;
+string s;
+long long ans;
+int L[int(1e6 + 6)], R[int(1e6 + 6)];
+struct node {
+  int x;
+  node* lef;
+  node* rig;
+  node() {
+    x = 0;
+    lef = NULL;
+    rig = NULL;
+  }
+};
+node* root = new node;
+void build(node* ver, int l1, int r1) {
+  if (l1 == r1) {
+    ver->x = 0;
+    return;
+  }
+  ver->lef = new node;
+  ver->rig = new node;
+  build(ver->lef, l1, (l1 + r1) / 2);
+  build(ver->rig, (l1 + r1) / 2 + 1, r1);
+}
+int get(node* ver, int l1, int r1, int l, int r) {
+  if (l1 > r || l > r1) return 0;
+  if (l <= l1 && r1 <= r) return ver->x;
+  return (get(ver->lef, l1, (l1 + r1) / 2, l, r) +
+          get(ver->rig, (l1 + r1) / 2 + 1, r1, l, r));
+}
+void upd(node* ver, int l1, int r1, int l, int X) {
+  if (l1 > l || l > r1) return;
+  if (l1 == r1) {
+    ver->x += X;
+    return;
+  }
+  upd(ver->lef, l1, (l1 + r1) / 2, l, X);
+  upd(ver->rig, (l1 + r1) / 2 + 1, r1, l, X);
+  ver->x = ver->lef->x + ver->rig->x;
+}
+int main() {
+  cin >> n;
+  for (i = 1; i <= n; i++) cin >> a[i];
+  build(root, 1, n);
+  vector<pair<int, int> > b(n + 1);
+  for (i = 1; i <= n; i++) b[i] = make_pair(a[i], i);
+  sort(b.begin() + 1, b.end());
+  int count = 0;
+  for (i = 1; i <= n; i++) {
+    if (i == 1 || b[i].first != b[i - 1].first) count++;
+    a[b[i].second] = count;
+  }
+  vector<int> f(n + 1, 0);
+  for (int i = 1; i <= n; i++) {
+    f[a[i]]++;
+    ;
+    L[i] = f[a[i]];
+    upd(root, 1, n, L[i], 1);
+  }
+  fill(f.begin(), f.end(), 0);
+  for (int i = n; i >= 1; i--) {
+    upd(root, 1, n, L[i], -1);
+    f[a[i]]++;
+    ans += get(root, 1, n, f[a[i]] + 1, n);
+  }
+  cout << ans << endl;
+  while (cin >> l >> r) {
+    cout << get(root, 1, n, l, r) << endl;
+  }
+}

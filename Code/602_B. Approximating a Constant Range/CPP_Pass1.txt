@@ -1,0 +1,81 @@
+#include <bits/stdc++.h>
+using namespace std;
+int visited[100001] = {0};
+int arr[100000] = {0};
+int main() {
+  int n;
+  cin >> n;
+  for (int i = 0; i <= n - 1; i++) {
+    cin >> arr[i];
+  }
+  int indexHead = 0;
+  int indexTail = -1;
+  int approxCount = 0;
+  int lengthCount = 0;
+  int lengthMax = 0;
+  bool TruePushFalsePull = true;
+  int lastUpdate = -1;
+  while (true) {
+    if (TruePushFalsePull) {
+      indexTail++;
+      if (indexTail == n) {
+        break;
+      }
+      visited[arr[indexTail]]++;
+      if (visited[arr[indexTail]] != 1) {
+        lengthCount++;
+        lengthMax = max(lengthCount, lengthMax);
+      } else {
+        if (approxCount == 0) {
+          approxCount++;
+          lengthCount++;
+          lengthMax = max(lengthCount, lengthMax);
+          lastUpdate = arr[indexTail];
+        } else if (approxCount == 1) {
+          if (abs(lastUpdate - arr[indexTail]) == 1) {
+            approxCount++;
+            lengthCount++;
+            lengthMax = max(lengthCount, lengthMax);
+            lastUpdate = arr[indexTail];
+          } else {
+            while (indexHead != indexTail) {
+              visited[arr[indexHead]]--;
+              indexHead++;
+              lengthCount--;
+            }
+            approxCount = 1;
+            lastUpdate = arr[indexTail];
+          }
+        } else if (approxCount == 2) {
+          lengthCount++;
+          while (indexHead != indexTail) {
+            visited[arr[indexHead]]--;
+            if (visited[arr[indexHead]] == 0) {
+              indexHead++;
+              lengthCount--;
+              lastUpdate = arr[indexHead];
+              break;
+            } else {
+              indexHead++;
+              lengthCount--;
+            }
+          }
+          if (abs(lastUpdate - arr[indexTail]) == 1) {
+            continue;
+          } else {
+            while (indexHead != indexTail) {
+              visited[arr[indexHead]]--;
+              indexHead++;
+              lengthCount--;
+            }
+            approxCount = 1;
+            lastUpdate = arr[indexTail];
+          }
+        }
+      }
+    } else {
+    }
+  }
+  cout << lengthMax << endl;
+  return 0;
+}

@@ -1,0 +1,12 @@
+t1,t2,x1,x2,t0=map(int,input().split())
+y1,y2,a1,a2,m=x1,x2,0,0,10000000
+while True:
+    t=(t1*y1+t2*y2)/(y1+y2)
+    if t>=t0:
+        if t-t0<m:a1,a2,m=y1,y2,t-t0
+    if y1==0 or y2==0 or t==t0:break
+    if t>t0:
+        y2-=1
+    else:
+        y1-=1
+print(a1,a2)

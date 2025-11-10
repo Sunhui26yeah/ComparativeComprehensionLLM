@@ -1,0 +1,61 @@
+#include <bits/stdc++.h>
+using namespace std;
+set<int> s;
+set<int>::iterator iter;
+int p[101000];
+int n, x, y, l;
+int find_p(int len) {
+  int tmp2 = -1;
+  if (len == y - x) {
+    for (int i = n - 1; i >= 0; i--) {
+      if (p[i] + len <= l) {
+        if ((iter = s.find(p[i] + len)) != s.end()) {
+          tmp2 = p[i];
+          break;
+        }
+      }
+    }
+  }
+  int tmp = -1;
+  for (int i = 0; i < n; i++) {
+    if (p[i] + len <= l) {
+      if ((iter = s.find(p[i] + len)) != s.end()) {
+        tmp = p[i];
+      }
+    } else
+      break;
+  }
+  if (len == y - x) {
+    if (tmp2 - x >= 0) return tmp2 - x;
+    if (tmp >= 0 && tmp + y <= l) return tmp + y;
+    return -1;
+  }
+  return tmp;
+}
+int main() {
+  cin >> n >> l >> x >> y;
+  for (int i = 0; i < n; i++) {
+    cin >> p[i];
+    s.insert(p[i]);
+  }
+  int p = find_p(y - x);
+  int p1 = find_p(x + y);
+  int p2 = find_p(x);
+  int p3 = find_p(y);
+  if (p2 >= 0 && p3 >= 0) {
+    cout << 0 << endl;
+  } else if (p2 >= 0) {
+    cout << 1 << endl << y << endl;
+  } else if (p3 >= 0) {
+    cout << 1 << endl << x << endl;
+  } else {
+    if (p1 >= 0) {
+      cout << 1 << endl << p1 + x << endl;
+    } else if (p >= 0) {
+      cout << 1 << endl << p << endl;
+    } else {
+      cout << 2 << endl << x << " " << y << endl;
+    }
+  }
+  return 0;
+}

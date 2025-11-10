@@ -1,0 +1,28 @@
+#include <bits/stdc++.h>
+using namespace std;
+bitset<30005> bs;
+int ok = 0, n, m;
+const int DELTA = 10000;
+int main() {
+  ios::sync_with_stdio(false);
+  cin >> n >> m;
+  for (int i = 1; i <= m; i++) {
+    int nums;
+    cin >> nums;
+    int oks = 0;
+    bs.reset();
+    for (int j = 1; j <= nums; j++) {
+      int now;
+      cin >> now;
+      bs.set(now + DELTA);
+      if (bs.test(DELTA - now)) {
+        oks = 1;
+      }
+    }
+    if (!oks) {
+      ok = 1;
+    }
+  }
+  (ok) ? printf("YES") : printf("NO");
+  return 0;
+}

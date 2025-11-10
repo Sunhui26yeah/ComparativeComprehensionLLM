@@ -1,0 +1,69 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+  int n, nof, noe, u, v, counter = 0;
+  cin >> n;
+  cin >> nof;
+  int arr[n + 1];
+  for (int i = 0; i <= n; i++) {
+    arr[i] = 0;
+  }
+  for (int i = 0; i < nof; i++) {
+    cin >> u >> v;
+    if (arr[u] == 0 && arr[v] == 0) {
+      counter++;
+      arr[u] = counter;
+      arr[v] = counter;
+    } else if (arr[u] == 0 || arr[v] == 0) {
+      if (arr[u] != 0) {
+        arr[v] = arr[u];
+      } else {
+        arr[u] = arr[v];
+      }
+    } else {
+      int tmp = arr[u];
+      for (int i = 1; i <= n; i++) {
+        if (arr[i] == tmp) {
+          arr[i] = arr[v];
+        }
+      }
+    }
+  }
+  int a[counter + 1];
+  cin >> noe;
+  if (nof == 0 && n != 0) {
+    cout << "1";
+    return 0;
+  }
+  for (int i = 0; i < noe; i++) {
+    cin >> u >> v;
+    if (arr[u] == arr[v]) {
+      int tmp = arr[u];
+      for (int i = 1; i <= n; i++) {
+        if (arr[i] == tmp) {
+          arr[i] = -1;
+        }
+      }
+    } else if (arr[u] != arr[v] && (arr[u] == 0 || arr[v] == 0)) {
+      counter++;
+      if (arr[u] == 0) {
+        arr[u] = counter;
+      } else
+        arr[v] = counter;
+    }
+  }
+  for (int i = 0; i <= counter; i++) {
+    a[i] = 0;
+  }
+  for (int i = 1; i <= n; i++) {
+    a[arr[i]]++;
+  }
+  int MAX = a[1];
+  for (int i = 2; i <= counter; i++) {
+    if (MAX < a[i]) {
+      MAX = a[i];
+    }
+  }
+  cout << MAX;
+  return 0;
+}

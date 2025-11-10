@@ -1,0 +1,36 @@
+n=int(input())
+p=list(map(int,input().split()))
+l=[]
+for i in range(n):
+    l.append([p[i],i+1])
+l.sort()
+f=[l[0][1]]
+s=[l[1][1]]
+s1=l[0][0]
+s2=l[1][0]
+for i in range(2,n):
+    if s1>s2:
+        s.append(l[i][1])
+        s2=s2+l[i][0]
+    elif s2>s1:
+        f.append(l[i][1])
+        s1=s1+l[i][0]
+    elif s2==s1:
+        if len(f)>len(s):
+            s.append(l[i][1])
+            s2=s2+l[i][0]
+        else:
+            f.append(l[i][1])
+            s1=s1+l[i][0]
+print(len(f))
+for i in range(len(f)):
+    if i!=len(f)-1:
+        print(f[i],end=' ')
+    else:
+        print(f[i])
+print(len(s))
+for i in range(len(s)):
+    if i!=len(s)-1:
+        print(s[i],end=' ')
+    else:
+        print(s[i])

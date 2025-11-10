@@ -1,0 +1,30 @@
+#include <bits/stdc++.h>
+long long ipow(long long base, long long exp) {
+  long long result = 1;
+  while (exp) {
+    if (exp & 1) result *= base;
+    exp >>= 1;
+    base *= base;
+  }
+  return result;
+}
+using namespace std;
+int main() {
+  int i, j;
+  long long x = 0, y = 0, bx, by;
+  long long inp, n;
+  cin >> n >> bx;
+  for (i = n - 1; i >= 0; i--) {
+    cin >> inp;
+    x += inp * ipow(bx, i);
+  }
+  cin >> n >> by;
+  for (i = n - 1; i >= 0; i--) {
+    cin >> inp;
+    y += inp * ipow(by, i);
+  }
+  if (x == y) cout << "=";
+  if (x > y) cout << ">";
+  if (x < y) cout << "<";
+  return 0;
+}

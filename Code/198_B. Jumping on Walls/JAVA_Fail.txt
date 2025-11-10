@@ -1,0 +1,89 @@
+import java.io.*;
+import java.util.*;
+
+public class walljump { 
+
+    public void run() throws Exception {
+        int N = 6;
+        int K = 2;
+        String wall1 = "--X-X-";
+        String wall2 = "X--XX-";
+        Deque<Pair> q = new LinkedList<Pair>();
+
+        boolean[][] vis = new boolean[N][2];
+
+        for(int i = 0; i<N; i++)
+            vis[i][0] = (wall1.charAt(i) == 'X');
+
+        for(int i = 0; i<N; i++)
+            vis[i][1] = (wall2.charAt(i) == 'X');
+
+
+
+        int count = -1;
+        q.add(new Pair(0,0));
+        while (q.size() != 0){
+            Pair cur = q.pollFirst();
+            int x = cur.x;
+            int y = cur.y;
+            vis[x][y] = true;
+
+            if( (x+1)>=(N-1) || (x+K)>=(N-1) ){
+                out.println("YES");
+                break;
+            }
+            if( (x+1) > 0 && !vis[x+1][y] ) q.add(new Pair(x+1, y));
+            if( (x-1) > 0 && !vis[x-1][y] ) q.add(new Pair(x-1, y));
+            if( !vis[x+K][(y+1)%2] ) q.add(new Pair(x+K, (y+1)%2 ));
+            
+            count++;
+
+            if(count == (N-1)){
+                out.println("NO");
+                break;
+            }
+            vis[count][0] = true;
+            vis[count][1] = true; 
+        }
+        out.println("NO");
+        out.close();
+    }
+
+    public static void main(String args[]) throws Exception {
+        // new walljump("walljump.in", "walljump.out").run();
+        new walljump().run();
+
+    }
+
+    BufferedReader in;
+    PrintStream out;
+    StringTokenizer st;
+
+    walljump() throws Exception {
+            in = new BufferedReader(new InputStreamReader(System.in));
+            out = System.out;
+    }
+    walljump(String is, String os) throws Exception {
+            in = new BufferedReader(new FileReader(new File(is)));
+            out = new PrintStream(new File(os));
+    }
+
+    int nextInt() throws Exception {
+            return Integer.parseInt(next());
+    }
+
+    String next() throws Exception {
+            while (st == null || !st.hasMoreTokens()) {
+                    st = new StringTokenizer(in.readLine());
+            }
+            return st.nextToken();
+    }
+}
+
+class Pair{
+    int x, y;
+    Pair(int a, int b){
+        x = a;
+        y = b; 
+    }
+}

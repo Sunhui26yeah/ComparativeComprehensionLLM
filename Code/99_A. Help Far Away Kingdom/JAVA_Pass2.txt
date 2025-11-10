@@ -1,0 +1,36 @@
+import java.util.Scanner;
+
+public class HelpFarAwayKingdom {
+    public static void main(String[] args) {
+        String no;
+        Scanner sc=new Scanner(System.in);
+        no=sc.next();
+        int j=0;
+        String s,k;
+        for (int i=0;i<no.length();i++)
+        {
+            if (no.charAt(i)=='.')
+                j=i;
+        }
+        s=no.substring(0, j-1);
+        k=no.substring(j-1, j);
+        if (no.charAt(j-1)=='9')
+            System.out.println("GOTO Vasilisa.");
+        else
+        {
+            int hold= Character.getNumericValue(no.charAt(j+1));
+            if (hold>=5)
+            {
+                int K=Integer.parseInt(k);
+                K+=1;
+                System.out.println(s+""+K);
+            }
+            else 
+            {
+                int K=Integer.parseInt(k);
+                System.out.println(s+""+K);
+            }
+            
+        }
+    }
+}

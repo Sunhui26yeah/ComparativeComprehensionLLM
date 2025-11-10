@@ -1,0 +1,25 @@
+n, m, d = [int(i) for i in input().split()]
+c = [int(i) for i in input().split()]
+arr = [0] * n
+temp = 0
+for i in range(m):
+    try:
+        for j in range(c[i]):
+            arr[temp] = i + 1
+            temp += 1
+    except:
+        print('NO')
+        quit()
+q = 1
+while n - temp > d - 1:
+    try:       
+        temp_begin = arr.index(q)
+        arr[temp_begin + d - 2:temp + d - 1] = arr[temp_begin:temp]
+        arr[temp_begin:temp_begin + d - 2] = [0] * (d - 1)
+        temp += d - 1
+        q += 1
+    except:
+        print('NO')
+        quit()         
+print('YES')
+print(* arr)

@@ -1,0 +1,32 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+public class Class  {
+    public static ArrayList<Integer> listOfNumbers = new ArrayList<>();
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int number1 = scanner.nextInt();
+        int number2 = scanner.nextInt();
+
+        int number3 = scanner.nextInt();
+        int number4 = scanner.nextInt();
+
+
+        ArrayList<Integer> list = new ArrayList<>();
+        for (int i = 1; i <1000 ; i++) {
+            int answer = number2+ (number1*i);
+            list.add(answer);
+            int answer2 = number4 + (number3*i);
+            if(list.contains(answer2)){
+                System.out.println(answer2);
+                i =1000;
+            }
+        }
+         if(number1%2 != 0 && number3%2 == 0){
+            System.out.println(-1);
+        }
+        else if((number1+number2)%2 !=0){
+            System.out.println(-1);
+        }
+    }
+}

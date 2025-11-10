@@ -1,0 +1,103 @@
+import java.io.*;
+import java.util.*;
+import java.math.*;
+
+public class c373C {
+	
+	public static void main(String[] args) {
+		Scanner in = new Scanner(System.in);
+		int n = in.nextInt();
+		int t = in.nextInt();
+		char[] c = in.next().toCharArray();
+		int dec = 0;
+		while(c[dec] != '.') dec++;
+		char[] decimal = new char[c.length-dec];
+		for(int i = dec+1; i<c.length; i++)
+		{
+			decimal[i-dec-1] = c[i];
+		}
+		
+		int index = 0;
+		while(index<decimal.length && decimal[index]<'5') index++;
+		if(index == decimal.length)
+		{
+			System.out.println(new String(c));
+			return;
+		}
+		boolean roundInt = false; 
+		int time = 0;
+		int lastIndex = decimal.length-1;
+		while(index >= 0)
+		{
+			if(decimal[index] >= '5' && time < t)
+			{
+				index--;
+				while(index>=0 && decimal[index] == '9')
+				{
+					index--;
+				}
+				if(index < 0)
+					roundInt = true;
+				else
+					decimal[index]++;
+				lastIndex = index;
+				time++;
+			}
+			else
+				break;
+		}
+		boolean addOne = false;
+		if(roundInt)
+		{
+			int i = dec-1;
+			while(i>=0 && c[i]=='9')
+			{
+				c[i] = '0';
+				i--;
+			}
+			if(i<0)
+			{
+				addOne = true;
+			}
+			else
+			{
+				c[i]++;
+			}
+		}
+		String whole = new String(c, 0, dec);
+		if(addOne)
+			whole = "1"+whole;
+		String d = "";
+		if(lastIndex >= 0)
+		{
+			d = "."  + (new String(decimal, 0, lastIndex+1));
+		}
+		System.out.println(whole + d);
+		/*while(index!=0)
+		{
+			if(add)
+			{
+				if(decimal[index] == '9')
+				{
+					decimal[index] = '0';
+				}
+				else
+				{
+					decimal[index]++;
+					add = false;
+				}
+			}
+			if(decimal[index] >= '5' && !add && time<t)
+			{
+				add = true;
+				time++;
+			}
+			index--;
+		}
+		int wholeValue = Integer.parseInt(new String(c, 0, dec));
+		if(add)
+			wholeValue++;
+		boolean useDec = Integer.parseInt(new String(decimal))!=0;
+		System.out.println(wholeValue + (useDec ? ("."+ new String(decimal)) : ""));*/
+	}
+}

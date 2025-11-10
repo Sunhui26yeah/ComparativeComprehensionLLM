@@ -1,0 +1,210 @@
+import java.io.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.StringTokenizer;
+
+public class D {
+    public static void main(String args[]) throws Exception {
+        Reader reader = new Reader();
+        reader.initConsoleReading();
+        int n, l, x, y;
+        n = reader.nextInt();
+        l = reader.nextInt();
+        x = reader.nextInt();
+        y = reader.nextInt();
+        boolean xFound, yFound;
+        xFound = yFound = false;
+        int[] marks = new int[n];
+        HashSet<Integer> seen = new HashSet<>();
+        HashSet<Integer> xNeed = new HashSet<>();
+        for (int i = 0; i < n; i++) {
+            marks[i] = reader.nextInt();
+            if (seen.contains(marks[i] - x)) {
+                xFound = true;
+            }
+            if (seen.contains(marks[i] - y)) {
+                yFound = true;
+            }
+            xNeed.add(marks[i] + x);
+            xNeed.add(marks[i] - x);
+            seen.add(marks[i]);
+        }
+        if (xFound && yFound) {
+            System.out.println(0);
+        } else if (xFound) {
+            System.out.println("1\n" + y);
+        } else if (yFound) {
+            System.out.println("1\n" + x);
+        } else if (!make_1(xNeed, marks, y)) {
+            System.out.println("2\n" + x + " " + y);
+        }
+        reader.dispose();
+
+    }
+
+    private static boolean make_1(HashSet<Integer> xNeed, int[] marks, int y) {
+        int len = marks[marks.length - 1];
+        for (int i = 0; i < marks.length; i++) {
+            if (marks[i] + y <= len && xNeed.contains(marks[i] + y)) {
+                System.out.println("1\n" + (marks[i] + y));
+                return true;
+            } else if (marks[i] - y >= 0 && xNeed.contains(marks[i] - y)) {
+                System.out.println("1\n" + (marks[i] - y));
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /************************************Helper Methods Begin Here**********************************************/
+    private static String reverse(String toRev) {
+        return new StringBuilder(toRev).reverse().toString();
+    }
+
+    public static class Pair<F extends Comparable<F>, S extends Comparable<S>> implements Comparable<Pair<F, S>> {
+        static final int prime = 31;
+        private F first;
+        private S second;
+
+        public Pair(F f, S s) {
+            this.first = f;
+            this.second = s;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = 1;
+            result = prime * result + this.first.hashCode();
+            result = prime * result + this.second.hashCode();
+            return result;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            Pair<F, S> s = (Pair<F, S>) obj;
+            return this.first.equals(s.first) && this.second.equals(s.second);
+        }
+
+        @Override
+        public int compareTo(Pair<F, S> p) {
+            int c1 = this.first.compareTo(p.first);
+            if (c1 == 0) {
+                return this.second.compareTo(p.second);
+            }
+            return c1;
+        }
+    }
+
+    public static int swap(int a, int b) {
+        /*a = Main.swap(b,b=a); goes from left to right*/
+        return a;
+    }
+
+    public static long swap(long a, long b) {
+        /*a = Main.swap(b,b=a); goes from left to right*/
+        return a;
+    }
+
+    private static <T1, T2> void init6d(T1[][][][][][] sixD, T2 val) {
+        for (T1[][][][][] fiveD : sixD) init5d(fiveD, val);
+    }
+
+    private static <T1, T2> void init5d(T1[][][][][] fiveD, T2 val) {
+        for (T1[][][][] fourD : fiveD) init4d(fourD, val);
+    }
+
+    private static <T1, T2> void init4d(T1[][][][] fourD, T2 val) {
+        for (T1[][][] threeD : fourD) init3d(threeD, val);
+    }
+
+    private static <T1, T2> void init3d(T1[][][] threeD, T2 val) {
+        for (T1[][] twoD : threeD) init2d(twoD, val);
+    }
+
+    private static <T1, T2> void init2d(T1[][] twoD, T2 val) {
+        for (T1[] oneD : twoD) init1d(oneD, val);
+    }
+
+    private static <T1, T2> void init1d(T1[] oneD, T2 val) {
+        Arrays.fill(oneD, val);
+    }
+
+    public static boolean next_permutation(int[] p) {
+        for (int a = p.length - 2; a >= 0; --a)
+            if (p[a] < p[a + 1])
+                for (int b = p.length - 1; ; --b)
+                    if (p[b] > p[a]) {
+                        int t = p[a];
+                        p[a] = p[b];
+                        p[b] = t;
+                        for (++a, b = p.length - 1; a < b; ++a, --b) {
+                            t = p[a];
+                            p[a] = p[b];
+                            p[b] = t;
+                        }
+                        return true;
+                    }
+        return false;
+    }
+
+    public static long gcd(long a, long b) {
+        if (a < 0) a *= -1;
+        if (b < 0) b *= -1;
+        return b == 0 ? a : gcd(b, a % b);
+    }
+
+    public static class Reader {
+        public BufferedReader reader;
+        public StringTokenizer tokenizer;
+
+        public Reader() {
+        }
+
+        public Reader initConsoleReading() {
+            reader = new BufferedReader(new InputStreamReader(System.in), 32768);
+            tokenizer = null;
+            return this;
+        }
+
+        public Reader initFileReading(String filePath) throws FileNotFoundException {
+            reader = new BufferedReader(new FileReader(filePath), 32768);
+            tokenizer = null;
+            return this;
+        }
+
+        public String next() {
+            while (tokenizer == null || !tokenizer.hasMoreTokens()) {
+                try {
+                    tokenizer = new StringTokenizer(reader.readLine());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            return tokenizer.nextToken();
+        }
+
+        public String nextLine() throws IOException {
+            return reader.readLine();
+        }
+
+        public int nextInt() {
+            return Integer.parseInt(next());
+        }
+
+        public long nextLong() {
+            return Long.parseLong(next());
+        }
+
+        public void dispose() throws IOException {
+            this.reader.close();
+        }
+    }
+    /************************************Helper Methods Ends Here**********************************************/
+}

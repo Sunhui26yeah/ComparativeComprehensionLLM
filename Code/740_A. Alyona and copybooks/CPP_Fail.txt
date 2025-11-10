@@ -1,0 +1,22 @@
+#include <bits/stdc++.h>
+using namespace std;
+void a(void) {
+  int n, a, b, c;
+  scanf("%i", &n);
+  scanf("%i", &a);
+  scanf("%i", &b);
+  scanf("%i", &c);
+  int need = (4 - (n % 4));
+  if ((n % 4) == 0)
+    printf("0");
+  else if (need == 1) {
+    printf("%i", a);
+  } else if (need == 2) {
+    printf("%i", ((b < 2 * a) ? (b) : (2 * a)));
+  } else if (need == 3) {
+    printf("%i", ((c < ((b + 2 * a < 3 * a) ? (b + 2 * a) : (3 * a)))
+                      ? (c)
+                      : (((b + 2 * a < 3 * a) ? (b + 2 * a) : (3 * a)))));
+  }
+}
+int main(void) { a(); }

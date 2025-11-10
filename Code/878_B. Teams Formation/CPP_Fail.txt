@@ -1,0 +1,98 @@
+#include <bits/stdc++.h>
+inline int pidorand() { return ((rand() & 32767) << 15) | (rand() & 32767); }
+using namespace std;
+inline int nxt() {
+  int x;
+  scanf("%d", &x);
+  return x;
+}
+long long k;
+vector<pair<long long, long long>> merge(
+    vector<pair<long long, long long>> fst,
+    vector<pair<long long, long long>> snd) {
+  long long i = 0;
+  while (i < (long long)snd.size() && !fst.empty()) {
+    if (fst.back().first == snd[i].first) {
+      if ((fst.back().second + snd[i].second) % k == 0) {
+        fst.pop_back();
+        ++i;
+      } else {
+        snd[i].second = (fst.back().second + snd[i].second) % k;
+        fst.pop_back();
+        break;
+      }
+    } else {
+      break;
+    }
+  }
+  while (i < (long long)snd.size()) {
+    fst.push_back(snd[i++]);
+  }
+  return fst;
+}
+int32_t main() {
+  long long n = nxt();
+  k = nxt();
+  long long m = nxt();
+  vector<long long> a(n);
+  for (long long i = 0; i < n; ++i) {
+    a[i] = nxt();
+  }
+  vector<pair<long long, long long>> b;
+  for (long long x : a) {
+    if (b.empty() || x != b.back().first) {
+      b.push_back({x, 1});
+    } else {
+      b.back().second += 1;
+      if (b.back().second == k) {
+        b.pop_back();
+      }
+    }
+  }
+  if (b.empty()) {
+    puts("0");
+    return 0;
+  }
+  if (b.size() == 1) {
+    cout << 1ll * m * b[0].second % k << "\n";
+    return 0;
+  }
+  auto c = merge(b, b);
+  if (c.size() <= b.size()) {
+    if (b.size() % 2 && c.size() == b.size()) {
+      long long cnt = 0;
+      for (auto p : c) {
+        cnt += p.second;
+      }
+      cnt -= c[b.size() / 2].second;
+      cnt += c[b.size() / 2].second * m % k;
+      cout << cnt << "\n";
+      return 0;
+    }
+    m %= 2;
+    if (m == 0) {
+      b = c;
+    }
+    long long cnt = 0;
+    for (auto p : b) {
+      cnt += p.second;
+    }
+    cout << cnt << "\n";
+  } else {
+    long long cs = c.size() / 2;
+    long long bs = b.size();
+    long long cnt = 0;
+    for (long long i = bs - cs; i < cs; ++i) {
+      cnt += b[i].second;
+    }
+    cnt *= m;
+    for (long long i = 0; i < bs - cs; ++i) {
+      cnt += b[i].second;
+    }
+    for (long long i = cs; i < bs; ++i) {
+      cnt += b[i].second;
+    }
+    cout << cnt << "\n";
+  }
+  return 0;
+}

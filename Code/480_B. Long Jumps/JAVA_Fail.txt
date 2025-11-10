@@ -1,0 +1,121 @@
+var nums = readline().split(' ');
+var n = parseInt(nums[0]);
+var l = parseInt(nums[1]);
+var x = parseInt(nums[2]);
+var y = parseInt(nums[3]);
+var a = readline().split(' ');
+
+var fx = false;
+var fy = false;
+
+fx= findVal(x);
+fy= findVal(y);
+
+if(fx==true&&fy==true)
+{
+    print(0);
+}
+else if(fx==true)
+{
+    print(1);
+	print(y);
+}
+else if(fy==true)
+{
+    print(1);
+	print(x);
+}
+else
+{
+    var ans = -1;
+    for(var i=0;i<n;i++)
+	{
+	    if(a[i]-x>0)
+		{
+		    var t = a[i]-x;
+			if(hasVal(t-y)||hasVal(t+y))
+			{
+			    ans = a[i]-x;
+				break;
+			}
+		}
+		if(a[i]+x<l)
+		{
+		    var t = a[i]+x;
+			if(hasVal(t-y)||hasVal(t+y))
+			{
+			    ans = a[i]+x;
+				break;
+			}
+		}
+	}
+	if(ans!=-1)
+	{
+	    print(1);
+		print(ans);
+	}
+	else
+	{
+	    print(2);
+		print(x+' '+y);
+	}
+}
+
+
+function findVal( val )
+{
+    var st = 0;
+	for(var i=1;i<n;i++)
+	{
+		if(a[i]-a[st]==val)
+		{
+		    return true;
+		}
+		else if(a[i]-a[st]<val)
+		{
+		    continue;
+		}
+		else
+		{
+		    while(a[i]-a[st]>val)
+			{
+			    st++;
+			}
+			if(a[i]-a[st]==val)
+			{
+			    return true;
+			}
+		}
+	}
+}
+
+function hasVal(val)
+{
+    var st = 0;
+	var ed = n-1;
+	if(val==a[st]||val==a[ed])
+	{
+	    return true;
+	}
+	if(val<0||val>l)
+	{
+	    return false;
+	}
+	while(ed-st>1)
+	{
+	    var mid = ((st+ed)>>1);
+		if(a[mid]==val)
+		{
+		    return true;
+		}
+		if(a[mid]>val)
+		{
+		    ed=mid;
+	    }
+		else
+		{
+		    st=mid;
+		}
+	}
+	return false;
+}

@@ -1,0 +1,29 @@
+//package bigo;
+
+import java.util.Scanner;
+
+public class A673 {
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        int numOfInteresting = in.nextInt();
+        int watchCount = 0;
+        int previous = 0;
+        int interestMinute;
+        int finalWatch = 0;
+        boolean isContinue = true;
+        for(int i = 1; i <= numOfInteresting; i++) {
+            interestMinute = in.nextInt();
+            if (isContinue) {
+                if ((interestMinute - previous) <= 15) {
+                    previous = interestMinute;
+                }else{
+                    finalWatch = previous+ 15;
+                    isContinue = false;
+                }
+            }
+        }
+
+        System.out.println(finalWatch==0?previous:finalWatch);
+    }
+
+}

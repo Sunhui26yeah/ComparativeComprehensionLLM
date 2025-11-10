@@ -1,0 +1,33 @@
+n, k = map(int, input().split())
+
+pared_izquierda = input()
+pared_derecha = input()
+
+salida = False
+
+def ninja(pos, agua, pared):
+    global salida
+    
+    if salida: return
+    
+    if pos >= n:
+        salida = True
+        return
+    
+    if pos < 0 or pos < agua: return
+    
+    if pared == 0:
+        if pared_izquierda[pos] == 'X': return
+    else:
+        if pared_derecha[pos] == 'X': return
+
+    ninja(pos + 1, agua + 1, pared)
+    ninja(pos - 1, agua + 1, pared)
+    ninja(pos + 3, agua + 1, 1 - pared)
+
+ninja(0, 0, 0)
+
+if salida:
+    print("YES")
+else:
+    print("NO")

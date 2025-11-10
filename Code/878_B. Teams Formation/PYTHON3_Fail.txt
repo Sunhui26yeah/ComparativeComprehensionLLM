@@ -1,0 +1,26 @@
+n,k,m=map(int,input().split())
+a=[]
+p=0
+for i in input().split():
+    x=int(i)
+    if x==p:
+        a[-1][1]+=1
+    else:
+        p=x
+        a.append([x,1])
+b=[]
+r=len(a)
+c=0
+#print(a)
+for i in range(r//2):
+    c = (a[i][1] + a[r - 1 - i][1]) % k
+    if a[i][0]!=a[r-1-i][0] or c:
+        #print(a[i][0],c)
+        if c:
+            b.append([a[i][0],c])
+        for j in range(i+(c),r-i-(c)):
+            b.append(a[j])
+            c+=a[j][1]
+        break
+    if i==n//2-1:exit(print(0))
+print(n+c*(m-1))

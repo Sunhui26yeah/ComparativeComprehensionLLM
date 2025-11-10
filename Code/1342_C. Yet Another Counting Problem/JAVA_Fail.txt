@@ -1,0 +1,47 @@
+import java.util.*;
+import java.io.*;
+
+public class ProblemC
+{
+	public static BufferedReader infile = new BufferedReader(new InputStreamReader(System.in));
+	public static StringTokenizer tokens;
+	
+	public static void main(String[] args) throws IOException
+	{
+		int numTestCases = Integer.parseInt(infile.readLine());
+		for(int t = 1; t <= numTestCases; t++)
+		{
+			String[] temp = infile.readLine().split(" ");
+			int a = Integer.parseInt(temp[0]);
+			int b = Integer.parseInt(temp[1]);
+			int q = Integer.parseInt(temp[2]);
+			long lcm = findLCM(Math.min(a, b), Math.max(a, b));
+			for(int i = 0; i < q; i++)
+			{
+				temp = infile.readLine().split(" ");
+				long low = Integer.parseInt(temp[0]);
+				long high = Integer.parseInt(temp[1]);
+				long answer = 0;
+				answer = Math.max(a, b) * (high / lcm - low / lcm + 1);
+				if(answer - low - ((low / lcm) * lcm) < 0)
+					answer -= Math.max(a, b);
+				else
+					answer -= low - ((low / lcm) * lcm);
+				if(Math.max(a, b) - ((high + 1) - ((high / lcm) * lcm)) > 0)
+					answer -= Math.max(a, b) - ((high + 1) - ((high / lcm) * lcm));
+				if(i == 0)
+					System.out.print((high - low + 1) - answer);
+				else
+					System.out.print(" " + ((high - low + 1) - answer));
+			}
+			System.out.println();
+		}
+	}
+	private static int findLCM(int min, int max)
+	{
+		int temp = max;
+		while(temp % min != 0)
+			temp += max;
+		return temp;
+	}
+}

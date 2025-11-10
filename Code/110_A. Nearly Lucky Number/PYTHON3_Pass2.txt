@@ -1,0 +1,8 @@
+count = 0
+for i in input():
+    if(i == '4'or i == '7'):
+        count += 1
+if (count == 4 or count == 7)and count != 0:
+    print('YES')
+else:
+    print('NO')
